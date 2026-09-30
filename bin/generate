@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# Regenerates src/shellrent_sdk/client from spec/openapi.yaml with openapi-python-client, run through uvx.
+# Configuration: openapi-python-client.yaml.
+set -euo pipefail
+
+GENERATOR_VERSION="0.29.1"
+# Ruff runs in the post hooks of the generator, from the same uvx environment. It is pinned too,
+# because its rules and formatting change between releases and so would the generated code.
+RUFF_VERSION="0.16.9"
+OUTPUT_PATH="src/shellrent_sdk/client"
+
+cd "$(dirname "$0")/.."
+
+if ! command -v uvx >/dev/null 2>&1; then
+    echo "bin/generate: uv is required, see https://docs.astral.sh/uv/" >&2
+    exit 1
+fi
+
+# The generator rewrites api/ and models/ but leaves other files in place:
+# start from scratch, so that nothing removed from the spec lingers.
+rm -rf -- "$OUTPUT_PATH"
+
+uvx --from "openapi-python-client==$GENERATOR_VERSION" --with "ruff==$RUFF_VERSION" \
+    openapi-python-client generate \
+    --path spec/openapi.yaml \
+    --config openapi-python-client.yaml \
+    --meta none \
+    --output-path "$OUTPUT_PATH" \
+    --overwrite \
+    --fail-on-warning
