@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Checks (Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.11', '3.12', '3.13', '3.14']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv sync --locked
+      - run: uv run --no-sync ruff format --check
+      - run: uv run --no-sync ruff check
+      - run: uv run --no-sync mypy
+      - run: uv run --no-sync pytest
+        env:
+          # The integration tests are skipped unless these secrets are set.
+          SHELLRENT_CLIENT_ID: ${{ secrets.SHELLRENT_CLIENT_ID }}
+          SHELLRENT_CLIENT_SECRET: ${{ secrets.SHELLRENT_CLIENT_SECRET }}
+          SHELLRENT_API_URL: ${{ vars.SHELLRENT_API_URL }}
+
+  lowest-dependencies:
+    name: Checks (Python 3.11, lowest dependencies)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: '3.11'
+      # The lowest versions allowed by pyproject.toml for the direct dependencies (httpx, attrs, dev tools).
+      - run: uv sync --resolution lowest-direct
+      - run: uv run --no-sync ruff format --check
+      - run: uv run --no-sync ruff check
+      - run: uv run --no-sync mypy
+      - run: uv run --no-sync pytest
+
+  generated-code:
+    name: Generated code is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+      - run: bin/generate
+      - name: Compare with the committed code
+        run: |
+          git add --all --intent-to-add
+          git diff --stat --exit-code

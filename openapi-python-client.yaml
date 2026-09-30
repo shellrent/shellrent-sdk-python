@@ -1,0 +1,12 @@
+# Configuration of openapi-python-client, used by bin/generate.
+# Options: https://github.com/openapi-generators/openapi-python-client#configuration
+
+# Downloads of invoices and credit notes (PDF, XML, signed p7m) are returned as File, with the raw
+# bytes: without these overrides the PDFs are skipped and the XML is decoded as text.
+content_type_overrides:
+  application/pdf: application/octet-stream
+  application/x-pkcs7-mime: application/octet-stream
+  text/xml: application/octet-stream
+
+# Attribute descriptions as docstrings of the attributes, where editors show them.
+docstrings_on_attributes: true
