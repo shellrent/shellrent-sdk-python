@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-09-30
+
 ### Added
 
 - Functions and models for the Shellrent API 3.0.0 (OpenAPI 3.1 specification), generated with
@@ -26,4 +28,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `invalid_client` or, for its rate limit, `rate_limited`.
 - The `shellrent` command, with `shellrent api` and `shellrent token`.
 
-[Unreleased]: https://github.com/shellrent/shellrent-sdk-python/commits/main
+[Unreleased]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/shellrent/shellrent-sdk-python/releases/tag/v0.1.0
