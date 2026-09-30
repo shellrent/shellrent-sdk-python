@@ -1,0 +1,51 @@
+# Publishes to PyPI with Trusted Publishing: PyPI trusts this file by its name (release.yml)
+# and the "pypi" environment, whose approval is required before the upload.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # hatch-vcs takes the version from the git tags.
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v10.2.0
+      - run: uv build
+      - name: Check that the version is the one of the tag
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          ls dist
+          if [[ ! -f "dist/shellrent_sdk-${version}.tar.gz" || ! -f "dist/shellrent_sdk-${version}-py3-none-any.whl" ]]; then
+            echo "::error::The built version is not ${version}, the one of the tag ${GITHUB_REF_NAME}"
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    name: Publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/shellrent-sdk
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
