@@ -54,7 +54,9 @@ da `spec/openapi.yaml`; a mano solo autenticazione, creazione del client, CLI, t
 - `auth.py`, `http.py` e `cli.py` non importano nulla da `shellrent_sdk.client` (lo verifica `test_layers.py`).
 - I transport di default di `RetryTransport` seguono l'ambiente come quelli di httpx: proxy con
   `urllib.request.getproxies`/`proxy_bypass` (httpx non ha un'API pubblica), certificati con `trust_env`.
-- L'interfaccia pubblica di `auth`, `http` e della CLI (`main(argv)`, comandi, variabili d'ambiente, exit
-  code) è usata da `shellrent-internal-sdk`: cambiarla è una modifica incompatibile (major).
+- L'interfaccia pubblica di `auth`, `http`, di `unwrap()` e `ApiException` (con `ApiErrorLike`) e della CLI
+  (`main(argv)`, comandi, variabili d'ambiente, exit code) è usata da `shellrent-internal-sdk`: cambiarla è
+  una modifica incompatibile (major). Il client generato interno passa il proprio `ApiError` a
+  `unwrap(error_type=...)`: `ApiException` non dipende dall'`ApiError` di questo pacchetto.
 - `create_client()` restituisce `AuthenticatedClient` perché le funzioni generate lo richiedono nel tipo; il
   token lo mette `OAuth2Auth` a ogni richiesta, non il campo `token` del client.
