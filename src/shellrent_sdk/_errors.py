@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from typing import TYPE_CHECKING, Protocol, TypeVar, overload
 
 from .client.errors import UnexpectedStatus
@@ -66,15 +66,28 @@ class ApiException(Exception):
 
 
 @overload
-def unwrap(response: Response[T | ApiError], *, error_type: type[ApiError] | None = None) -> T: ...
+def unwrap(
+    response: Response[T | ApiError],
+    *,
+    error_type: type[ApiError] | None = None,
+    unexpected_status_type: Callable[[int, bytes], Exception] | None = None,
+) -> T: ...
 
 
 @overload
-def unwrap(response: _ResponseLike[T | E], *, error_type: type[E]) -> T: ...
+def unwrap(
+    response: _ResponseLike[T | E],
+    *,
+    error_type: type[E],
+    unexpected_status_type: Callable[[int, bytes], Exception] | None = None,
+) -> T: ...
 
 
 def unwrap(
-    response: _ResponseLike[object], *, error_type: type[ApiErrorLike] | None = None
+    response: _ResponseLike[object],
+    *,
+    error_type: type[ApiErrorLike] | None = None,
+    unexpected_status_type: Callable[[int, bytes], Exception] | None = None,
 ) -> object:
     """Returns the parsed body of a successful response and raises an exception for the others.
 
@@ -89,11 +102,18 @@ def unwrap(
             envelope of the body, so another generated client wraps ``unwrap()`` with its own types::
 
                 def unwrap(response: Response[T | ApiError]) -> T:
-                    return shellrent_sdk.unwrap(response, error_type=ApiError)
+                    return shellrent_sdk.unwrap(
+                        response, error_type=ApiError, unexpected_status_type=UnexpectedStatus
+                    )
+
+        unexpected_status_type: The ``UnexpectedStatus`` class of the generated client; default the
+            one of ``shellrent_sdk.client``. Each generated client has its own: another client passes
+            it, so that ``unwrap()`` raises the same exception as its generated functions.
 
     Raises:
         ApiException: An error response documented in the specification (``error_type``).
-        UnexpectedStatus: Any other response outside 2xx, or without a parsed body.
+        UnexpectedStatus: Any other response outside 2xx, or without a parsed body
+            (``unexpected_status_type``).
     """
     if error_type is None:
         # Imported here: importing the models takes a while, and the CLI does not need them.
@@ -105,5 +125,7 @@ def unwrap(
     if isinstance(parsed, error_type):
         raise ApiException(response.status_code, parsed, response.headers, response.content)
     if parsed is None or not 200 <= response.status_code < 300:
-        raise UnexpectedStatus(response.status_code, response.content)
+        if unexpected_status_type is None:
+            unexpected_status_type = UnexpectedStatus
+        raise unexpected_status_type(response.status_code, response.content)
     return parsed
