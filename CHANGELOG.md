@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-01
+
+### Added
+
+- `unwrap(response, error_type=...)`: another generated client passes its own `ApiError` model, so
+  that its documented error responses raise `ApiException` instead of `UnexpectedStatus`. Without
+  `error_type`, `unwrap()` works and is typed as before.
+- `ApiErrorLike`, the protocol of the error envelopes of the generated clients (`error` and
+  `message`).
+
+### Changed
+
+- `ApiException.error` is typed as `ApiErrorLike` instead of `ApiError`, so that it accepts the
+  `ApiError` of any generated client. At runtime it is still the `ApiError` of the response; for its
+  other fields, narrow it with `isinstance(e.error, ApiError)`.
+- The message of `ApiException` is `HTTP <status>` when the envelope has no `message`.
+
 ## [0.1.0] - 2026-09-30
 
 ### Added
@@ -28,5 +45,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `invalid_client` or, for its rate limit, `rate_limited`.
 - The `shellrent` command, with `shellrent api` and `shellrent token`.
 
-[Unreleased]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/shellrent/shellrent-sdk-python/releases/tag/v0.1.0
