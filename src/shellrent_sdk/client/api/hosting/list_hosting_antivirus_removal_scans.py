@@ -17,7 +17,7 @@ def _get_kwargs(
     hosting_id: int,
     *,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -94,7 +94,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | HostingAntivirusRemovalScanPaginatedListResponse]:
     """List antivirus removal scans
 
@@ -103,7 +103,7 @@ def sync_detailed(
     Args:
         hosting_id (int):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -131,7 +131,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | HostingAntivirusRemovalScanPaginatedListResponse | None:
     """List antivirus removal scans
 
@@ -140,7 +140,7 @@ def sync(
     Args:
         hosting_id (int):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -163,7 +163,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | HostingAntivirusRemovalScanPaginatedListResponse]:
     """List antivirus removal scans
 
@@ -172,7 +172,7 @@ async def asyncio_detailed(
     Args:
         hosting_id (int):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -198,7 +198,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | HostingAntivirusRemovalScanPaginatedListResponse | None:
     """List antivirus removal scans
 
@@ -207,7 +207,7 @@ async def asyncio(
     Args:
         hosting_id (int):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

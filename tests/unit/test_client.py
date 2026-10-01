@@ -187,7 +187,7 @@ def test_list_tasks_sends_only_the_parameters_with_a_default(api: FakeApi) -> No
         "error": 0,
         "message": None,
         "data": [],
-        "meta": {"total": 0, "count": 0, "pages": 0, "page": 1, "per_page": 20},
+        "meta": {"total": 0, "count": 0, "pages": 0, "page": 1, "per_page": 15},
     }
     api.responses += [token_response(), httpx.Response(200, json=body)]
 
@@ -196,7 +196,7 @@ def test_list_tasks_sends_only_the_parameters_with_a_default(api: FakeApi) -> No
     assert dict(api.api_requests[0].url.params) == {
         "alive_only": "true",
         "page": "1",
-        "per_page": "20",
+        "per_page": "15",
     }
 
 

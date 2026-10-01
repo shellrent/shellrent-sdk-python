@@ -17,7 +17,7 @@ def _get_kwargs(
     is_it: bool | Unset = UNSET,
     country: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -103,7 +103,7 @@ def sync_detailed(
     is_it: bool | Unset = UNSET,
     country: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | TldPaginatedListResponse]:
     """List all TLDs
 
@@ -115,7 +115,7 @@ def sync_detailed(
         is_it (bool | Unset):
         country (str | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -149,7 +149,7 @@ def sync(
     is_it: bool | Unset = UNSET,
     country: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | TldPaginatedListResponse | None:
     """List all TLDs
 
@@ -161,7 +161,7 @@ def sync(
         is_it (bool | Unset):
         country (str | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -190,7 +190,7 @@ async def asyncio_detailed(
     is_it: bool | Unset = UNSET,
     country: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | TldPaginatedListResponse]:
     """List all TLDs
 
@@ -202,7 +202,7 @@ async def asyncio_detailed(
         is_it (bool | Unset):
         country (str | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -234,7 +234,7 @@ async def asyncio(
     is_it: bool | Unset = UNSET,
     country: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | TldPaginatedListResponse | None:
     """List all TLDs
 
@@ -246,7 +246,7 @@ async def asyncio(
         is_it (bool | Unset):
         country (str | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

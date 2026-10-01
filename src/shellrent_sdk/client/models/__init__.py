@@ -579,12 +579,9 @@ from .server_template import ServerTemplate
 from .service import Service
 from .service_category import ServiceCategory
 from .service_change import ServiceChange
-from .service_list_response import ServiceListResponse
-from .service_list_response_meta_type_0 import ServiceListResponseMetaType0
 from .service_paginated_list_response import ServicePaginatedListResponse
 from .service_server import ServiceServer
-from .service_server_list_response import ServiceServerListResponse
-from .service_server_list_response_meta_type_0 import ServiceServerListResponseMetaType0
+from .service_server_paginated_list_response import ServiceServerPaginatedListResponse
 from .simple_pagination_meta import SimplePaginationMeta
 from .sms import Sms
 from .sms_account import SmsAccount
@@ -1185,12 +1182,9 @@ __all__ = (
     "Service",
     "ServiceCategory",
     "ServiceChange",
-    "ServiceListResponse",
-    "ServiceListResponseMetaType0",
     "ServicePaginatedListResponse",
     "ServiceServer",
-    "ServiceServerListResponse",
-    "ServiceServerListResponseMetaType0",
+    "ServiceServerPaginatedListResponse",
     "SimplePaginationMeta",
     "Sms",
     "SmsAccount",

@@ -17,7 +17,7 @@ def _get_kwargs(
     date_emission_to: datetime.date | Unset = UNSET,
     payed: bool | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -106,7 +106,7 @@ def sync_detailed(
     date_emission_to: datetime.date | Unset = UNSET,
     payed: bool | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | InvoicePaginatedListResponse]:
     """List all Invoices
 
@@ -117,7 +117,7 @@ def sync_detailed(
         date_emission_to (datetime.date | Unset):
         payed (bool | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -149,7 +149,7 @@ def sync(
     date_emission_to: datetime.date | Unset = UNSET,
     payed: bool | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | InvoicePaginatedListResponse | None:
     """List all Invoices
 
@@ -160,7 +160,7 @@ def sync(
         date_emission_to (datetime.date | Unset):
         payed (bool | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,7 +187,7 @@ async def asyncio_detailed(
     date_emission_to: datetime.date | Unset = UNSET,
     payed: bool | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | InvoicePaginatedListResponse]:
     """List all Invoices
 
@@ -198,7 +198,7 @@ async def asyncio_detailed(
         date_emission_to (datetime.date | Unset):
         payed (bool | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -228,7 +228,7 @@ async def asyncio(
     date_emission_to: datetime.date | Unset = UNSET,
     payed: bool | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | InvoicePaginatedListResponse | None:
     """List all Invoices
 
@@ -239,7 +239,7 @@ async def asyncio(
         date_emission_to (datetime.date | Unset):
         payed (bool | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
