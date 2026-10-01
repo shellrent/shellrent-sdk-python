@@ -16,7 +16,7 @@ def _get_kwargs(
     ask_user_error: str | Unset = UNSET,
     purchase_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -99,7 +99,7 @@ def sync_detailed(
     ask_user_error: str | Unset = UNSET,
     purchase_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | TaskPaginatedListResponse]:
     """List purchases tasks
 
@@ -110,7 +110,7 @@ def sync_detailed(
         ask_user_error (str | Unset):
         purchase_id (int | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -142,7 +142,7 @@ def sync(
     ask_user_error: str | Unset = UNSET,
     purchase_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | TaskPaginatedListResponse | None:
     """List purchases tasks
 
@@ -153,7 +153,7 @@ def sync(
         ask_user_error (str | Unset):
         purchase_id (int | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -180,7 +180,7 @@ async def asyncio_detailed(
     ask_user_error: str | Unset = UNSET,
     purchase_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | TaskPaginatedListResponse]:
     """List purchases tasks
 
@@ -191,7 +191,7 @@ async def asyncio_detailed(
         ask_user_error (str | Unset):
         purchase_id (int | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -221,7 +221,7 @@ async def asyncio(
     ask_user_error: str | Unset = UNSET,
     purchase_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | TaskPaginatedListResponse | None:
     """List purchases tasks
 
@@ -232,7 +232,7 @@ async def asyncio(
         ask_user_error (str | Unset):
         purchase_id (int | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -1,4 +1,4 @@
-"""unwrap() with the models of another generated client, such as the one of shellrent-internal-sdk."""
+"""unwrap() with the types of another generated client, such as the one of shellrent-internal-sdk."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import Generic, TypeVar, assert_type
 import pytest
 from attrs import define
 
-from shellrent_sdk import ApiException, unwrap
+from shellrent_sdk import ApiException, UnexpectedStatus, unwrap
 from shellrent_sdk.client.models import ApiError
 from shellrent_sdk.client.types import File, Response
 
@@ -39,9 +39,16 @@ class OtherStatus:
     data: str
 
 
+class OtherUnexpectedStatus(Exception):
+    def __init__(self, status_code: int, content: bytes):
+        self.status_code = status_code
+        self.content = content
+        super().__init__(f"Unexpected status code: {status_code}")
+
+
 def other_unwrap(response: OtherResponse[T | OtherApiError]) -> T:
     """The wrapper of the other client, as in the docstring of unwrap()."""
-    return unwrap(response, error_type=OtherApiError)
+    return unwrap(response, error_type=OtherApiError, unexpected_status_type=OtherUnexpectedStatus)
 
 
 def test_unwrap_raises_api_exception_for_the_api_error_of_another_client() -> None:
@@ -79,6 +86,47 @@ def test_api_exception_without_message() -> None:
     assert str(info.value) == "HTTP 409"
 
 
+@pytest.mark.parametrize(
+    ("status", "parsed"),
+    [
+        # A status code missing from the specification.
+        (HTTPStatus.SERVICE_UNAVAILABLE, None),
+        # A 2xx without a parsed body.
+        (HTTPStatus.OK, None),
+        # A body parsed for a status outside 2xx.
+        (HTTPStatus.INTERNAL_SERVER_ERROR, OtherStatus(error=0, message=None, data="ok")),
+    ],
+)
+def test_unwrap_raises_the_unexpected_status_of_another_client(
+    status: HTTPStatus, parsed: OtherStatus | None
+) -> None:
+    response: OtherResponse[OtherStatus | OtherApiError] = OtherResponse(
+        status, b"Maintenance", {}, parsed
+    )
+
+    with pytest.raises(OtherUnexpectedStatus) as info:
+        other_unwrap(response)
+
+    assert not isinstance(info.value, UnexpectedStatus)
+    assert info.value.status_code == status
+    assert info.value.content == b"Maintenance"
+
+
+def test_without_unexpected_status_type_another_client_gets_the_one_of_shellrent_sdk() -> None:
+    def unwrap_0_2_0(response: OtherResponse[T | OtherApiError]) -> T:
+        """The wrapper of the other client with shellrent-sdk 0.2.0."""
+        return unwrap(response, error_type=OtherApiError)
+
+    response: OtherResponse[OtherStatus | OtherApiError] = OtherResponse(
+        HTTPStatus.SERVICE_UNAVAILABLE, b"Maintenance", {}, None
+    )
+
+    with pytest.raises(UnexpectedStatus) as info:
+        unwrap_0_2_0(response)
+
+    assert info.value.status_code == 503
+
+
 def test_the_api_error_of_shellrent_sdk_is_the_default() -> None:
     file = File(payload=BytesIO(b"%PDF"))
     response: Response[File | ApiError] = Response(HTTPStatus.OK, b"%PDF", {}, file)
@@ -93,3 +141,16 @@ def test_the_api_error_of_shellrent_sdk_is_the_default() -> None:
     assert assert_type(unwrap(response, error_type=ApiError), File) is file
     with pytest.raises(ApiException):
         unwrap(error, error_type=ApiError)
+
+
+def test_the_unexpected_status_of_shellrent_sdk_is_the_default() -> None:
+    response: Response[File | ApiError] = Response(
+        HTTPStatus.SERVICE_UNAVAILABLE, b"Maintenance", {}, None
+    )
+
+    with pytest.raises(UnexpectedStatus):
+        unwrap(response)
+    with pytest.raises(UnexpectedStatus):
+        unwrap(response, unexpected_status_type=UnexpectedStatus)
+    with pytest.raises(OtherUnexpectedStatus):
+        unwrap(response, unexpected_status_type=OtherUnexpectedStatus)

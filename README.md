@@ -76,12 +76,17 @@ this saves a token request per process and keeps you within the limit of the tok
 ```python
 from shellrent_sdk import FileTokenStore, create_client
 
-# $XDG_CACHE_HOME/shellrent-sdk, or ~/.cache/shellrent-sdk
+# $SHELLRENT_TOKEN_CACHE, or $XDG_CACHE_HOME/shellrent-sdk, or ~/.cache/shellrent-sdk
 client = create_client(token_store=FileTokenStore())
 
 # In a web application the home directory of the server user may not be writable:
 client = create_client(token_store=FileTokenStore("/var/cache/myapp/shellrent"))
 ```
+
+Without a directory, `FileTokenStore()` follows `SHELLRENT_TOKEN_CACHE`, like the
+[`shellrent` command](#command-line): the variable sets another directory, or `off` keeps the tokens
+in memory, for the life of the process, without writing any file. A directory passed to
+`FileTokenStore` wins over the variable.
 
 `FileTokenStore` creates its directory readable by its owner only (0700) and writes each token
 atomically to a file with mode 0600. The client secret is never cached.
@@ -258,8 +263,8 @@ fi
 
 Each run is a new process, so the command keeps the token in a file, in `$XDG_CACHE_HOME/shellrent-sdk`
 or `~/.cache/shellrent-sdk`, and reuses it until it expires: scripts run by cron do not request a
-token every time. `SHELLRENT_TOKEN_CACHE` sets another directory, or `off` to keep the token only
-for the current run. `python -m shellrent_sdk` is the same as `shellrent`, and
+token every time. `SHELLRENT_TOKEN_CACHE`, as for `FileTokenStore()`, sets another directory, or
+`off` to keep the token only for the current run. `python -m shellrent_sdk` is the same as `shellrent`, and
 `uvx --from shellrent-sdk shellrent` runs it without installing it.
 
 ## Using httpx directly

@@ -153,13 +153,71 @@ def test_file_store_keeps_the_old_file_when_the_write_fails(
 
 
 def test_file_store_default_directory(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.delenv("SHELLRENT_TOKEN_CACHE", raising=False)
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "xdg"))
+    assert FileTokenStore().directory == tmp_path / "xdg" / "shellrent-sdk"
+
+    monkeypatch.setenv("SHELLRENT_TOKEN_CACHE", "")
     assert FileTokenStore().directory == tmp_path / "xdg" / "shellrent-sdk"
 
     monkeypatch.setenv("XDG_CACHE_HOME", "relative/path")
     monkeypatch.setenv("HOME", str(tmp_path / "home"))
     monkeypatch.setenv("USERPROFILE", str(tmp_path / "home"))
     assert FileTokenStore().directory == tmp_path / "home" / ".cache" / "shellrent-sdk"
+
+
+def test_file_store_directory_from_the_environment(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setenv("SHELLRENT_TOKEN_CACHE", str(tmp_path / "env"))
+    monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path / "xdg"))
+
+    store = FileTokenStore()
+    store.set("key", "value", 10)
+
+    assert store.directory == tmp_path / "env"
+    assert (tmp_path / "env" / "key.json").exists()
+    assert not (tmp_path / "xdg").exists()
+
+
+def test_a_directory_argument_wins_over_the_environment(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setenv("SHELLRENT_TOKEN_CACHE", str(tmp_path / "env"))
+    assert FileTokenStore(tmp_path / "arg").directory == tmp_path / "arg"
+
+    # Even "off": it is the name of a directory then.
+    monkeypatch.setenv("SHELLRENT_TOKEN_CACHE", "off")
+    store = FileTokenStore(tmp_path)
+    store.set("key", "value", 10)
+    assert (tmp_path / "key.json").exists()
+
+
+@pytest.mark.parametrize("setting", ["off", "OFF", "Off"])
+def test_file_store_turned_off_keeps_values_in_memory(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, setting: str
+) -> None:
+    monkeypatch.setenv("SHELLRENT_TOKEN_CACHE", setting)
+    monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path))
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
+    clock = FakeClock()
+    store = FileTokenStore(clock=clock)
+
+    store.set("key", "value", 10)
+    store.set("other", "value", 10)
+    assert store.get("key") == "value"
+    assert FileTokenStore().get("key") is None  # Not shared with the other processes.
+
+    store.delete("other")
+    store.delete("missing")
+    assert store.get("other") is None
+    clock.now += 10
+    assert store.get("key") is None
+
+    with pytest.raises(ValueError, match="Invalid key"):
+        store.set("../key", "value", 10)
+    assert list(tmp_path.iterdir()) == []
 
 
 # With OAuth2Auth
@@ -178,6 +236,33 @@ def test_a_new_process_reuses_the_token_in_the_file(tmp_path: Path) -> None:
     assert "token-1" in file.read_text()
     assert CLIENT_SECRET not in file.read_text()
     assert CLIENT_SECRET not in file.name
+
+
+def test_with_the_cache_turned_off_a_new_process_requests_a_new_token(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setenv("SHELLRENT_TOKEN_CACHE", "off")
+    monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path))
+    api = FakeApi(
+        token_response("token-1"),
+        health_response(),
+        health_response(),
+        token_response("token-2"),
+        health_response(),
+    )
+
+    store = FileTokenStore()
+    for _ in range(2):  # Two clients of the same process share the store.
+        auth = OAuth2Auth(credentials(), store)
+        with httpx.Client(base_url=API_URL, auth=auth, transport=api.transport()) as client:
+            client.get("/api/health")
+    auth = OAuth2Auth(credentials(), FileTokenStore())
+    with httpx.Client(base_url=API_URL, auth=auth, transport=api.transport()) as client:
+        client.get("/api/health")
+
+    assert len(api.token_requests) == 2
+    assert api.api_requests[-1].headers["Authorization"] == "Bearer token-2"
+    assert list(tmp_path.iterdir()) == []
 
 
 def test_an_expired_token_in_the_file_is_not_used(tmp_path: Path) -> None:

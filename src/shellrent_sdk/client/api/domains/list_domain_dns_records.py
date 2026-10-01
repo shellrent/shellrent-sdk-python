@@ -18,7 +18,7 @@ def _get_kwargs(
     host: str | Unset = UNSET,
     destination: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -104,7 +104,7 @@ def sync_detailed(
     host: str | Unset = UNSET,
     destination: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | DnsRecordPaginatedListResponse]:
     """List DNS records
 
@@ -118,7 +118,7 @@ def sync_detailed(
         host (str | Unset):
         destination (str | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -152,7 +152,7 @@ def sync(
     host: str | Unset = UNSET,
     destination: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | DnsRecordPaginatedListResponse | None:
     """List DNS records
 
@@ -166,7 +166,7 @@ def sync(
         host (str | Unset):
         destination (str | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -195,7 +195,7 @@ async def asyncio_detailed(
     host: str | Unset = UNSET,
     destination: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | DnsRecordPaginatedListResponse]:
     """List DNS records
 
@@ -209,7 +209,7 @@ async def asyncio_detailed(
         host (str | Unset):
         destination (str | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -241,7 +241,7 @@ async def asyncio(
     host: str | Unset = UNSET,
     destination: str | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | DnsRecordPaginatedListResponse | None:
     """List DNS records
 
@@ -255,7 +255,7 @@ async def asyncio(
         host (str | Unset):
         destination (str | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

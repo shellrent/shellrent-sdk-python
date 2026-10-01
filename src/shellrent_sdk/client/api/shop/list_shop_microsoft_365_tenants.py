@@ -16,7 +16,7 @@ def _get_kwargs(
     *,
     account_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -93,7 +93,7 @@ def sync_detailed(
     client: AuthenticatedClient,
     account_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | Microsoft365TenantPaginatedListResponse]:
     """Microsoft 365 tenants
 
@@ -103,7 +103,7 @@ def sync_detailed(
         account_id (int | Unset): ID of the account owner of the Microsoft 365 subscription used
             to search for existing tenants. Available to Resellers only.
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -131,7 +131,7 @@ def sync(
     client: AuthenticatedClient,
     account_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | Microsoft365TenantPaginatedListResponse | None:
     """Microsoft 365 tenants
 
@@ -141,7 +141,7 @@ def sync(
         account_id (int | Unset): ID of the account owner of the Microsoft 365 subscription used
             to search for existing tenants. Available to Resellers only.
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -164,7 +164,7 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     account_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> Response[ApiError | Microsoft365TenantPaginatedListResponse]:
     """Microsoft 365 tenants
 
@@ -174,7 +174,7 @@ async def asyncio_detailed(
         account_id (int | Unset): ID of the account owner of the Microsoft 365 subscription used
             to search for existing tenants. Available to Resellers only.
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -200,7 +200,7 @@ async def asyncio(
     client: AuthenticatedClient,
     account_id: int | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> ApiError | Microsoft365TenantPaginatedListResponse | None:
     """Microsoft 365 tenants
 
@@ -210,7 +210,7 @@ async def asyncio(
         account_id (int | Unset): ID of the account owner of the Microsoft 365 subscription used
             to search for existing tenants. Available to Resellers only.
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

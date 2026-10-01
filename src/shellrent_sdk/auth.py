@@ -186,9 +186,13 @@ class MemoryTokenStore:
 class FileTokenStore:
     """Keeps the tokens in files, one per key, shared by the processes of the same user.
 
-    The directory defaults to ``$XDG_CACHE_HOME/shellrent-sdk``, or ``~/.cache/shellrent-sdk``.
-    When it does not exist it is created readable by its owner only (0700); the files are always
-    written with mode 0600, through a temporary file and an atomic rename.
+    Without ``directory``, like the ``shellrent`` command, it follows ``SHELLRENT_TOKEN_CACHE``: a
+    directory, or ``off`` to keep the tokens in memory instead, for the life of the process, as
+    ``MemoryTokenStore`` does. Otherwise the directory is ``$XDG_CACHE_HOME/shellrent-sdk``, or
+    ``~/.cache/shellrent-sdk``.
+
+    When the directory does not exist it is created readable by its owner only (0700); the files
+    are always written with mode 0600, through a temporary file and an atomic rename.
     """
 
     _KEY_PATTERN: Final = re.compile(r"[A-Za-z0-9_-][A-Za-z0-9_.-]*")
@@ -199,12 +203,21 @@ class FileTokenStore:
         *,
         clock: Callable[[], float] = time.time,
     ) -> None:
+        setting = _env("SHELLRENT_TOKEN_CACHE") if directory is None else None
+        off = setting is not None and setting.lower() == "off"
+        if directory is None and setting is not None and not off:
+            directory = setting
+
         self.directory: Final = Path(directory) if directory is not None else _default_cache_dir()
         self._clock = clock
+        self._memory: Final = MemoryTokenStore(clock=clock) if off else None
 
     def get(self, key: str) -> str | None:
+        path = self._path(key)
+        if self._memory is not None:
+            return self._memory.get(key)
         try:
-            data = json.loads(self._path(key).read_text(encoding="utf-8"))
+            data = json.loads(path.read_text(encoding="utf-8"))
         except FileNotFoundError:
             return None
         except ValueError:  # Not JSON: a file of someone else, or damaged.
@@ -219,6 +232,9 @@ class FileTokenStore:
 
     def set(self, key: str, value: str, ttl: int) -> None:
         path = self._path(key)
+        if self._memory is not None:
+            self._memory.set(key, value, ttl)
+            return
         if ttl <= 0:
             self.delete(key)
             return
@@ -236,7 +252,11 @@ class FileTokenStore:
             raise
 
     def delete(self, key: str) -> None:
-        self._path(key).unlink(missing_ok=True)
+        path = self._path(key)
+        if self._memory is not None:
+            self._memory.delete(key)
+            return
+        path.unlink(missing_ok=True)
 
     def _path(self, key: str) -> Path:
         if not self._KEY_PATTERN.fullmatch(key):

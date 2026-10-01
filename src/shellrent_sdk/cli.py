@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import sys
 from collections.abc import Sequence
 from pathlib import Path
@@ -17,14 +16,7 @@ from urllib.parse import urlsplit
 
 import httpx
 
-from .auth import (
-    ClientCredentials,
-    FileTokenStore,
-    MemoryTokenStore,
-    OAuth2Auth,
-    TokenError,
-    TokenStore,
-)
+from .auth import ClientCredentials, FileTokenStore, OAuth2Auth, TokenError
 from .http import _package_version, client_args
 
 __all__ = ["main"]
@@ -152,7 +144,9 @@ def _token(args: argparse.Namespace) -> int:
 
 
 def _client(credentials: ClientCredentials) -> tuple[httpx.Client, OAuth2Auth]:
-    args = client_args(credentials, token_store=_token_store())
+    # Each run is a new process: without a file the token would be requested every time.
+    # FileTokenStore follows SHELLRENT_TOKEN_CACHE, "off" included.
+    args = client_args(credentials, token_store=FileTokenStore())
     return httpx.Client(**args), args["auth"]
 
 
@@ -161,14 +155,6 @@ def _credentials() -> ClientCredentials:
         return ClientCredentials.from_env()
     except ValueError as exc:
         raise _UsageError(str(exc)) from None
-
-
-def _token_store() -> TokenStore:
-    # Each run is a new process: without a file the token would be requested every time.
-    setting = os.environ.get("SHELLRENT_TOKEN_CACHE", "")
-    if setting.lower() == "off":
-        return MemoryTokenStore()
-    return FileTokenStore(setting or None)
 
 
 def _path(path: str) -> str:

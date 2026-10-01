@@ -7,26 +7,22 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
+    from ..models.pagination_meta import PaginationMeta
     from ..models.service_server import ServiceServer
-    from ..models.service_server_list_response_meta_type_0 import ServiceServerListResponseMetaType0
 
 
-T = TypeVar("T", bound="ServiceServerListResponse")
+T = TypeVar("T", bound="ServiceServerPaginatedListResponse")
 
 
 @_attrs_define
-class ServiceServerListResponse:
+class ServiceServerPaginatedListResponse:
     error: int
     message: None | str
     data: list[ServiceServer]
-    meta: None | ServiceServerListResponseMetaType0
+    meta: PaginationMeta
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.service_server_list_response_meta_type_0 import (
-            ServiceServerListResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -37,11 +33,7 @@ class ServiceServerListResponse:
             data_item = data_item_data.to_dict()
             data.append(data_item)
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, ServiceServerListResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta.to_dict()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -58,10 +50,8 @@ class ServiceServerListResponse:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.pagination_meta import PaginationMeta
         from ..models.service_server import ServiceServer
-        from ..models.service_server_list_response_meta_type_0 import (
-            ServiceServerListResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = d.pop("error")
@@ -80,30 +70,17 @@ class ServiceServerListResponse:
 
             data.append(data_item)
 
-        def _parse_meta(data: object) -> None | ServiceServerListResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = ServiceServerListResponseMetaType0.from_dict(data)
+        meta = PaginationMeta.from_dict(d.pop("meta"))
 
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | ServiceServerListResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
-
-        service_server_list_response = cls(
+        service_server_paginated_list_response = cls(
             error=error,
             message=message,
             data=data,
             meta=meta,
         )
 
-        service_server_list_response.additional_properties = d
-        return service_server_list_response
+        service_server_paginated_list_response.additional_properties = d
+        return service_server_paginated_list_response
 
     @property
     def additional_keys(self) -> list[str]:

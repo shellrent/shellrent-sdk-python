@@ -6,14 +6,14 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.service_server_list_response import ServiceServerListResponse
+from ...models.service_server_paginated_list_response import ServiceServerPaginatedListResponse
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
+    per_page: int | Unset = 15,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -35,9 +35,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | ServiceServerListResponse | None:
+) -> ApiError | ServiceServerPaginatedListResponse | None:
     if response.status_code == 200:
-        response_200 = ServiceServerListResponse.from_dict(response.json())
+        response_200 = ServiceServerPaginatedListResponse.from_dict(response.json())
 
         return response_200
 
@@ -74,7 +74,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | ServiceServerListResponse]:
+) -> Response[ApiError | ServiceServerPaginatedListResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -87,22 +87,22 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
-) -> Response[ApiError | ServiceServerListResponse]:
+    per_page: int | Unset = 15,
+) -> Response[ApiError | ServiceServerPaginatedListResponse]:
     """Cloud VPS products
 
      Get a list of all Cloud VPS products that can be ordered
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | ServiceServerListResponse]
+        Response[ApiError | ServiceServerPaginatedListResponse]
     """
 
     kwargs = _get_kwargs(
@@ -121,22 +121,22 @@ def sync(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
-) -> ApiError | ServiceServerListResponse | None:
+    per_page: int | Unset = 15,
+) -> ApiError | ServiceServerPaginatedListResponse | None:
     """Cloud VPS products
 
      Get a list of all Cloud VPS products that can be ordered
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | ServiceServerListResponse
+        ApiError | ServiceServerPaginatedListResponse
     """
 
     return sync_detailed(
@@ -150,22 +150,22 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
-) -> Response[ApiError | ServiceServerListResponse]:
+    per_page: int | Unset = 15,
+) -> Response[ApiError | ServiceServerPaginatedListResponse]:
     """Cloud VPS products
 
      Get a list of all Cloud VPS products that can be ordered
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | ServiceServerListResponse]
+        Response[ApiError | ServiceServerPaginatedListResponse]
     """
 
     kwargs = _get_kwargs(
@@ -182,22 +182,22 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 20,
-) -> ApiError | ServiceServerListResponse | None:
+    per_page: int | Unset = 15,
+) -> ApiError | ServiceServerPaginatedListResponse | None:
     """Cloud VPS products
 
      Get a list of all Cloud VPS products that can be ordered
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 20.
+        per_page (int | Unset):  Default: 15.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | ServiceServerListResponse
+        ApiError | ServiceServerPaginatedListResponse
     """
 
     return (

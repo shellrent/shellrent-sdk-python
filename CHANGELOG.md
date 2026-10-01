@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-01
+
+### Added
+
+- `unwrap(response, unexpected_status_type=...)`: another generated client passes its own
+  `UnexpectedStatus`, so that `unwrap()` raises the same exception as its generated functions
+  instead of the `UnexpectedStatus` of `shellrent_sdk.client`, which its callers would not catch.
+  Without it, `unwrap()` raises the `UnexpectedStatus` of `shellrent_sdk.client` as before.
+- `ServiceServerPaginatedListResponse`, from the updated specification.
+
+### Changed
+
+- `FileTokenStore()` without a directory follows `SHELLRENT_TOKEN_CACHE`, like the `shellrent`
+  command: a directory, or `off` to keep the tokens in memory without writing any file. A directory
+  passed to `FileTokenStore` still wins. The command now uses `FileTokenStore()` itself, with the
+  same behaviour as before.
+- Functions and models regenerated from the updated specification of the Shellrent API:
+  - the default of `per_page` in the list operations is 15 instead of 20, as in the API;
+  - `list_active_monitoring_products` and `list_private_cloud_sv_products` return
+    `ServicePaginatedListResponse`, `list_cloud_vps_products` and `list_dedicated_server_products`
+    return `ServiceServerPaginatedListResponse`: their `meta` is a `PaginationMeta`.
+
+### Removed
+
+- `ServiceListResponse`, `ServiceListResponseMetaType0`, `ServiceServerListResponse` and
+  `ServiceServerListResponseMetaType0`, no longer in the specification: use
+  `ServicePaginatedListResponse` and `ServiceServerPaginatedListResponse`.
+
 ## [0.2.0] - 2026-10-01
 
 ### Added
@@ -45,6 +73,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `invalid_client` or, for its rate limit, `rate_limited`.
 - The `shellrent` command, with `shellrent api` and `shellrent token`.
 
-[Unreleased]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/shellrent/shellrent-sdk-python/releases/tag/v0.1.0
