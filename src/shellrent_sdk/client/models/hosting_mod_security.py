@@ -11,13 +11,27 @@ T = TypeVar("T", bound="HostingModSecurity")
 
 @_attrs_define
 class HostingModSecurity:
+    """Status of ModSecurity, the web application firewall, on the hosting"""
+
     hosting_id: int
+    """ Id of the hosting (`GET /api/v3/hostings/{hosting_id}`) """
     is_available: bool
+    """ Whether ModSecurity can be managed: only on Linux hostings, and not while the purchase is suspended or in
+    maintenance """
     is_active: bool
+    """ Whether ModSecurity is enabled (`PATCH /api/v3/hostings/{hosting_id}/modsecurity`) """
     firewall_compatible: bool
+    """ Whether the rules of ModSecurity can be managed on the web server of the hosting: false on dedicated web
+    servers and when ModSecurity is not available """
     full_strict: bool | None
+    """ Whether ModSecurity filters all the traffic, with no disabled rule; null when `firewall_compatible` is false
+    """
     custom_rules: list[str] | None
+    """ Numbers of the rules disabled on the hosting, as read from the web server; null when the hosting has no
+    custom configuration """
     custom_set: list[str] | None
+    """ Rule sets of the custom configuration of the hosting, as read from the web server; null when the hosting has
+    no custom configuration """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

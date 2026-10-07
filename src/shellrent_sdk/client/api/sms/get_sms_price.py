@@ -17,7 +17,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/sms/countries/{country_code}".format(
+        "url": "/api/v3/sms-prices/{country_code}".format(
             country_code=quote(str(country_code), safe=""),
         ),
     }
@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -83,6 +88,8 @@ def sync_detailed(
     """Get SMS price
 
      Get the SMS price for a specific Country
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         country_code (str):
@@ -115,6 +122,8 @@ def sync(
 
      Get the SMS price for a specific Country
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         country_code (str):
 
@@ -140,6 +149,8 @@ async def asyncio_detailed(
     """Get SMS price
 
      Get the SMS price for a specific Country
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         country_code (str):
@@ -169,6 +180,8 @@ async def asyncio(
     """Get SMS price
 
      Get the SMS price for a specific Country
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         country_code (str):

@@ -12,17 +12,25 @@ T = TypeVar("T", bound="HostingModSecurityScan")
 
 @_attrs_define
 class HostingModSecurityScan:
+    """Scan of the ModSecurity rules that generated errors or blocks on the hosting"""
+
     scan_id: int
-    hosting_id: int
+    hosting_id: int | None
+    """ Id of the hosting (`GET /api/v3/hostings/{hosting_id}`) """
     date_created: datetime.datetime
     error: None | str
+    """ Error of the scan; null when it succeeded """
     rules_found: int
+    """ Number of rules found by the scan: those that generated errors or blocks on the day of the scan """
     rules_excluded: int
+    """ Number of rules found by the scan that are disabled on the hosting now (`included` true in `GET
+    /api/v3/hostings/{hosting_id}/modsecurity/rules`) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         scan_id = self.scan_id
 
+        hosting_id: int | None
         hosting_id = self.hosting_id
 
         date_created = self.date_created.isoformat()
@@ -54,7 +62,12 @@ class HostingModSecurityScan:
         d = dict(src_dict)
         scan_id = d.pop("scan_id")
 
-        hosting_id = d.pop("hosting_id")
+        def _parse_hosting_id(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        hosting_id = _parse_hosting_id(d.pop("hosting_id"))
 
         date_created = datetime.datetime.fromisoformat(d.pop("date_created"))
 

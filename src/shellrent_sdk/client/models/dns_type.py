@@ -11,8 +11,13 @@ T = TypeVar("T", bound="DnsType")
 
 @_attrs_define
 class DnsType:
+    """Nameserver type of a domain, which decides where its DNS zone is managed"""
+
     type_code: str
+    """ Code of the nameserver type: `INTERNAL` (our "standard" nameservers), `EXTERNAL` (nameservers of a third
+    party) or `CLOUDFLARE` (Cloudflare nameservers, with a Cloudflare account) """
     type_name: str
+    """ Name of the nameserver type, in Italian: `Standard`, `Esterna` or `Cloudflare` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

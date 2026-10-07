@@ -16,22 +16,42 @@ T = TypeVar("T", bound="Microsoft365")
 
 @_attrs_define
 class Microsoft365:
+    """Microsoft 365 subscription of the account, with its status at the supplier and its tenant"""
+
     microsoft365_id: int
     purchase_id: int
+    """ Id of the purchase of the subscription (`GET /api/v3/purchases/{purchase_id}`) """
     tenant_id: int | None
+    """ Id of the tenant of the subscription (`GET /api/v3/microsoft-365-tenants/{microsoft_365_tenant_id}`) """
     service_name: None | str
+    """ Name of the service of the purchase, in Italian """
     purchase_name: None | str
+    """ Object name of the purchase (`purchase_name.object_name` of the purchase): the prefix of the tenant domain,
+    null until it is set """
     supplier_code: None | str
+    """ Reference of the subscription at the supplier; null until the supplier provisions it """
     supplier_status: None | str
+    """ Status of the subscription as the supplier reports it, for example `active`, `suspended` or `canceled`; null
+    until known """
     order_code: None | str
+    """ Code of the order placed at the supplier for the subscription; null until it is placed """
     order_reference: None | str
+    """ Reference of the order at the supplier; null until the supplier assigns it """
     order_status: None | str
+    """ Status of the order at the supplier, for example `Order queued`, `Fulfilled` or `Archived`; null until the
+    order is placed """
     order_need_submit: bool
+    """ Whether the order at the supplier ended with a warning and must be submitted again """
     autorenew_enabled: bool
+    """ Whether the subscription renews automatically at the supplier """
     is_trial: bool
+    """ Whether the subscription is a trial """
     subscription_activation_date: datetime.date | None
+    """ Activation date of the subscription at the supplier; null until known """
     subscription_expiry_date: datetime.date | None
+    """ Expiry date of the subscription at the supplier; null until known """
     tenant: Microsoft365Tenant | None
+    """ Tenant of the subscription """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

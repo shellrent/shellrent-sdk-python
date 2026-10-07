@@ -11,11 +11,17 @@ T = TypeVar("T", bound="HostingModSecurityRule")
 
 @_attrs_define
 class HostingModSecurityRule:
+    """ModSecurity rule of the hosting, found by a scan or added by hand, and whether it is disabled"""
+
     rule_id: int
     hosting_id: int
+    """ Id of the hosting (`GET /api/v3/hostings/{hosting_id}`) """
     rule_number: str
+    """ Number of the rule in ModSecurity """
     description: None | str
+    """ Message of the rule found by the scan, or the description given when it was added """
     included: bool
+    """ Whether the rule is disabled on the hosting: it is in the list of rules that ModSecurity does not apply """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

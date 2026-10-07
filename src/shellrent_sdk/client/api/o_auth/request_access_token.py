@@ -79,13 +79,13 @@ def sync_detailed(
     client: AuthenticatedClient | Client,
     body: RequestAccessTokenBody,
 ) -> Response[OAuthError | OAuthTokenResponse]:
-    """Richiedi un access token
+    """Request an access token
 
-     Eroga un access token JWT tramite grant `client_credentials`. I parametri `audience` e `scope` sono
-    opzionali: senza `audience` il token usa l'unica audience del client (un client con più audience
-    deve indicarla), senza `scope` riceve tutti gli scope assegnati al client, come con
-    `scope=api:full`. Gli scope interni sono concessi solo con audience `api-internal`. La risposta
-    riporta l'audience e gli scope concessi.
+     Issues a JWT access token with the `client_credentials` grant. The `audience` and `scope` parameters
+    are optional: without `audience`, or with an empty value, the token gets the only audience of the
+    client (a client with more audiences must send it); without `scope` it gets all the scopes assigned
+    to the client, as with `scope=api:full`. The internal scopes are granted only with the `api-
+    internal` audience. The response reports the granted audience and scopes.
 
     Args:
         body (RequestAccessTokenBody):
@@ -114,13 +114,13 @@ def sync(
     client: AuthenticatedClient | Client,
     body: RequestAccessTokenBody,
 ) -> OAuthError | OAuthTokenResponse | None:
-    """Richiedi un access token
+    """Request an access token
 
-     Eroga un access token JWT tramite grant `client_credentials`. I parametri `audience` e `scope` sono
-    opzionali: senza `audience` il token usa l'unica audience del client (un client con più audience
-    deve indicarla), senza `scope` riceve tutti gli scope assegnati al client, come con
-    `scope=api:full`. Gli scope interni sono concessi solo con audience `api-internal`. La risposta
-    riporta l'audience e gli scope concessi.
+     Issues a JWT access token with the `client_credentials` grant. The `audience` and `scope` parameters
+    are optional: without `audience`, or with an empty value, the token gets the only audience of the
+    client (a client with more audiences must send it); without `scope` it gets all the scopes assigned
+    to the client, as with `scope=api:full`. The internal scopes are granted only with the `api-
+    internal` audience. The response reports the granted audience and scopes.
 
     Args:
         body (RequestAccessTokenBody):
@@ -144,13 +144,13 @@ async def asyncio_detailed(
     client: AuthenticatedClient | Client,
     body: RequestAccessTokenBody,
 ) -> Response[OAuthError | OAuthTokenResponse]:
-    """Richiedi un access token
+    """Request an access token
 
-     Eroga un access token JWT tramite grant `client_credentials`. I parametri `audience` e `scope` sono
-    opzionali: senza `audience` il token usa l'unica audience del client (un client con più audience
-    deve indicarla), senza `scope` riceve tutti gli scope assegnati al client, come con
-    `scope=api:full`. Gli scope interni sono concessi solo con audience `api-internal`. La risposta
-    riporta l'audience e gli scope concessi.
+     Issues a JWT access token with the `client_credentials` grant. The `audience` and `scope` parameters
+    are optional: without `audience`, or with an empty value, the token gets the only audience of the
+    client (a client with more audiences must send it); without `scope` it gets all the scopes assigned
+    to the client, as with `scope=api:full`. The internal scopes are granted only with the `api-
+    internal` audience. The response reports the granted audience and scopes.
 
     Args:
         body (RequestAccessTokenBody):
@@ -177,13 +177,13 @@ async def asyncio(
     client: AuthenticatedClient | Client,
     body: RequestAccessTokenBody,
 ) -> OAuthError | OAuthTokenResponse | None:
-    """Richiedi un access token
+    """Request an access token
 
-     Eroga un access token JWT tramite grant `client_credentials`. I parametri `audience` e `scope` sono
-    opzionali: senza `audience` il token usa l'unica audience del client (un client con più audience
-    deve indicarla), senza `scope` riceve tutti gli scope assegnati al client, come con
-    `scope=api:full`. Gli scope interni sono concessi solo con audience `api-internal`. La risposta
-    riporta l'audience e gli scope concessi.
+     Issues a JWT access token with the `client_credentials` grant. The `audience` and `scope` parameters
+    are optional: without `audience`, or with an empty value, the token gets the only audience of the
+    client (a client with more audiences must send it); without `scope` it gets all the scopes assigned
+    to the client, as with `scope=api:full`. The internal scopes are granted only with the `api-
+    internal` audience. The response reports the granted audience and scopes.
 
     Args:
         body (RequestAccessTokenBody):

@@ -15,10 +15,16 @@ T = TypeVar("T", bound="ObjectStorageBucketChart")
 
 @_attrs_define
 class ObjectStorageBucketChart:
+    """Daily usage history of a bucket, for a chart"""
+
     object_storage_id: int
+    """ Id of the object storage (`GET /api/v3/object-storages/{object_storage_id}`) """
     bucket_id: int
+    """ Id of the bucket (`GET /api/v3/object-storages/{object_storage_id}/buckets/{bucket_id}`) """
     interval: str
+    """ Interval between two points, as an ISO 8601 duration: always `P1D`, one point per day """
     points: list[ObjectStorageBucketChartPointsItem]
+    """ Usage of the bucket day by day, oldest first """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

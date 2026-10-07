@@ -6,24 +6,27 @@ from typing import Any, Self, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
 T = TypeVar("T", bound="ObjectStorageBucketChartPointsItem")
 
 
 @_attrs_define
 class ObjectStorageBucketChartPointsItem:
-    x: float | Unset = UNSET
+    x: float
     """ UNIX timestamp in milliseconds """
-    active_storage_bytes: int | Unset = UNSET
-    deleted_storage_bytes: int | Unset = UNSET
-    active_objects: int | Unset = UNSET
-    deleted_objects: int | Unset = UNSET
-    api_calls_count: int | Unset = UNSET
-    storage_wrote_bytes: int | Unset = UNSET
-    storage_read_bytes: int | Unset = UNSET
-    ingress_traffic_bytes: int | Unset = UNSET
-    egress_traffic_bytes: int | Unset = UNSET
+    active_storage_bytes: int
+    """ Space used by the active objects on the day, in bytes """
+    deleted_storage_bytes: int
+    """ Space of the deleted objects still counted on the day, in bytes """
+    active_objects: int
+    """ Number of active objects on the day """
+    deleted_objects: int
+    """ Number of deleted objects still counted on the day """
+    api_calls_count: int
+    """ Number of API calls on the day """
+    storage_wrote_bytes: int
+    storage_read_bytes: int
+    ingress_traffic_bytes: int
+    egress_traffic_bytes: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -49,52 +52,45 @@ class ObjectStorageBucketChartPointsItem:
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
-        if x is not UNSET:
-            field_dict["x"] = x
-        if active_storage_bytes is not UNSET:
-            field_dict["active_storage_bytes"] = active_storage_bytes
-        if deleted_storage_bytes is not UNSET:
-            field_dict["deleted_storage_bytes"] = deleted_storage_bytes
-        if active_objects is not UNSET:
-            field_dict["active_objects"] = active_objects
-        if deleted_objects is not UNSET:
-            field_dict["deleted_objects"] = deleted_objects
-        if api_calls_count is not UNSET:
-            field_dict["api_calls_count"] = api_calls_count
-        if storage_wrote_bytes is not UNSET:
-            field_dict["storage_wrote_bytes"] = storage_wrote_bytes
-        if storage_read_bytes is not UNSET:
-            field_dict["storage_read_bytes"] = storage_read_bytes
-        if ingress_traffic_bytes is not UNSET:
-            field_dict["ingress_traffic_bytes"] = ingress_traffic_bytes
-        if egress_traffic_bytes is not UNSET:
-            field_dict["egress_traffic_bytes"] = egress_traffic_bytes
+        field_dict.update(
+            {
+                "x": x,
+                "active_storage_bytes": active_storage_bytes,
+                "deleted_storage_bytes": deleted_storage_bytes,
+                "active_objects": active_objects,
+                "deleted_objects": deleted_objects,
+                "api_calls_count": api_calls_count,
+                "storage_wrote_bytes": storage_wrote_bytes,
+                "storage_read_bytes": storage_read_bytes,
+                "ingress_traffic_bytes": ingress_traffic_bytes,
+                "egress_traffic_bytes": egress_traffic_bytes,
+            }
+        )
 
         return field_dict
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        x = d.pop("x", UNSET)
+        x = d.pop("x")
 
-        active_storage_bytes = d.pop("active_storage_bytes", UNSET)
+        active_storage_bytes = d.pop("active_storage_bytes")
 
-        deleted_storage_bytes = d.pop("deleted_storage_bytes", UNSET)
+        deleted_storage_bytes = d.pop("deleted_storage_bytes")
 
-        active_objects = d.pop("active_objects", UNSET)
+        active_objects = d.pop("active_objects")
 
-        deleted_objects = d.pop("deleted_objects", UNSET)
+        deleted_objects = d.pop("deleted_objects")
 
-        api_calls_count = d.pop("api_calls_count", UNSET)
+        api_calls_count = d.pop("api_calls_count")
 
-        storage_wrote_bytes = d.pop("storage_wrote_bytes", UNSET)
+        storage_wrote_bytes = d.pop("storage_wrote_bytes")
 
-        storage_read_bytes = d.pop("storage_read_bytes", UNSET)
+        storage_read_bytes = d.pop("storage_read_bytes")
 
-        ingress_traffic_bytes = d.pop("ingress_traffic_bytes", UNSET)
+        ingress_traffic_bytes = d.pop("ingress_traffic_bytes")
 
-        egress_traffic_bytes = d.pop("egress_traffic_bytes", UNSET)
+        egress_traffic_bytes = d.pop("egress_traffic_bytes")
 
         object_storage_bucket_chart_points_item = cls(
             x=x,

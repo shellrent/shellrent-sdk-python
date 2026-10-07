@@ -18,26 +18,50 @@ T = TypeVar("T", bound="ServiceServer")
 
 @_attrs_define
 class ServiceServer:
+    """Server service of the price list, with the templates and operating systems it can be bought with"""
+
     service_id: int
     service_category: ServiceCategory
     service_name: str
+    """ Name of the service, in Italian """
     recurrence: Recurrence
+    """ Billing recurrence: its frequency and, in days, the timings of renewal, suspension and dismission """
     recurrences_available: list[Recurrence]
+    """ Recurrences that can be chosen when buying the service (`recurrence_id`) """
     tld_id: int | None
+    """ Id of the TLD of a domain service (`GET /api/v3/tlds/{tld_id}`); null for the other services """
     service_code: str
+    """ Code of the service, for example `DEDICATED_SERVER_ADVANCE` or `CLOUD_VPS_STD_IOPS` """
     service_url: str
+    """ URL of the cart page of the service """
     activation_price: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     renew_price: Amount | None
+    """ Renew price of the price list; null when the service has none """
     restore_price: Amount | None
+    """ Restore price of the price list; null when the service has none """
     transfer_price: Amount | None
+    """ Transfer price of the price list; null when the service has none """
     is_primary: bool | None
+    """ Whether the service can be sold as a primary service """
     is_secondary: bool | None
+    """ Whether the service is an additional service of a primary one """
     is_presale: bool | None
+    """ Whether the service can be bought as an additional service together with its primary service (presale) """
     is_aftersale: bool | None
+    """ Whether the service can be bought as an additional service after the activation of its primary service
+    (aftersale) """
     is_quantifiable: bool | None
+    """ Whether the service can be added to the cart more than once; the quantity of one purchase is set by
+    `quantity_min` and `quantity_max` """
     quantity_min: int | None
+    """ Minimum quantity of the service in one purchase """
     quantity_max: int | None
+    """ Maximum quantity of the service in one purchase; null when the quantity cannot be chosen """
     templates: list[ServerTemplate]
+    """ Server templates compatible with the service, with their operating systems: `template_code` and `os_code`
+    are the values of `SERVER_CONFIGURATION_CODE` and `SERVER_TEMPLATE_CODE` when buying it """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

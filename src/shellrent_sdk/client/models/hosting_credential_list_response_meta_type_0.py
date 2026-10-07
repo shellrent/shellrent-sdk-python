@@ -11,6 +11,8 @@ T = TypeVar("T", bound="HostingCredentialListResponseMetaType0")
 
 @_attrs_define
 class HostingCredentialListResponseMetaType0:
+    """Always null: only the paginated lists have a `meta`"""
+
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

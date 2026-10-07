@@ -19,7 +19,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/sms/phonebooks",
+        "url": "/api/v3/sms-phonebooks",
     }
 
     _kwargs["json"] = body.to_dict()
@@ -33,10 +33,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | SmsPhonebookResponse | None:
-    if response.status_code == 200:
-        response_200 = SmsPhonebookResponse.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = SmsPhonebookResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -62,6 +62,11 @@ def _parse_response(
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)

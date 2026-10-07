@@ -67,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -92,11 +97,12 @@ def sync_detailed(
 ) -> Response[ApiError | HostingModSecurityRuleListResponse]:
     """Enable ModSecurity rules
 
-     Enable multiple ModSecurity rules by id
+     Disables on the hosting the ModSecurity rules with the given ids (`rule_id`), so that ModSecurity no
+    longer applies them, and returns them with `included` true
 
     Args:
         hosting_id (int):
-        body (HostingModSecurityRuleBulkRequest):
+        body (HostingModSecurityRuleBulkRequest): Rules of the hosting to disable
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,11 +132,12 @@ def sync(
 ) -> ApiError | HostingModSecurityRuleListResponse | None:
     """Enable ModSecurity rules
 
-     Enable multiple ModSecurity rules by id
+     Disables on the hosting the ModSecurity rules with the given ids (`rule_id`), so that ModSecurity no
+    longer applies them, and returns them with `included` true
 
     Args:
         hosting_id (int):
-        body (HostingModSecurityRuleBulkRequest):
+        body (HostingModSecurityRuleBulkRequest): Rules of the hosting to disable
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -155,11 +162,12 @@ async def asyncio_detailed(
 ) -> Response[ApiError | HostingModSecurityRuleListResponse]:
     """Enable ModSecurity rules
 
-     Enable multiple ModSecurity rules by id
+     Disables on the hosting the ModSecurity rules with the given ids (`rule_id`), so that ModSecurity no
+    longer applies them, and returns them with `included` true
 
     Args:
         hosting_id (int):
-        body (HostingModSecurityRuleBulkRequest):
+        body (HostingModSecurityRuleBulkRequest): Rules of the hosting to disable
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,11 +195,12 @@ async def asyncio(
 ) -> ApiError | HostingModSecurityRuleListResponse | None:
     """Enable ModSecurity rules
 
-     Enable multiple ModSecurity rules by id
+     Disables on the hosting the ModSecurity rules with the given ids (`rule_id`), so that ModSecurity no
+    longer applies them, and returns them with `included` true
 
     Args:
         hosting_id (int):
-        body (HostingModSecurityRuleBulkRequest):
+        body (HostingModSecurityRuleBulkRequest): Rules of the hosting to disable
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

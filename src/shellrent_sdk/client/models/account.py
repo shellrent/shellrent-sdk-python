@@ -16,17 +16,29 @@ T = TypeVar("T", bound="Account")
 
 @_attrs_define
 class Account:
+    """User account, with the data of its administrative contact: without one, these data are null and the country is Italy"""
+
     account_id: int
-    username: str
+    username: None | str
+    """ Username assigned to the account when it is created, used to log in """
     username_alias: None | str
-    account_name: str
+    """ Alternative username chosen for the account, also valid to log in; null when not set """
+    account_name: None | str
+    """ Display name of the account: first name and surname of the administrative contact, or its organization, or
+    the username; empty when the account has no administrative contact """
     name: None | str
+    """ First name of the administrative contact """
     surname: None | str
+    """ Surname of the administrative contact """
     email: None | str
     phone: None | str
+    """ Phone of the administrative contact, usually in the form `0039.0123456789`: `00` and the international
+    prefix, a dot, the number """
     address: None | str
     city: None | str
     state: None | str
+    """ Province of the administrative contact: the acronym of the Italian province, for example `VI`, or `EE`
+    outside Italy """
     postal_code: None | str
     country: Country
     date_created: datetime.datetime
@@ -35,11 +47,13 @@ class Account:
     def to_dict(self) -> dict[str, Any]:
         account_id = self.account_id
 
+        username: None | str
         username = self.username
 
         username_alias: None | str
         username_alias = self.username_alias
 
+        account_name: None | str
         account_name = self.account_name
 
         name: None | str
@@ -100,7 +114,12 @@ class Account:
         d = dict(src_dict)
         account_id = d.pop("account_id")
 
-        username = d.pop("username")
+        def _parse_username(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        username = _parse_username(d.pop("username"))
 
         def _parse_username_alias(data: object) -> None | str:
             if data is None:
@@ -109,7 +128,12 @@ class Account:
 
         username_alias = _parse_username_alias(d.pop("username_alias"))
 
-        account_name = d.pop("account_name")
+        def _parse_account_name(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        account_name = _parse_account_name(d.pop("account_name"))
 
         def _parse_name(data: object) -> None | str:
             if data is None:

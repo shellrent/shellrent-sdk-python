@@ -15,9 +15,14 @@ T = TypeVar("T", bound="ServerTemplate")
 
 @_attrs_define
 class ServerTemplate:
+    """Server template that can be chosen when buying the service, with the operating systems compatible with it"""
+
     template_code: str
+    """ Code of the server template, to send as `SERVER_CONFIGURATION_CODE` in `data` when buying the service """
     template_name: str
+    """ Short name of the server template """
     template_name_alternative: None | str
+    """ Longer name of the server template; null when it has none """
     min_ram: int | None
     """ Min RAM (GB), for VPS/VM only """
     min_cpu: int | None

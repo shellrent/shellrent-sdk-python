@@ -16,21 +16,38 @@ T = TypeVar("T", bound="PecOwnerChange")
 
 @_attrs_define
 class PecOwnerChange:
+    """Request to change the owner of a PEC mailbox or of a PEC domain, with its documents and its status"""
+
     owner_change_id: int | None
     pec_id: int | None
+    """ Id of the PEC mailbox of the request (`GET /api/v3/pec-mailboxes/{pec_id}`); null for the requests of a PEC
+    domain """
     pec_domain_id: int | None
+    """ Id of the PEC domain of the request (`GET /api/v3/pec-domains/{pec_domain_id}`); null for the requests of a
+    mailbox """
     status_code: None | str
+    """ Status of the request: `PENDENT` (documents not sent yet), `PENDENT_APPROVAL` (waiting for our approval),
+    `APPROVED` or `REJECTED` """
     rejection_reason: None | str
+    """ Reason of the rejection; null unless the request was rejected """
     submission_date: datetime.datetime | None
+    """ When the documents were sent; null until they are """
     acceptance_date: datetime.datetime | None
+    """ When the request was approved """
     rejection_date: datetime.datetime | None
+    """ When the request was rejected """
     has_identity_document: bool
+    """ Whether the request has the identity document """
     has_contract_document: bool
+    """ Whether the request has the contract """
     has_order_module_document: bool
-    person_id_accept: int | None
-    person_id_reject: int | None
+    """ Whether the request has the order form """
     owner_old: PecOwnerSummary
+    """ Owner (titolare) of a PEC mailbox or domain: the person and, for organizations, the data of the
+    organization; all the fields are null when there is no owner """
     owner_new: PecOwnerSummary
+    """ Owner (titolare) of a PEC mailbox or domain: the person and, for organizations, the data of the
+    organization; all the fields are null when there is no owner """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -74,12 +91,6 @@ class PecOwnerChange:
 
         has_order_module_document = self.has_order_module_document
 
-        person_id_accept: int | None
-        person_id_accept = self.person_id_accept
-
-        person_id_reject: int | None
-        person_id_reject = self.person_id_reject
-
         owner_old = self.owner_old.to_dict()
 
         owner_new = self.owner_new.to_dict()
@@ -105,8 +116,6 @@ class PecOwnerChange:
                 "has_identity_document": has_identity_document,
                 "has_contract_document": has_contract_document,
                 "has_order_module_document": has_order_module_document,
-                "person_id_accept": person_id_accept,
-                "person_id_reject": person_id_reject,
                 "owner_old": owner_old,
                 "owner_new": owner_new,
                 "date_created": date_created,
@@ -207,20 +216,6 @@ class PecOwnerChange:
 
         has_order_module_document = d.pop("has_order_module_document")
 
-        def _parse_person_id_accept(data: object) -> int | None:
-            if data is None:
-                return data
-            return cast(int | None, data)
-
-        person_id_accept = _parse_person_id_accept(d.pop("person_id_accept"))
-
-        def _parse_person_id_reject(data: object) -> int | None:
-            if data is None:
-                return data
-            return cast(int | None, data)
-
-        person_id_reject = _parse_person_id_reject(d.pop("person_id_reject"))
-
         owner_old = PecOwnerSummary.from_dict(d.pop("owner_old"))
 
         owner_new = PecOwnerSummary.from_dict(d.pop("owner_new"))
@@ -252,8 +247,6 @@ class PecOwnerChange:
             has_identity_document=has_identity_document,
             has_contract_document=has_contract_document,
             has_order_module_document=has_order_module_document,
-            person_id_accept=person_id_accept,
-            person_id_reject=person_id_reject,
             owner_old=owner_old,
             owner_new=owner_new,
             date_created=date_created,

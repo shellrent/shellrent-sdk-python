@@ -9,7 +9,7 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.amount_simple import AmountSimple
-    from ..models.payment_provider_data_type_0 import PaymentProviderDataType0
+    from ..models.payment_provider_data import PaymentProviderData
     from ..models.prepaid_credit_operation import PrepaidCreditOperation
 
 
@@ -18,19 +18,31 @@ T = TypeVar("T", bound="Payment")
 
 @_attrs_define
 class Payment:
+    """Payment of one or more orders, with the data of the payment provider"""
+
     payment_id: int
     payment_method: str
+    """ Name of the payment method, in Italian, for example `Carta di credito` or `Bonifico Bancario` """
     payment_code: str
+    """ Unique code of the payment: `SR` followed by letters and digits, to write in the reason of a bank transfer
+    """
     amount_total: AmountSimple
+    """ Amount in euros, without the VAT details of `Amount` """
     amount_payed: AmountSimple
+    """ Amount in euros, without the VAT details of `Amount` """
     date_payment: datetime.datetime | None
+    """ When the payment was made (the latest paid attempt); null when nothing has been paid """
     payed: bool
+    """ Whether the payment is complete: `amount_payed` reaches `amount_total` """
     prepaid_credit_operations: list[PrepaidCreditOperation]
-    provider_data: None | PaymentProviderDataType0
+    """ Uses of the prepaid credit made by the payment; empty unless the payment is with the prepaid credit """
+    provider_data: None | PaymentProviderData
+    """ Data of the payment provider, from the paid attempt or the latest one; null when the payment has no attempts
+    """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.payment_provider_data_type_0 import PaymentProviderDataType0
+        from ..models.payment_provider_data import PaymentProviderData
 
         payment_id = self.payment_id
 
@@ -56,7 +68,7 @@ class Payment:
             prepaid_credit_operations.append(prepaid_credit_operations_item)
 
         provider_data: dict[str, Any] | None
-        if isinstance(self.provider_data, PaymentProviderDataType0):
+        if isinstance(self.provider_data, PaymentProviderData):
             provider_data = self.provider_data.to_dict()
         else:
             provider_data = self.provider_data
@@ -82,7 +94,7 @@ class Payment:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.amount_simple import AmountSimple
-        from ..models.payment_provider_data_type_0 import PaymentProviderDataType0
+        from ..models.payment_provider_data import PaymentProviderData
         from ..models.prepaid_credit_operation import PrepaidCreditOperation
 
         d = dict(src_dict)
@@ -122,18 +134,18 @@ class Payment:
 
             prepaid_credit_operations.append(prepaid_credit_operations_item)
 
-        def _parse_provider_data(data: object) -> None | PaymentProviderDataType0:
+        def _parse_provider_data(data: object) -> None | PaymentProviderData:
             if data is None:
                 return data
             try:
                 if not isinstance(data, dict):
                     raise TypeError()
-                provider_data_type_0 = PaymentProviderDataType0.from_dict(data)
+                provider_data_type_0 = PaymentProviderData.from_dict(data)
 
                 return provider_data_type_0
             except (TypeError, ValueError, AttributeError, KeyError):
                 pass
-            return cast(None | PaymentProviderDataType0, data)
+            return cast(None | PaymentProviderData, data)
 
         provider_data = _parse_provider_data(d.pop("provider_data"))
 

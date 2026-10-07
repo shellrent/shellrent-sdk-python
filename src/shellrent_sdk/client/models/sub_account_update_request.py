@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -14,22 +13,37 @@ T = TypeVar("T", bound="SubAccountUpdateRequest")
 @_attrs_define
 class SubAccountUpdateRequest:
     person_password: str | Unset = UNSET
+    """ New password of the account: at least 13 characters, with at least one uppercase letter, one lowercase
+    letter, one number and one symbol """
     username_alias: None | str | Unset = UNSET
+    """ Alternative username of the account, also valid to log in; null or empty to remove it """
     administrative_person_name: str | Unset = UNSET
+    """ First name of the administrative contact of the account """
     administrative_person_surname: str | Unset = UNSET
+    """ Surname of the administrative contact """
     administrative_address: str | Unset = UNSET
+    """ Address of the administrative contact """
     administrative_city: str | Unset = UNSET
+    """ City of the administrative contact """
     administrative_state: str | Unset = UNSET
-    """ State or province """
+    """ Acronym of the Italian province, ie. "VI" for Vicenza, or "EE" for an address outside Italy """
     administrative_country: str | Unset = UNSET
-    """ Country ISO code with 2 letters """
+    """ Country ISO code with 2 letters, ie. "IT" for Italy, "ES" for Spain, etc. """
     administrative_postal_code: str | Unset = UNSET
+    """ Postal code of the administrative contact """
     administrative_phone_prefix: str | Unset = UNSET
+    """ International phone code (prefix) for "Phone", ie. "39" for Italy, "44" for United Kingdom; empty for Italy.
+    Required with `administrative_phone` """
     administrative_phone: str | Unset = UNSET
+    """ Phone number without international phone code, digits only. Required with `administrative_phone_prefix` """
     administrative_mobile_prefix: str | Unset = UNSET
+    """ International phone code (prefix) for "Mobile", ie. "39" for Italy, "44" for United Kingdom; empty for
+    Italy. Required with `administrative_mobile` """
     administrative_mobile: str | Unset = UNSET
+    """ Mobile phone number without international phone code, digits only. Required with
+    `administrative_mobile_prefix` """
     administrative_email: str | Unset = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    """ Email address of the administrative contact """
 
     def to_dict(self) -> dict[str, Any]:
         person_password = self.person_password
@@ -65,7 +79,7 @@ class SubAccountUpdateRequest:
         administrative_email = self.administrative_email
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update({})
         if person_password is not UNSET:
             field_dict["person_password"] = person_password
@@ -153,21 +167,4 @@ class SubAccountUpdateRequest:
             administrative_email=administrative_email,
         )
 
-        sub_account_update_request.additional_properties = d
         return sub_account_update_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

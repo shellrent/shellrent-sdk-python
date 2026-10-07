@@ -16,8 +16,15 @@ T = TypeVar("T", bound="DomainDnssec")
 
 @_attrs_define
 class DomainDnssec:
+    """Active DNSSEC records of the domain: the ones of our zone with the standard nameservers, the ones set with `PATCH
+    /api/v3/domains/{domain_id}/dnssec` with the external nameservers
+
+    """
+
     ds_data: list[DnssecDsData]
+    """ DS records """
     key_data: list[DnssecKeyData]
+    """ DNSKEY records """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

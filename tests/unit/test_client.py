@@ -14,13 +14,14 @@ from shellrent_sdk.client import AuthenticatedClient
 from shellrent_sdk.client.api.billing import download_invoice_pdf
 from shellrent_sdk.client.api.health import get_health
 from shellrent_sdk.client.api.hosting import get_hosting_antivirus
+from shellrent_sdk.client.api.payment import create_prepaid_credit_payment
 from shellrent_sdk.client.api.purchases import get_purchase, list_tasks
-from shellrent_sdk.client.api.shop import pay_orders
+from shellrent_sdk.client.api.sms import delete_sms
 from shellrent_sdk.client.models import (
     ApiError,
     HealthStatusResponse,
-    OrderPayRequest,
     Payment,
+    PrepaidCreditPaymentCreateRequest,
 )
 from shellrent_sdk.http import RetryTransport, default_user_agent
 from tests.support import (
@@ -165,21 +166,24 @@ def test_undocumented_status_codes_raise_unexpected_status(api: FakeApi) -> None
     assert info.value.status_code == 503
 
 
-def test_inline_envelopes_accept_null_message_and_meta(api: FakeApi) -> None:
+def test_envelopes_accept_null_data_message_and_meta(api: FakeApi) -> None:
     body = {"error": 0, "message": None, "data": None, "meta": None}
-    api.responses += [
-        token_response(),
-        httpx.Response(200, json=body),
-        httpx.Response(200, json=body),
-    ]
+    api.responses += [token_response(), httpx.Response(200, json=body)]
+
+    # No scan yet.
+    antivirus = unwrap(get_hosting_antivirus.sync_detailed(1, client=create_client(credentials())))
+
+    assert (antivirus.data, antivirus.message, antivirus.meta) == (None, None, None)
+
+
+def test_unwrap_returns_none_for_204_no_content(api: FakeApi) -> None:
+    api.responses += [token_response(), httpx.Response(204), httpx.Response(204)]
     client = create_client(credentials())
 
     # Nothing to pay: the total is 0.00.
-    payment = unwrap(pay_orders.sync_detailed(client=client, body=OrderPayRequest(order_ids=[1])))
-    antivirus = unwrap(get_hosting_antivirus.sync_detailed(1, client=client))
-
-    assert (payment.data, payment.message, payment.meta) == (None, None, None)
-    assert (antivirus.data, antivirus.message, antivirus.meta) == (None, None, None)
+    order = PrepaidCreditPaymentCreateRequest(order_ids=[1])
+    assert unwrap(create_prepaid_credit_payment.sync_detailed(client=client, body=order)) is None
+    assert unwrap(delete_sms.sync_detailed(1, client=client)) is None
 
 
 def test_list_tasks_sends_only_the_parameters_with_a_default(api: FakeApi) -> None:
@@ -187,7 +191,7 @@ def test_list_tasks_sends_only_the_parameters_with_a_default(api: FakeApi) -> No
         "error": 0,
         "message": None,
         "data": [],
-        "meta": {"total": 0, "count": 0, "pages": 0, "page": 1, "per_page": 15},
+        "meta": {"total": 0, "count": 0, "pages": 0, "page": 1, "per_page": 20},
     }
     api.responses += [token_response(), httpx.Response(200, json=body)]
 
@@ -196,7 +200,7 @@ def test_list_tasks_sends_only_the_parameters_with_a_default(api: FakeApi) -> No
     assert dict(api.api_requests[0].url.params) == {
         "alive_only": "true",
         "page": "1",
-        "per_page": "15",
+        "per_page": "20",
     }
 
 
@@ -260,16 +264,15 @@ PAYMENT = {
 }
 
 
-def test_pay_orders_returns_the_payment(api: FakeApi) -> None:
-    body = {"error": 0, "message": "", "data": PAYMENT, "meta": {}}
-    api.responses += [token_response(), httpx.Response(200, json=body)]
-    order = OrderPayRequest(order_ids=[1, 2], use_prepaid_credit=True)
+def test_create_prepaid_credit_payment_returns_the_payment(api: FakeApi) -> None:
+    body = {"error": 0, "message": None, "data": PAYMENT, "meta": None}
+    api.responses += [token_response(), httpx.Response(201, json=body)]
+    order = PrepaidCreditPaymentCreateRequest(order_ids=[1, 2])
 
-    result = unwrap(pay_orders.sync_detailed(client=create_client(credentials()), body=order))
+    result = unwrap(
+        create_prepaid_credit_payment.sync_detailed(client=create_client(credentials()), body=order)
+    )
 
     assert isinstance(result.data, Payment)
     assert result.data.payment_id == 7
-    assert json.loads(api.api_requests[0].content) == {
-        "order_ids": [1, 2],
-        "use_prepaid_credit": True,
-    }
+    assert json.loads(api.api_requests[0].content) == {"order_ids": [1, 2]}

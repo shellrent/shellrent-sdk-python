@@ -11,10 +11,17 @@ T = TypeVar("T", bound="WebMonitoringNotices")
 
 @_attrs_define
 class WebMonitoringNotices:
+    """Notice settings of a web monitoring"""
+
     web_monitoring_id: int
+    """ Id of the web monitoring (`GET /api/v3/web-monitorings/{web_monitoring_id}`) """
     notification_email: None | str
+    """ Email address for the notices of the monitoring (site down or back up, SSL expiry); without it no email
+    notice is sent """
     notification_sms: None | str
-    send_ssl_notify: bool
+    """ Italian mobile number for the SMS notices, without the international prefix; without it no SMS is sent """
+    send_ssl_notify: bool | None
+    """ Whether the notices of the expiry of the SSL certificate of the site are sent """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -26,6 +33,7 @@ class WebMonitoringNotices:
         notification_sms: None | str
         notification_sms = self.notification_sms
 
+        send_ssl_notify: bool | None
         send_ssl_notify = self.send_ssl_notify
 
         field_dict: dict[str, Any] = {}
@@ -60,7 +68,12 @@ class WebMonitoringNotices:
 
         notification_sms = _parse_notification_sms(d.pop("notification_sms"))
 
-        send_ssl_notify = d.pop("send_ssl_notify")
+        def _parse_send_ssl_notify(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        send_ssl_notify = _parse_send_ssl_notify(d.pop("send_ssl_notify"))
 
         web_monitoring_notices = cls(
             web_monitoring_id=web_monitoring_id,

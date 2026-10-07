@@ -12,19 +12,39 @@ T = TypeVar("T", bound="HostingCronjob")
 
 @_attrs_define
 class HostingCronjob:
+    """Cron job of the hosting: a URL called on a schedule"""
+
     cronjob_id: int
     hosting_id: int
+    """ Id of the hosting of the request: cron jobs belong to the purchase, so a subdomain lists those of its main
+    hosting """
     purchase_id: int
+    """ Id of the purchase of the hosting (`GET /api/v3/purchases/{purchase_id}`) """
     request_url: str
+    """ URL called by the cron job, with the protocol """
     http_request_method: None | str
+    """ HTTP method of the call: `GET` or `POST` """
     plan_month: None | str
+    """ Months, from 1 (January) to 12 (December), as a comma-separated list like in the creation (for example
+    `1,6`); null for every month """
     plan_monthday: None | str
+    """ Days of the month, from 1 to 31, as a comma-separated list like in the creation (for example `1,15`); null
+    for every day """
     plan_weekday: None | str
+    """ Days of the week, from 1 (Monday) to 7 (Sunday), as a comma-separated list like in the creation (for example
+    `1,5`); null for every day of the week """
     plan_hour: None | str
+    """ Hours, from 0 to 23, as a comma-separated list like in the creation (for example `0,12`); null for every
+    hour """
     plan_minute: None | str
+    """ Minutes, from 0 to 59, as a comma-separated list like in the creation (for example `0,30`); null for every
+    minute """
     active: bool
+    """ Whether the cron job is active: deleted cron jobs, and the old versions of changed ones, stay in the list as
+    inactive """
     date_created: datetime.datetime | None
     date_disabled: datetime.datetime | None
+    """ When the cron job was deleted or replaced by a new version; null while it is active """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

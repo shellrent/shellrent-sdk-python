@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -20,12 +19,17 @@ class BuyServiceMicrosoft365Request:
     service_id: int
     """ ID of the Service to buy """
     data: BuyServiceMicrosoft365RequestData
-    """ Information about the Microsoft 365 tenant to associate to the subscription """
-    quantity: int | Unset = 1
-    """ Number of seats """
+    """ Microsoft 365 tenant of the subscription. All the data is checked before the order is created: with "select"
+    the tenant must be one of the account (409 if it already has 2 active subscriptions of the same service); with
+    "transfer" and "new" no tenant can have the domain prefix already, and at Microsoft the ".onmicrosoft.com"
+    domain must exist ("transfer") or be available ("new"), otherwise 409. Send only the fields of the chosen
+    option. """
+    quantity: int | Unset = UNSET
+    """ Number of seats (user licenses) to purchase. It must be between `quantity_min` and `quantity_max` of the
+    chosen service, as listed by `GET /api/v3/shop/microsoft-365/services`. If omitted, `quantity_min` is used.
+    Ignored for the services without `quantity_max`. """
     account_id: int | Unset = UNSET
     """ ID of the account of the user that will be the owner of the purchase (available to Resellers only) """
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         service_id = self.service_id
@@ -37,7 +41,7 @@ class BuyServiceMicrosoft365Request:
         account_id = self.account_id
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update(
             {
                 "service_id": service_id,
@@ -73,21 +77,4 @@ class BuyServiceMicrosoft365Request:
             account_id=account_id,
         )
 
-        buy_service_microsoft_365_request.additional_properties = d
         return buy_service_microsoft_365_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

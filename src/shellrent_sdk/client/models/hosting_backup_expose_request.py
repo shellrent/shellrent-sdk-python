@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,9 +12,14 @@ T = TypeVar("T", bound="HostingBackupExposeRequest")
 
 @_attrs_define
 class HostingBackupExposeRequest:
+    """Backups to expose: they are copied, without restoring them, into the FTP space of the hosting"""
+
     web_backup_id: int | None | Unset = UNSET
+    """ The `backup_id` of a backup with category `web` returned by `GET /api/v3/hostings/{hosting_id}/backups`.
+    Send at least one of web_backup_id and db_backup_id """
     db_backup_id: int | None | Unset = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    """ The `backup_id` of a backup with category `database` returned by `GET
+    /api/v3/hostings/{hosting_id}/backups`. Send at least one of web_backup_id and db_backup_id """
 
     def to_dict(self) -> dict[str, Any]:
         web_backup_id: int | None | Unset
@@ -31,7 +35,7 @@ class HostingBackupExposeRequest:
             db_backup_id = self.db_backup_id
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update({})
         if web_backup_id is not UNSET:
             field_dict["web_backup_id"] = web_backup_id
@@ -67,21 +71,4 @@ class HostingBackupExposeRequest:
             db_backup_id=db_backup_id,
         )
 
-        hosting_backup_expose_request.additional_properties = d
         return hosting_backup_expose_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

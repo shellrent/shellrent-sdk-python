@@ -19,20 +19,38 @@ T = TypeVar("T", bound="InvoiceRow")
 
 @_attrs_define
 class InvoiceRow:
+    """Row of an invoice"""
+
     invoice_row_id: int
     invoice_id: int
+    """ Id of the invoice (`GET /api/v3/invoices/{invoice_id}`) """
     invoice_id_deposit: int | None
+    """ Id of the deposit invoice that the row deducts, in a balance invoice (`GET /api/v3/invoices/{invoice_id}`);
+    null for the other rows """
     service: None | Service
+    """ Service of the row; null when the row is not for a service """
     purchase: None | Purchase
+    """ Purchase of the row; null when the row is not for a purchase """
     description: str
     unit_description: None | str
+    """ Unit of `unit_quantity`: `h` (hours) or `m` (minutes); null when the row is not priced by unit """
     unit_quantity: float | None
+    """ Quantity, in the unit of `unit_description`; null when the row is not priced by unit """
     unit_amount: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     amount: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     billing_data: BillingData
+    """ Italian public administration codes of a document row: CIG, CUP and ODA """
     is_recurring: bool
+    """ Whether the row is for a recurring charge, such as a service renewed periodically, and not a one-time one
+    """
     date_start: datetime.date | None
+    """ Start of the period the row refers to; null when the row has no period """
     date_end: datetime.date | None
+    """ End of the period the row refers to; null when the row has no period """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

@@ -11,13 +11,21 @@ T = TypeVar("T", bound="HostingDatabase")
 
 @_attrs_define
 class HostingDatabase:
+    """Database of the hosting, with the account that owns it"""
+
     database_id: str
+    """ Id of the database: its name """
     name: str
     type_: str
+    """ Type of the database: `MYSQL` or `MSSQL` (Microsoft SQL Server) """
     credential_id: int | None
+    """ Id of the database account that owns the database, as in `GET /api/v3/hostings/{hosting_id}/credentials` """
     username: None | str
+    """ Username of the database account """
     supplier_code: None | str
+    """ Id of the database on Plesk, for the hostings managed with Plesk; null for the others """
     table_count: int | None
+    """ Number of tables in the database; null for the databases on Plesk """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

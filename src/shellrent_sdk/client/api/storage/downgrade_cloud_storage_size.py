@@ -16,8 +16,8 @@ def _get_kwargs(
 ) -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
-        "method": "patch",
-        "url": "/api/v3/cloud-storages/{cloud_storage_id}/size-downgrade".format(
+        "method": "post",
+        "url": "/api/v3/cloud-storages/{cloud_storage_id}/size-downgrades".format(
             cloud_storage_id=quote(str(cloud_storage_id), safe=""),
         ),
     }
@@ -28,10 +28,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | TaskResponse | None:
-    if response.status_code == 200:
-        response_200 = TaskResponse.from_dict(response.json())
+    if response.status_code == 202:
+        response_202 = TaskResponse.from_dict(response.json())
 
-        return response_200
+        return response_202
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -53,10 +53,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -83,6 +93,8 @@ def sync_detailed(
     """Downgrade cloud storage size
 
      Downgrade the cloud storage size. Returns the background Task created for the downgrade.
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         cloud_storage_id (int):
@@ -115,6 +127,8 @@ def sync(
 
      Downgrade the cloud storage size. Returns the background Task created for the downgrade.
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         cloud_storage_id (int):
 
@@ -140,6 +154,8 @@ async def asyncio_detailed(
     """Downgrade cloud storage size
 
      Downgrade the cloud storage size. Returns the background Task created for the downgrade.
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         cloud_storage_id (int):
@@ -169,6 +185,8 @@ async def asyncio(
     """Downgrade cloud storage size
 
      Downgrade the cloud storage size. Returns the background Task created for the downgrade.
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         cloud_storage_id (int):

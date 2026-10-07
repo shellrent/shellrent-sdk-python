@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any
+from typing import Any, cast
 from urllib.parse import quote
 
 import httpx
@@ -7,20 +7,19 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.empty_response import EmptyResponse
 from ...types import Response
 
 
 def _get_kwargs(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
 ) -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": "/api/v3/hostings/{hosting_id}/cronjobs/{cronjob_id}".format(
+        "url": "/api/v3/hostings/{hosting_id}/cron-jobs/{cron_job_id}".format(
             hosting_id=quote(str(hosting_id), safe=""),
-            cronjob_id=quote(str(cronjob_id), safe=""),
+            cron_job_id=quote(str(cron_job_id), safe=""),
         ),
     }
 
@@ -29,11 +28,10 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | EmptyResponse | None:
-    if response.status_code == 200:
-        response_200 = EmptyResponse.from_dict(response.json())
-
-        return response_200
+) -> Any | ApiError | None:
+    if response.status_code == 204:
+        response_204 = cast(Any, None)
+        return response_204
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -60,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -68,7 +71,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -79,29 +82,29 @@ def _build_response(
 
 def sync_detailed(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
     *,
     client: AuthenticatedClient,
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     """Delete hosting cronjob
 
      Delete a cronjob for hosting
 
     Args:
         hosting_id (int):
-        cronjob_id (int):
+        cron_job_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | EmptyResponse]
+        Response[Any | ApiError]
     """
 
     kwargs = _get_kwargs(
         hosting_id=hosting_id,
-        cronjob_id=cronjob_id,
+        cron_job_id=cron_job_id,
     )
 
     response = client.get_httpx_client().request(
@@ -113,58 +116,58 @@ def sync_detailed(
 
 def sync(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
     *,
     client: AuthenticatedClient,
-) -> ApiError | EmptyResponse | None:
+) -> Any | ApiError | None:
     """Delete hosting cronjob
 
      Delete a cronjob for hosting
 
     Args:
         hosting_id (int):
-        cronjob_id (int):
+        cron_job_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | EmptyResponse
+        Any | ApiError
     """
 
     return sync_detailed(
         hosting_id=hosting_id,
-        cronjob_id=cronjob_id,
+        cron_job_id=cron_job_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
     *,
     client: AuthenticatedClient,
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     """Delete hosting cronjob
 
      Delete a cronjob for hosting
 
     Args:
         hosting_id (int):
-        cronjob_id (int):
+        cron_job_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | EmptyResponse]
+        Response[Any | ApiError]
     """
 
     kwargs = _get_kwargs(
         hosting_id=hosting_id,
-        cronjob_id=cronjob_id,
+        cron_job_id=cron_job_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -174,30 +177,30 @@ async def asyncio_detailed(
 
 async def asyncio(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
     *,
     client: AuthenticatedClient,
-) -> ApiError | EmptyResponse | None:
+) -> Any | ApiError | None:
     """Delete hosting cronjob
 
      Delete a cronjob for hosting
 
     Args:
         hosting_id (int):
-        cronjob_id (int):
+        cron_job_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | EmptyResponse
+        Any | ApiError
     """
 
     return (
         await asyncio_detailed(
             hosting_id=hosting_id,
-            cronjob_id=cronjob_id,
+            cron_job_id=cron_job_id,
             client=client,
         )
     ).parsed

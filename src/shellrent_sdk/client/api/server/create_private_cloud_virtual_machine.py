@@ -21,7 +21,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/servers/{server_id}/private_cloud/virtual-machines".format(
+        "url": "/api/v3/servers/{server_id}/private-cloud/virtual-machines".format(
             server_id=quote(str(server_id), safe=""),
         ),
     }
@@ -37,10 +37,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | TaskResponse | None:
-    if response.status_code == 200:
-        response_200 = TaskResponse.from_dict(response.json())
+    if response.status_code == 202:
+        response_202 = TaskResponse.from_dict(response.json())
 
-        return response_200
+        return response_202
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -62,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,11 +102,15 @@ def sync_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Create private cloud VM
 
-     Create private cloud VM
+     Create private cloud VM. The response is 409 when the private cloud already has the maximum number
+    of virtual machines, its daily backup space is already in use, it has no licences left for the
+    template, or another operation is in progress.
 
     Args:
         server_id (int):
-        body (PrivateCloudVmCreateRequest):
+        body (PrivateCloudVmCreateRequest): Virtual machine to create on the private cloud:
+            `template_vm_id` to copy a template VM, otherwise both `server_configuration_id` and
+            `template_id`; and either `ip_address_id` or `use_local_ip` true, not both
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,11 +140,15 @@ def sync(
 ) -> ApiError | TaskResponse | None:
     """Create private cloud VM
 
-     Create private cloud VM
+     Create private cloud VM. The response is 409 when the private cloud already has the maximum number
+    of virtual machines, its daily backup space is already in use, it has no licences left for the
+    template, or another operation is in progress.
 
     Args:
         server_id (int):
-        body (PrivateCloudVmCreateRequest):
+        body (PrivateCloudVmCreateRequest): Virtual machine to create on the private cloud:
+            `template_vm_id` to copy a template VM, otherwise both `server_configuration_id` and
+            `template_id`; and either `ip_address_id` or `use_local_ip` true, not both
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -155,11 +173,15 @@ async def asyncio_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Create private cloud VM
 
-     Create private cloud VM
+     Create private cloud VM. The response is 409 when the private cloud already has the maximum number
+    of virtual machines, its daily backup space is already in use, it has no licences left for the
+    template, or another operation is in progress.
 
     Args:
         server_id (int):
-        body (PrivateCloudVmCreateRequest):
+        body (PrivateCloudVmCreateRequest): Virtual machine to create on the private cloud:
+            `template_vm_id` to copy a template VM, otherwise both `server_configuration_id` and
+            `template_id`; and either `ip_address_id` or `use_local_ip` true, not both
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,11 +209,15 @@ async def asyncio(
 ) -> ApiError | TaskResponse | None:
     """Create private cloud VM
 
-     Create private cloud VM
+     Create private cloud VM. The response is 409 when the private cloud already has the maximum number
+    of virtual machines, its daily backup space is already in use, it has no licences left for the
+    template, or another operation is in progress.
 
     Args:
         server_id (int):
-        body (PrivateCloudVmCreateRequest):
+        body (PrivateCloudVmCreateRequest): Virtual machine to create on the private cloud:
+            `template_vm_id` to copy a template VM, otherwise both `server_configuration_id` and
+            `template_id`; and either `ip_address_id` or `use_local_ip` true, not both
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

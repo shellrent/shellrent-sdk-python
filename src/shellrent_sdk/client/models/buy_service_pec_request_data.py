@@ -13,6 +13,11 @@ T = TypeVar("T", bound="BuyServicePecRequestData")
 
 @_attrs_define
 class BuyServicePecRequestData:
+    """PEC (certified email, "Posta Elettronica Certificata") mailbox to create and data of its owner; the `transferin_*`
+    documents only for a transfer
+
+    """
+
     box_name: str
     """ PEC mailbox local part, before the @ symbol """
     domain_select: int

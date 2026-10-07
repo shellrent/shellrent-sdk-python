@@ -11,9 +11,14 @@ T = TypeVar("T", bound="BillingData")
 
 @_attrs_define
 class BillingData:
+    """Italian public administration codes of a document row: CIG, CUP and ODA"""
+
     cig_value: None | str
+    """ CIG (`Codice Identificativo Gara`), the Italian code of the public tender; null when not given """
     cup_value: None | str
+    """ CUP (`Codice Unico di Progetto`), the Italian code of the public investment project; null when not given """
     oda_value: None | str
+    """ ODA (`Ordine di Acquisto`), the code of the purchase order; null when not given """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

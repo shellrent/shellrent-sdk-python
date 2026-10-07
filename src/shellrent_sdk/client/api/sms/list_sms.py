@@ -18,7 +18,7 @@ def _get_kwargs(
     date_created_from: datetime.datetime | Unset = UNSET,
     date_created_to: datetime.datetime | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -87,6 +87,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -111,7 +116,7 @@ def sync_detailed(
     date_created_from: datetime.datetime | Unset = UNSET,
     date_created_to: datetime.datetime | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> Response[ApiError | SmsPaginatedListResponse]:
     """List all SMS
 
@@ -122,7 +127,7 @@ def sync_detailed(
         date_created_from (datetime.datetime | Unset):
         date_created_to (datetime.datetime | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -154,7 +159,7 @@ def sync(
     date_created_from: datetime.datetime | Unset = UNSET,
     date_created_to: datetime.datetime | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> ApiError | SmsPaginatedListResponse | None:
     """List all SMS
 
@@ -165,7 +170,7 @@ def sync(
         date_created_from (datetime.datetime | Unset):
         date_created_to (datetime.datetime | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -192,7 +197,7 @@ async def asyncio_detailed(
     date_created_from: datetime.datetime | Unset = UNSET,
     date_created_to: datetime.datetime | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> Response[ApiError | SmsPaginatedListResponse]:
     """List all SMS
 
@@ -203,7 +208,7 @@ async def asyncio_detailed(
         date_created_from (datetime.datetime | Unset):
         date_created_to (datetime.datetime | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -233,7 +238,7 @@ async def asyncio(
     date_created_from: datetime.datetime | Unset = UNSET,
     date_created_to: datetime.datetime | Unset = UNSET,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> ApiError | SmsPaginatedListResponse | None:
     """List all SMS
 
@@ -244,7 +249,7 @@ async def asyncio(
         date_created_from (datetime.datetime | Unset):
         date_created_to (datetime.datetime | Unset):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

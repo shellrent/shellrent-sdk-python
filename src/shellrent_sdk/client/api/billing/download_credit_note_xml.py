@@ -12,7 +12,7 @@ from ...types import UNSET, File, Response, Unset
 
 
 def _get_kwargs(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     prefer_xml: bool | Unset = UNSET,
 ) -> dict[str, Any]:
@@ -25,8 +25,8 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/creditnotes/{creditnote_id}/download".format(
-            creditnote_id=quote(str(creditnote_id), safe=""),
+        "url": "/api/v3/credit-notes/{credit_note_id}/xml".format(
+            credit_note_id=quote(str(credit_note_id), safe=""),
         ),
         "params": params,
     }
@@ -67,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -85,7 +90,7 @@ def _build_response(
 
 
 def sync_detailed(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     client: AuthenticatedClient,
     prefer_xml: bool | Unset = UNSET,
@@ -94,8 +99,10 @@ def sync_detailed(
 
      Download the XML file of a Credit note
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
         prefer_xml (bool | Unset):
 
     Raises:
@@ -107,7 +114,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
         prefer_xml=prefer_xml,
     )
 
@@ -119,7 +126,7 @@ def sync_detailed(
 
 
 def sync(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     client: AuthenticatedClient,
     prefer_xml: bool | Unset = UNSET,
@@ -128,8 +135,10 @@ def sync(
 
      Download the XML file of a Credit note
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
         prefer_xml (bool | Unset):
 
     Raises:
@@ -141,14 +150,14 @@ def sync(
     """
 
     return sync_detailed(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
         client=client,
         prefer_xml=prefer_xml,
     ).parsed
 
 
 async def asyncio_detailed(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     client: AuthenticatedClient,
     prefer_xml: bool | Unset = UNSET,
@@ -157,8 +166,10 @@ async def asyncio_detailed(
 
      Download the XML file of a Credit note
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
         prefer_xml (bool | Unset):
 
     Raises:
@@ -170,7 +181,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
         prefer_xml=prefer_xml,
     )
 
@@ -180,7 +191,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     client: AuthenticatedClient,
     prefer_xml: bool | Unset = UNSET,
@@ -189,8 +200,10 @@ async def asyncio(
 
      Download the XML file of a Credit note
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
         prefer_xml (bool | Unset):
 
     Raises:
@@ -203,7 +216,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            creditnote_id=creditnote_id,
+            credit_note_id=credit_note_id,
             client=client,
             prefer_xml=prefer_xml,
         )

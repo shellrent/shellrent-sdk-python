@@ -16,19 +16,40 @@ T = TypeVar("T", bound="DnsRecord")
 
 @_attrs_define
 class DnsRecord:
+    """Record of the DNS zone of a domain"""
+
     record_id: str
     type_: str
+    """ Type of the record, for example `A`, `CNAME`, `MX` or `TXT` """
     host: str
+    """ Name of the record relative to the zone, `@` for the domain itself; for SRV and TLSA records, without the
+    service and the protocol """
     service: None | str
+    """ Service of SRV records (for example `_sip`) and port of TLSA records (for example `_443`), with the
+    underscore; null for the other types """
     protocol: None | str
+    """ Protocol of SRV and TLSA records: `_tcp`, `_udp` or `_tls`; null for the other types """
     destination: str
-    port: str
+    """ Value of the record: the IPv4 address for A, the IPv6 address for AAAA, the target hostname for CNAME, MX,
+    NS, PTR and SRV, the text for TXT and SPF, the value of the tag for CAA, the certificate association data for
+    TLSA """
+    port: None | str
+    """ Port of the service, for SRV records; null for the other types """
     weight: int | None
+    """ Weight of SRV records; `0` for the other types """
     priority: int | None
+    """ Priority of MX and SRV records; null for the other types and, with the standard and external nameservers,
+    when it is `0` """
     ttl: int | None
+    """ TTL of the record, in seconds: with Cloudflare null means automatic, with the standard and external
+    nameservers it is the TTL of the zone (`PATCH /api/v3/domains/{domain_id}/dns`) """
     proxied: bool
+    """ Whether the traffic of the record goes through the Cloudflare proxy; always false with the other nameserver
+    types """
     caa_data: DnsRecordCaaData | None
+    """ Data of CAA records; null for the other types """
     tlsa_data: DnsRecordTlsaData | None
+    """ Data of TLSA records; null for the other types """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -49,6 +70,7 @@ class DnsRecord:
 
         destination = self.destination
 
+        port: None | str
         port = self.port
 
         weight: int | None
@@ -124,7 +146,12 @@ class DnsRecord:
 
         destination = d.pop("destination")
 
-        port = d.pop("port")
+        def _parse_port(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        port = _parse_port(d.pop("port"))
 
         def _parse_weight(data: object) -> int | None:
             if data is None:

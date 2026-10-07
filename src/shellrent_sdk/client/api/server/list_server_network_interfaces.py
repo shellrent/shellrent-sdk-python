@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -82,7 +87,8 @@ def sync_detailed(
 ) -> Response[ApiError | ServerNetworkInterfaceListResponse]:
     """List server network interfaces
 
-     List server network interfaces
+     Lists the active network interfaces (VIF) of the server, on public and local networks; the deleted
+    interfaces are not returned
 
     Args:
         server_id (int):
@@ -113,7 +119,8 @@ def sync(
 ) -> ApiError | ServerNetworkInterfaceListResponse | None:
     """List server network interfaces
 
-     List server network interfaces
+     Lists the active network interfaces (VIF) of the server, on public and local networks; the deleted
+    interfaces are not returned
 
     Args:
         server_id (int):
@@ -139,7 +146,8 @@ async def asyncio_detailed(
 ) -> Response[ApiError | ServerNetworkInterfaceListResponse]:
     """List server network interfaces
 
-     List server network interfaces
+     Lists the active network interfaces (VIF) of the server, on public and local networks; the deleted
+    interfaces are not returned
 
     Args:
         server_id (int):
@@ -168,7 +176,8 @@ async def asyncio(
 ) -> ApiError | ServerNetworkInterfaceListResponse | None:
     """List server network interfaces
 
-     List server network interfaces
+     Lists the active network interfaces (VIF) of the server, on public and local networks; the deleted
+    interfaces are not returned
 
     Args:
         server_id (int):

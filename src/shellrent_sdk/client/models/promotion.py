@@ -16,15 +16,27 @@ T = TypeVar("T", bound="Promotion")
 
 @_attrs_define
 class Promotion:
+    """Promotion applied to a row of an order: of the `percentage_*` and `amount_*` fields, only the one of its type is set"""
+
     promocode: None | str
-    description: str
+    """ Promotional code used; null when the promotion applies without a code """
+    description: None | str
+    """ Promotion description; null when the promotion has none """
     percentage_increase: float | None
+    """ Price increase, in percent; null for the other types """
     percentage_decrease: float | None
+    """ Discount, in percent; null for the other types """
     amount_increase: Amount | None
+    """ Price increase, as an amount before VAT; null for the other types """
     amount_decrease: Amount | None
+    """ Discount, as an amount before VAT; null for the other types """
     amount_fixed: Amount | None
+    """ Fixed price set by the promotion, before VAT; null for the other types """
     applied_amount: Amount | None
+    """ Difference between the base price and the price of the order row (`base_price` and `price` of `OrderRow`):
+    negative when the promotion increases the price """
     date_applied: datetime.datetime
+    """ When the promotion was applied to the order """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -33,6 +45,7 @@ class Promotion:
         promocode: None | str
         promocode = self.promocode
 
+        description: None | str
         description = self.description
 
         percentage_increase: float | None
@@ -98,7 +111,12 @@ class Promotion:
 
         promocode = _parse_promocode(d.pop("promocode"))
 
-        description = d.pop("description")
+        def _parse_description(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        description = _parse_description(d.pop("description"))
 
         def _parse_percentage_increase(data: object) -> float | None:
             if data is None:

@@ -12,15 +12,28 @@ T = TypeVar("T", bound="IpAddress")
 
 @_attrs_define
 class IpAddress:
+    """IP address of a server, with its reverse DNS and its state"""
+
     ip_address_id: int
     server_id: int | None
+    """ Id of the server the IP address is assigned to (`GET /api/v3/servers/{server_id}`); null for the free IP
+    addresses of a private cloud (`GET /api/v3/servers/{server_id}/private-cloud/available-ip-addresses`) """
     ip_address: str
     reverse_dns: None | str
+    """ Reverse DNS set on the IP address, changed with `PATCH /api/v3/servers/{server_id}/ip-
+    addresses/{ip_address_id}/rdns`; null when it is not set """
     reverse_dns_external: None | str
+    """ Reverse DNS of the IP address as last read from its supplier; null when the supplier has none """
     mac_address: None | str
+    """ MAC address associated with the IP address, such as the virtual MAC of the supplier or the one of its
+    network interface; null when there is none """
     blocked_for_spam: bool
+    """ Whether the supplier blocked the IP address for spam """
     active: bool
+    """ Whether the IP address is active: false once it has been revoked or cancelled at the supplier """
     available: bool
+    """ Whether the IP address can be used: an address that is not available, such as the gateway of its block,
+    cannot be assigned to a network interface or to a virtual machine """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

@@ -12,19 +12,39 @@ T = TypeVar("T", bound="HostingBackup")
 
 @_attrs_define
 class HostingBackup:
+    """Backup that contains the hosting: a backup of a web, database or mail server, with the database or the mailbox of
+    the hosting that it saved
+
+    """
+
     hosting_backup_id: int
+    """ Id of the backup in the hosting (`GET /api/v3/hostings/{hosting_id}/backups/{hosting_backup_id}`) """
     hosting_id: int
+    """ Id of the hosting (`GET /api/v3/hostings/{hosting_id}`) """
     backup_id: int
+    """ Id of the server backup, which can include other hostings: send it to `POST
+    /api/v3/hostings/{hosting_id}/backups/exhibitions` """
     category: None | str
+    """ Category of the backed up server: `web` (web contents), `database` or `mail` """
     backup_type_code: None | str
+    """ Type of the backup, for example `HOSTING_DAILY`, `HOSTING_WEEKLY`, `HOSTING_MONTHLY` or `HOSTING_UNA_TANTUM`
+    (one-off backup) """
     backup_frequency_code: None | str
+    """ Frequency of the backup: `D` daily, `W` weekly, `M` monthly, `C` one-off """
     backup_date: datetime.datetime | None
+    """ When the server backup was taken """
     backup_size: int | None
+    """ Size of the server backup, in MB: it can include other hostings """
     backup_duration: None | str
+    """ Duration of the server backup, as `HH:MM:SS` """
     exit_status: int | None
+    """ Exit code of the server backup: 0 when it succeeded """
     error_type: None | str
+    """ Outcome message of the server backup, in Italian, for example `Tutto ok` (all fine) """
     mailbox_name: None | str
+    """ Mailbox saved, for a backup of category `mail`; null for the other categories """
     database_name: None | str
+    """ Database saved, for a backup of category `database`; null for the other categories """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

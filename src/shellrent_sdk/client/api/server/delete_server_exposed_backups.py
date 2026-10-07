@@ -28,10 +28,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | TaskResponse | None:
-    if response.status_code == 200:
-        response_200 = TaskResponse.from_dict(response.json())
+    if response.status_code == 202:
+        response_202 = TaskResponse.from_dict(response.json())
 
-        return response_200
+        return response_202
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -53,10 +53,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -82,7 +92,11 @@ def sync_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Delete exposed backups
 
-     Delete exposed backups
+     Removes the backups exposed on the virtual machine with `POST
+    /api/v3/servers/{server_id}/backups/exhibitions`; the operation goes on in the background as the
+    returned Task. 409 while a backup is being exposed, for a physical server or a virtual machine that
+    is not on oVirt, while the server is not ready, its service is not active or is under maintenance,
+    or another operation does not allow it
 
     Args:
         server_id (int):
@@ -113,7 +127,11 @@ def sync(
 ) -> ApiError | TaskResponse | None:
     """Delete exposed backups
 
-     Delete exposed backups
+     Removes the backups exposed on the virtual machine with `POST
+    /api/v3/servers/{server_id}/backups/exhibitions`; the operation goes on in the background as the
+    returned Task. 409 while a backup is being exposed, for a physical server or a virtual machine that
+    is not on oVirt, while the server is not ready, its service is not active or is under maintenance,
+    or another operation does not allow it
 
     Args:
         server_id (int):
@@ -139,7 +157,11 @@ async def asyncio_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Delete exposed backups
 
-     Delete exposed backups
+     Removes the backups exposed on the virtual machine with `POST
+    /api/v3/servers/{server_id}/backups/exhibitions`; the operation goes on in the background as the
+    returned Task. 409 while a backup is being exposed, for a physical server or a virtual machine that
+    is not on oVirt, while the server is not ready, its service is not active or is under maintenance,
+    or another operation does not allow it
 
     Args:
         server_id (int):
@@ -168,7 +190,11 @@ async def asyncio(
 ) -> ApiError | TaskResponse | None:
     """Delete exposed backups
 
-     Delete exposed backups
+     Removes the backups exposed on the virtual machine with `POST
+    /api/v3/servers/{server_id}/backups/exhibitions`; the operation goes on in the background as the
+    returned Task. 409 while a backup is being exposed, for a physical server or a virtual machine that
+    is not on oVirt, while the server is not ready, its service is not active or is under maintenance,
+    or another operation does not allow it
 
     Args:
         server_id (int):

@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,10 +12,17 @@ T = TypeVar("T", bound="PurchaseBillingInfoChangeRequest")
 
 @_attrs_define
 class PurchaseBillingInfoChangeRequest:
+    """Billing data of the purchase to change: at least one of `oda`, `cig` and `cup`; the ones omitted stay unchanged"""
+
     oda: str | Unset = UNSET
+    """ Number of the purchase order (ODA, "Ordine di Acquisto") of an Italian public administration, reported on
+    the invoices of the purchase """
     cig: str | Unset = UNSET
+    """ CIG ("Codice Identificativo Gara"), the Italian code of a public tender, reported on the invoices of the
+    purchase """
     cup: str | Unset = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    """ CUP ("Codice Unico di Progetto"), the Italian code of a public investment project, reported on the invoices
+    of the purchase """
 
     def to_dict(self) -> dict[str, Any]:
         oda = self.oda
@@ -26,7 +32,7 @@ class PurchaseBillingInfoChangeRequest:
         cup = self.cup
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update({})
         if oda is not UNSET:
             field_dict["oda"] = oda
@@ -52,21 +58,4 @@ class PurchaseBillingInfoChangeRequest:
             cup=cup,
         )
 
-        purchase_billing_info_change_request.additional_properties = d
         return purchase_billing_info_change_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

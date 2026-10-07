@@ -15,7 +15,12 @@ T = TypeVar("T", bound="BuyServicePecDomainRequestData")
 
 @_attrs_define
 class BuyServicePecDomainRequestData:
-    domain_name: str | Unset = UNSET
+    """Domain to activate for PEC (certified email, "Posta Elettronica Certificata") and data of its owner; the
+    `transferin_*` documents only for a transfer
+
+    """
+
+    domain_name: str
     """ Domain complete name (with TLD extension), for example: "example.com" or "example.co.uk" """
     legal_entity: BuyServicePecDomainRequestDataLegalEntity | Unset = UNSET
     """ Legal entity of the PEC owner """
@@ -129,9 +134,11 @@ class BuyServicePecDomainRequestData:
 
         field_dict: dict[str, Any] = {}
 
-        field_dict.update({})
-        if domain_name is not UNSET:
-            field_dict["domain_name"] = domain_name
+        field_dict.update(
+            {
+                "domain_name": domain_name,
+            }
+        )
         if legal_entity is not UNSET:
             field_dict["legal_entity"] = legal_entity
         if owner is not UNSET:
@@ -190,7 +197,7 @@ class BuyServicePecDomainRequestData:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        domain_name = d.pop("domain_name", UNSET)
+        domain_name = d.pop("domain_name")
 
         _legal_entity = d.pop("legal_entity", UNSET)
         legal_entity: BuyServicePecDomainRequestDataLegalEntity | Unset

@@ -11,8 +11,12 @@ T = TypeVar("T", bound="SdiDocumentType")
 
 @_attrs_define
 class SdiDocumentType:
+    """Type of an electronic document on SDI, the Italian e-invoicing exchange system (`TipoDocumento`)"""
+
     type_code: str
+    """ Code of the type, for example `TD01` (invoice), `TD02` (deposit invoice) or `TD04` (credit note) """
     type_description: str
+    """ Description of the type, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

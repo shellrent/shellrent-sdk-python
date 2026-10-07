@@ -11,10 +11,17 @@ T = TypeVar("T", bound="ServerCredential")
 
 @_attrs_define
 class ServerCredential:
+    """Root credentials of the server"""
+
     type_: str
+    """ Type of the credentials: always `root` """
     username: None | str
+    """ Username of the root user of the server; null when it is not set """
     password: None | str
+    """ Password of the root user; null when `visible` is false """
     visible: bool
+    """ Whether `password` is returned: false when the root password is not set or is not visible to the customer
+    """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

@@ -17,10 +17,16 @@ T = TypeVar("T", bound="ServerMonitoringProbeChart")
 
 @_attrs_define
 class ServerMonitoringProbeChart:
+    """Values measured by a probe of a server monitoring in the last day"""
+
     server_monitoring_id: int
+    """ Id of the server monitoring (`GET /api/v3/server-monitorings/{server_monitoring_id}`) """
     probe_id: int
+    """ Id of the probe (`GET /api/v3/server-monitorings/{server_monitoring_id}/probes/{probe_id}`) """
     interval: str
+    """ Period covered by the chart, as an ISO 8601 duration: always `P1D`, the last day """
     points: list[ServerMonitoringProbeChartPointsItem]
+    """ Values measured by the probe in the period, in time order """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

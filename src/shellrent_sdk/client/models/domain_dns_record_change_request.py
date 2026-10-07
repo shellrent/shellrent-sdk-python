@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -23,19 +22,32 @@ T = TypeVar("T", bound="DomainDnsRecordChangeRequest")
 @_attrs_define
 class DomainDnsRecordChangeRequest:
     host: str
+    """ Name of the record relative to the zone, `@` for the domain itself; for SRV and TLSA records, without the
+    service and the protocol """
     destination: str
+    """ Value of the record: the IPv4 address for A, the IPv6 address for AAAA, the target hostname for CNAME, MX,
+    NS, PTR and SRV, the text for TXT and SPF, the value of the tag for CAA, the certificate association data for
+    TLSA """
     service: str | Unset = UNSET
+    """ Service of SRV records (e.g. `_sip`) and port of TLSA records """
     protocol: str | Unset = UNSET
+    """ Protocol of SRV and TLSA records: `_tcp`, `_udp` or `_tls` """
     port: str | Unset = UNSET
+    """ Port of the service, required for SRV records """
     weight: str | Unset = UNSET
+    """ Weight of SRV records """
     priority: str | Unset = UNSET
+    """ Priority of MX and SRV records """
     ttl: int | Unset = UNSET
+    """ TTL of the record, in seconds, for the Cloudflare records that are not proxied (`0` or `1` for the automatic
+    TTL); ignored with the standard and external nameservers, where the records have the TTL of the zone """
     proxied: bool | Unset = UNSET
+    """ Whether the traffic of the record goes through the Cloudflare proxy; only for the Cloudflare records that
+    can be proxied """
     caa_data: DomainDnsRecordChangeRequestCaaData | Unset = UNSET
     """ Use this for CAA type record only """
     tlsa_data: DomainDnsRecordChangeRequestTlsaData | Unset = UNSET
     """ Use this for TLSA type record only """
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         host = self.host
@@ -65,7 +77,7 @@ class DomainDnsRecordChangeRequest:
             tlsa_data = self.tlsa_data.to_dict()
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update(
             {
                 "host": host,
@@ -149,21 +161,4 @@ class DomainDnsRecordChangeRequest:
             tlsa_data=tlsa_data,
         )
 
-        domain_dns_record_change_request.additional_properties = d
         return domain_dns_record_change_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

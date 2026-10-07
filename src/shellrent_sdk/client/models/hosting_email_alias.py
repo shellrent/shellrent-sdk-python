@@ -11,14 +11,24 @@ T = TypeVar("T", bound="HostingEmailAlias")
 
 @_attrs_define
 class HostingEmailAlias:
+    """Email alias of the mail domain of the hosting, with its destinations"""
+
     alias_id: str
+    """ Id of the alias: its address, as in `address` """
     address: str
+    """ Address of the alias, with the domain in punycode """
     address_idna: str
+    """ Address of the alias, with the domain in Unicode """
     goto: None | str
+    """ Destination addresses, separated by commas """
     goto_idna: None | str
+    """ Destination addresses, separated by commas, with the domains in Unicode """
     domain: str
+    """ Mail domain of the alias, in punycode """
     domain_idna: str
+    """ Mail domain of the alias, in Unicode """
     is_active: bool
+    """ Whether the alias is active """
     does_exist: bool
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

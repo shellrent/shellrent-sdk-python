@@ -11,8 +11,13 @@ T = TypeVar("T", bound="OrderCanCancel")
 
 @_attrs_define
 class OrderCanCancel:
+    """Whether an order can be cancelled"""
+
     order_id: int
+    """ Id of the order (`GET /api/v3/orders/{order_id}`) """
     can_cancel: bool
+    """ Whether the order can be cancelled with `DELETE /api/v3/orders/{order_id}`: not when it is completed, closed
+    or cancelled, or when one of its purchases does not allow it """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

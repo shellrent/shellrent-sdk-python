@@ -16,13 +16,15 @@ class Country:
     iso_code_3: str
     """ ie. ITA """
     country_name: str
+    """ Name of the country in Italian; the local name when there is no translation """
     local_name: str
+    """ Name of the country in its own language, for example `Deutschland` """
     phone_code: str
-    """ +39, +44, ... """
+    """ International calling code, without `+`, for example `39` """
     continent: str
-    """ Europe, America, ... """
+    """ Continent, in English, for example `Europe` or `North America` """
     region: str
-    """ Macro region """
+    """ Area of the country: `EU` (European Union) or `EXTRAEU` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

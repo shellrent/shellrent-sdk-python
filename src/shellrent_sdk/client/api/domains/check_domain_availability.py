@@ -63,6 +63,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -87,7 +92,9 @@ def sync_detailed(
 ) -> Response[ApiError | DomainAvailabilityResponse]:
     """Domain whois
 
-     Search availability status for a domain (whois)
+     Search availability status for a domain (whois). A premium domain, sold at a price set by the
+    registry, comes with our prices, which its order (`POST /api/v3/shop/domain`) uses; sub-accounts get
+    no prices
 
     Args:
         domain_full_name (str | Unset):
@@ -118,7 +125,9 @@ def sync(
 ) -> ApiError | DomainAvailabilityResponse | None:
     """Domain whois
 
-     Search availability status for a domain (whois)
+     Search availability status for a domain (whois). A premium domain, sold at a price set by the
+    registry, comes with our prices, which its order (`POST /api/v3/shop/domain`) uses; sub-accounts get
+    no prices
 
     Args:
         domain_full_name (str | Unset):
@@ -144,7 +153,9 @@ async def asyncio_detailed(
 ) -> Response[ApiError | DomainAvailabilityResponse]:
     """Domain whois
 
-     Search availability status for a domain (whois)
+     Search availability status for a domain (whois). A premium domain, sold at a price set by the
+    registry, comes with our prices, which its order (`POST /api/v3/shop/domain`) uses; sub-accounts get
+    no prices
 
     Args:
         domain_full_name (str | Unset):
@@ -173,7 +184,9 @@ async def asyncio(
 ) -> ApiError | DomainAvailabilityResponse | None:
     """Domain whois
 
-     Search availability status for a domain (whois)
+     Search availability status for a domain (whois). A premium domain, sold at a price set by the
+    registry, comes with our prices, which its order (`POST /api/v3/shop/domain`) uses; sub-accounts get
+    no prices
 
     Args:
         domain_full_name (str | Unset):

@@ -12,15 +12,25 @@ T = TypeVar("T", bound="Sms")
 
 @_attrs_define
 class Sms:
+    """SMS sending of the account: one message to one or more recipients (`GET /api/v3/sms/{sms_id}/messages`)"""
+
     id: int
     quality: str
+    """ Delivery quality: `STANDARD` or `PREMIUM` """
     status: str
+    """ Status of the sending: `DRAFT` (not confirmed), `PROCESSING` (being sent), `ACCOMPLISHED` (all the messages
+    sent) or `CANCELLED` (sending stopped) """
     sender: None | str
+    """ Sender name, for the `PREMIUM` quality """
     message: None | str
     send_from: datetime.datetime | None
+    """ Date and time from which the messages are sent """
     date_approved: datetime.datetime | None
+    """ Date and time the sending was confirmed; null for a `DRAFT` """
     stop_date: datetime.datetime | None
+    """ Date and time the sending was stopped; null if it was not """
     sms_count: int | None
+    """ Number of SMS the message takes for each recipient: a long text is split into several SMS """
     date_created: datetime.datetime
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

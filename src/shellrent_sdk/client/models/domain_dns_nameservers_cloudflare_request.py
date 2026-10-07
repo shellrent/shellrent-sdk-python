@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 T = TypeVar("T", bound="DomainDnsNameserversCloudflareRequest")
 
@@ -12,8 +11,9 @@ T = TypeVar("T", bound="DomainDnsNameserversCloudflareRequest")
 @_attrs_define
 class DomainDnsNameserversCloudflareRequest:
     account_email: str
+    """ Email of the Cloudflare account that will manage the DNS zone """
     api_token: str
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    """ Global API key of the Cloudflare account (not an API token), used together with `account_email` """
 
     def to_dict(self) -> dict[str, Any]:
         account_email = self.account_email
@@ -21,7 +21,7 @@ class DomainDnsNameserversCloudflareRequest:
         api_token = self.api_token
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update(
             {
                 "account_email": account_email,
@@ -43,21 +43,4 @@ class DomainDnsNameserversCloudflareRequest:
             api_token=api_token,
         )
 
-        domain_dns_nameservers_cloudflare_request.additional_properties = d
         return domain_dns_nameservers_cloudflare_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

@@ -69,6 +69,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -95,7 +100,8 @@ def sync_detailed(
 ) -> Response[ApiError | DnsRecordResponse]:
     """Modify DNS record
 
-     Modify an existing DNS record
+     Changes a record of the DNS zone of the domain; its type cannot change. `NS` and `PTR` records
+    cannot be changed, as in the control panel (403)
 
     Args:
         domain_id (int):
@@ -132,7 +138,8 @@ def sync(
 ) -> ApiError | DnsRecordResponse | None:
     """Modify DNS record
 
-     Modify an existing DNS record
+     Changes a record of the DNS zone of the domain; its type cannot change. `NS` and `PTR` records
+    cannot be changed, as in the control panel (403)
 
     Args:
         domain_id (int):
@@ -164,7 +171,8 @@ async def asyncio_detailed(
 ) -> Response[ApiError | DnsRecordResponse]:
     """Modify DNS record
 
-     Modify an existing DNS record
+     Changes a record of the DNS zone of the domain; its type cannot change. `NS` and `PTR` records
+    cannot be changed, as in the control panel (403)
 
     Args:
         domain_id (int):
@@ -199,7 +207,8 @@ async def asyncio(
 ) -> ApiError | DnsRecordResponse | None:
     """Modify DNS record
 
-     Modify an existing DNS record
+     Changes a record of the DNS zone of the domain; its type cannot change. `NS` and `PTR` records
+    cannot be changed, as in the control panel (403)
 
     Args:
         domain_id (int):

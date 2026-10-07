@@ -11,10 +11,21 @@ T = TypeVar("T", bound="DomainCanChangeNameservers")
 
 @_attrs_define
 class DomainCanChangeNameservers:
+    """Nameserver types that can be activated on the domain now: none while the purchase of the domain is not active or has
+    an operation running, or while the nameservers are being changed
+
+    """
+
     domain_id: int
     can_activate_standard: bool
+    """ Whether the standard nameservers can be activated (`PUT /api/v3/domains/{domain_id}/dns/standard`); false
+    when they are the current ones """
     can_activate_cloudflare: bool
+    """ Whether the Cloudflare nameservers can be activated (`PUT /api/v3/domains/{domain_id}/dns/cloudflare`);
+    false when they are the current ones """
     can_activate_external: bool
+    """ Whether the external nameservers can be activated (`PUT /api/v3/domains/{domain_id}/dns/external`); false
+    when they are the current ones """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

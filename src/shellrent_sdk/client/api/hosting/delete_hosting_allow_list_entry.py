@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any
+from typing import Any, cast
 from urllib.parse import quote
 
 import httpx
@@ -7,7 +7,6 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.empty_response import EmptyResponse
 from ...types import Response
 
 
@@ -29,11 +28,10 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | EmptyResponse | None:
-    if response.status_code == 200:
-        response_200 = EmptyResponse.from_dict(response.json())
-
-        return response_200
+) -> Any | ApiError | None:
+    if response.status_code == 204:
+        response_204 = cast(Any, None)
+        return response_204
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -60,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -68,7 +71,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -82,7 +85,7 @@ def sync_detailed(
     allow_list_id: int,
     *,
     client: AuthenticatedClient,
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     """Delete allow list entry
 
      Delete an allow list entry for hosting
@@ -96,7 +99,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | EmptyResponse]
+        Response[Any | ApiError]
     """
 
     kwargs = _get_kwargs(
@@ -116,7 +119,7 @@ def sync(
     allow_list_id: int,
     *,
     client: AuthenticatedClient,
-) -> ApiError | EmptyResponse | None:
+) -> Any | ApiError | None:
     """Delete allow list entry
 
      Delete an allow list entry for hosting
@@ -130,7 +133,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | EmptyResponse
+        Any | ApiError
     """
 
     return sync_detailed(
@@ -145,7 +148,7 @@ async def asyncio_detailed(
     allow_list_id: int,
     *,
     client: AuthenticatedClient,
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     """Delete allow list entry
 
      Delete an allow list entry for hosting
@@ -159,7 +162,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | EmptyResponse]
+        Response[Any | ApiError]
     """
 
     kwargs = _get_kwargs(
@@ -177,7 +180,7 @@ async def asyncio(
     allow_list_id: int,
     *,
     client: AuthenticatedClient,
-) -> ApiError | EmptyResponse | None:
+) -> Any | ApiError | None:
     """Delete allow list entry
 
      Delete an allow list entry for hosting
@@ -191,7 +194,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | EmptyResponse
+        Any | ApiError
     """
 
     return (

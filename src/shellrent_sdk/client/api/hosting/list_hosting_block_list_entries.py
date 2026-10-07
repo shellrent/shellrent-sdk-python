@@ -7,8 +7,8 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.hosting_email_bloc_list_paginated_list_response import (
-    HostingEmailBlocListPaginatedListResponse,
+from ...models.hosting_email_block_list_paginated_list_response import (
+    HostingEmailBlockListPaginatedListResponse,
 )
 from ...types import UNSET, Response, Unset
 
@@ -17,7 +17,7 @@ def _get_kwargs(
     hosting_id: int,
     *,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -41,9 +41,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | HostingEmailBlocListPaginatedListResponse | None:
+) -> ApiError | HostingEmailBlockListPaginatedListResponse | None:
     if response.status_code == 200:
-        response_200 = HostingEmailBlocListPaginatedListResponse.from_dict(response.json())
+        response_200 = HostingEmailBlockListPaginatedListResponse.from_dict(response.json())
 
         return response_200
 
@@ -72,6 +72,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -80,7 +85,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | HostingEmailBlocListPaginatedListResponse]:
+) -> Response[ApiError | HostingEmailBlockListPaginatedListResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -94,8 +99,8 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
-) -> Response[ApiError | HostingEmailBlocListPaginatedListResponse]:
+    per_page: int | Unset = 20,
+) -> Response[ApiError | HostingEmailBlockListPaginatedListResponse]:
     """List hosting block list
 
      Get list of block list entries for hosting
@@ -103,14 +108,14 @@ def sync_detailed(
     Args:
         hosting_id (int):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | HostingEmailBlocListPaginatedListResponse]
+        Response[ApiError | HostingEmailBlockListPaginatedListResponse]
     """
 
     kwargs = _get_kwargs(
@@ -131,8 +136,8 @@ def sync(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
-) -> ApiError | HostingEmailBlocListPaginatedListResponse | None:
+    per_page: int | Unset = 20,
+) -> ApiError | HostingEmailBlockListPaginatedListResponse | None:
     """List hosting block list
 
      Get list of block list entries for hosting
@@ -140,14 +145,14 @@ def sync(
     Args:
         hosting_id (int):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | HostingEmailBlocListPaginatedListResponse
+        ApiError | HostingEmailBlockListPaginatedListResponse
     """
 
     return sync_detailed(
@@ -163,8 +168,8 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
-) -> Response[ApiError | HostingEmailBlocListPaginatedListResponse]:
+    per_page: int | Unset = 20,
+) -> Response[ApiError | HostingEmailBlockListPaginatedListResponse]:
     """List hosting block list
 
      Get list of block list entries for hosting
@@ -172,14 +177,14 @@ async def asyncio_detailed(
     Args:
         hosting_id (int):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | HostingEmailBlocListPaginatedListResponse]
+        Response[ApiError | HostingEmailBlockListPaginatedListResponse]
     """
 
     kwargs = _get_kwargs(
@@ -198,8 +203,8 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
-) -> ApiError | HostingEmailBlocListPaginatedListResponse | None:
+    per_page: int | Unset = 20,
+) -> ApiError | HostingEmailBlockListPaginatedListResponse | None:
     """List hosting block list
 
      Get list of block list entries for hosting
@@ -207,14 +212,14 @@ async def asyncio(
     Args:
         hosting_id (int):
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | HostingEmailBlocListPaginatedListResponse
+        ApiError | HostingEmailBlockListPaginatedListResponse
     """
 
     return (

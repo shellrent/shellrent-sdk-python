@@ -11,8 +11,13 @@ T = TypeVar("T", bound="PurchaseCanRenew")
 
 @_attrs_define
 class PurchaseCanRenew:
+    """Whether the purchase can be renewed now (`POST /api/v3/purchases/{purchase_id}/renewals`)"""
+
     purchase_id: int
+    """ Id of the purchase (`GET /api/v3/purchases/{purchase_id}`) """
     can_renew: bool
+    """ Whether the purchase can be renewed now: possible from `recurrence.days_renew` days before the expiry, when
+    it is set to renew and has no pending order """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,10 +16,17 @@ T = TypeVar("T", bound="TaskResponse")
 
 @_attrs_define
 class TaskResponse:
-    error: int
+    """Successful response with one `Task`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: Task
+    """ Operation on a purchase that goes on in the background, with its status and progress (`GET
+    /api/v3/tasks/{task_id}`) """
     meta: None | TaskResponseMetaType0
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,7 +64,9 @@ class TaskResponse:
         from ..models.task_response_meta_type_0 import TaskResponseMetaType0
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:

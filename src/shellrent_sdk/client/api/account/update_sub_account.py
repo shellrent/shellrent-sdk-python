@@ -67,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -92,7 +97,9 @@ def sync_detailed(
 ) -> Response[AccountResponse | ApiError]:
     """Edit a user sub-account
 
-     Edit an existing user sub-account
+     Edit an existing user sub-account. Only the given fields change, with the rules of the creation: a
+    field required by the creation cannot be emptied, and phone and mobile numbers are given together
+    with their prefix
 
     Args:
         account_id (int):
@@ -126,7 +133,9 @@ def sync(
 ) -> AccountResponse | ApiError | None:
     """Edit a user sub-account
 
-     Edit an existing user sub-account
+     Edit an existing user sub-account. Only the given fields change, with the rules of the creation: a
+    field required by the creation cannot be emptied, and phone and mobile numbers are given together
+    with their prefix
 
     Args:
         account_id (int):
@@ -155,7 +164,9 @@ async def asyncio_detailed(
 ) -> Response[AccountResponse | ApiError]:
     """Edit a user sub-account
 
-     Edit an existing user sub-account
+     Edit an existing user sub-account. Only the given fields change, with the rules of the creation: a
+    field required by the creation cannot be emptied, and phone and mobile numbers are given together
+    with their prefix
 
     Args:
         account_id (int):
@@ -187,7 +198,9 @@ async def asyncio(
 ) -> AccountResponse | ApiError | None:
     """Edit a user sub-account
 
-     Edit an existing user sub-account
+     Edit an existing user sub-account. Only the given fields change, with the rules of the creation: a
+    field required by the creation cannot be emptied, and phone and mobile numbers are given together
+    with their prefix
 
     Args:
         account_id (int):

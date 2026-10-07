@@ -11,13 +11,24 @@ T = TypeVar("T", bound="ObjectStorageS3Key")
 
 @_attrs_define
 class ObjectStorageS3Key:
+    """Main S3 key of an object storage: the key of the root user of its account at the storage, with the secret"""
+
     object_storage_id: int
+    """ Id of the object storage (`GET /api/v3/object-storages/{object_storage_id}`) """
     sub_account_id: int
+    """ Id of the sub-account of the object storage, the account at the storage that holds its buckets and IAM users
+    (not the account id of the storage) """
     username: None | str
+    """ Name of the sub-account at the storage """
     user_id: None | str
+    """ Id of the root user of the sub-account in the IAM service of the storage """
     arn: None | str
+    """ ARN (Amazon Resource Name) of the root user of the sub-account, used in the policies
+    (`arn:aws:iam::<account>:root`) """
     access_key: None | str
+    """ Access key ID, to use with `secret_key` in the S3 clients; null if the sub-account has no key saved """
     secret_key: None | str
+    """ Secret of the key; null if the sub-account has no key saved """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

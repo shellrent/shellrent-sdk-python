@@ -11,8 +11,12 @@ T = TypeVar("T", bound="OrderPaymentStatus")
 
 @_attrs_define
 class OrderPaymentStatus:
+    """Payment status of an order"""
+
     status_code: str
+    """ One of `NOT_PAYED`, `PARTIALLY_PAYED` or `PAYED` """
     status_name: str
+    """ Name of the status, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

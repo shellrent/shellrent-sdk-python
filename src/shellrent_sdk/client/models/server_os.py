@@ -11,8 +11,12 @@ T = TypeVar("T", bound="ServerOs")
 
 @_attrs_define
 class ServerOs:
+    """Operating system that can be installed with a server template, with its minimum requirements"""
+
     os_code: str
+    """ Code of the operating system, to send as `SERVER_TEMPLATE_CODE` in `data` when buying the service """
     os_name: str
+    """ Name of the operating system """
     min_ram: int | None
     """ Min RAM (GB), for VPS/VM only """
     min_cpu: int | None

@@ -8,18 +8,30 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
 from ...models.order_can_pay_response import OrderCanPayResponse
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     order_id: int,
+    *,
+    one_click_id: int | Unset = UNSET,
+    prepaid_credit: bool | Unset = UNSET,
 ) -> dict[str, Any]:
+
+    params: dict[str, Any] = {}
+
+    params["one_click_id"] = one_click_id
+
+    params["prepaid_credit"] = prepaid_credit
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "get",
         "url": "/api/v3/orders/{order_id}/can-pay".format(
             order_id=quote(str(order_id), safe=""),
         ),
+        "params": params,
     }
 
     return _kwargs
@@ -58,6 +70,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -79,13 +96,24 @@ def sync_detailed(
     order_id: int,
     *,
     client: AuthenticatedClient,
+    one_click_id: int | Unset = UNSET,
+    prepaid_credit: bool | Unset = UNSET,
 ) -> Response[ApiError | OrderCanPayResponse]:
     """Can pay Order
 
-     Know if it's possible to complete the payment for an Order
+     Whether the order can be paid now with a payment method, with the amount to pay, commission of the
+    method included, and the orders paid together with it. Send either `one_click_id` or
+    `prepaid_credit=true` (400 otherwise). `can_pay` is false when the order cannot be paid now, when
+    the One-Click method is not active or has expired, or when the prepaid credit cannot be used for
+    these orders or is not enough. 404 when the One-Click method does not exist or belongs to another
+    account
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         order_id (int):
+        one_click_id (int | Unset):
+        prepaid_credit (bool | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -97,6 +125,8 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         order_id=order_id,
+        one_click_id=one_click_id,
+        prepaid_credit=prepaid_credit,
     )
 
     response = client.get_httpx_client().request(
@@ -110,13 +140,24 @@ def sync(
     order_id: int,
     *,
     client: AuthenticatedClient,
+    one_click_id: int | Unset = UNSET,
+    prepaid_credit: bool | Unset = UNSET,
 ) -> ApiError | OrderCanPayResponse | None:
     """Can pay Order
 
-     Know if it's possible to complete the payment for an Order
+     Whether the order can be paid now with a payment method, with the amount to pay, commission of the
+    method included, and the orders paid together with it. Send either `one_click_id` or
+    `prepaid_credit=true` (400 otherwise). `can_pay` is false when the order cannot be paid now, when
+    the One-Click method is not active or has expired, or when the prepaid credit cannot be used for
+    these orders or is not enough. 404 when the One-Click method does not exist or belongs to another
+    account
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         order_id (int):
+        one_click_id (int | Unset):
+        prepaid_credit (bool | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -129,6 +170,8 @@ def sync(
     return sync_detailed(
         order_id=order_id,
         client=client,
+        one_click_id=one_click_id,
+        prepaid_credit=prepaid_credit,
     ).parsed
 
 
@@ -136,13 +179,24 @@ async def asyncio_detailed(
     order_id: int,
     *,
     client: AuthenticatedClient,
+    one_click_id: int | Unset = UNSET,
+    prepaid_credit: bool | Unset = UNSET,
 ) -> Response[ApiError | OrderCanPayResponse]:
     """Can pay Order
 
-     Know if it's possible to complete the payment for an Order
+     Whether the order can be paid now with a payment method, with the amount to pay, commission of the
+    method included, and the orders paid together with it. Send either `one_click_id` or
+    `prepaid_credit=true` (400 otherwise). `can_pay` is false when the order cannot be paid now, when
+    the One-Click method is not active or has expired, or when the prepaid credit cannot be used for
+    these orders or is not enough. 404 when the One-Click method does not exist or belongs to another
+    account
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         order_id (int):
+        one_click_id (int | Unset):
+        prepaid_credit (bool | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -154,6 +208,8 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         order_id=order_id,
+        one_click_id=one_click_id,
+        prepaid_credit=prepaid_credit,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -165,13 +221,24 @@ async def asyncio(
     order_id: int,
     *,
     client: AuthenticatedClient,
+    one_click_id: int | Unset = UNSET,
+    prepaid_credit: bool | Unset = UNSET,
 ) -> ApiError | OrderCanPayResponse | None:
     """Can pay Order
 
-     Know if it's possible to complete the payment for an Order
+     Whether the order can be paid now with a payment method, with the amount to pay, commission of the
+    method included, and the orders paid together with it. Send either `one_click_id` or
+    `prepaid_credit=true` (400 otherwise). `can_pay` is false when the order cannot be paid now, when
+    the One-Click method is not active or has expired, or when the prepaid credit cannot be used for
+    these orders or is not enough. 404 when the One-Click method does not exist or belongs to another
+    account
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         order_id (int):
+        one_click_id (int | Unset):
+        prepaid_credit (bool | Unset):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -185,5 +252,7 @@ async def asyncio(
         await asyncio_detailed(
             order_id=order_id,
             client=client,
+            one_click_id=one_click_id,
+            prepaid_credit=prepaid_credit,
         )
     ).parsed

@@ -8,20 +8,27 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
 from ...models.purchase_can_change_recurrence_response import PurchaseCanChangeRecurrenceResponse
-from ...types import Response
+from ...types import UNSET, Response
 
 
 def _get_kwargs(
     purchase_id: int,
+    *,
     recurrence_id: int,
 ) -> dict[str, Any]:
 
+    params: dict[str, Any] = {}
+
+    params["recurrence_id"] = recurrence_id
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/purchases/{purchase_id}/can-change-recurrence/{recurrence_id}".format(
+        "url": "/api/v3/purchases/{purchase_id}/can-change-recurrence".format(
             purchase_id=quote(str(purchase_id), safe=""),
-            recurrence_id=quote(str(recurrence_id), safe=""),
         ),
+        "params": params,
     }
 
     return _kwargs
@@ -60,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -79,13 +91,15 @@ def _build_response(
 
 def sync_detailed(
     purchase_id: int,
-    recurrence_id: int,
     *,
     client: AuthenticatedClient,
+    recurrence_id: int,
 ) -> Response[ApiError | PurchaseCanChangeRecurrenceResponse]:
     """Can change recurrence
 
      Know if it's possible to change the recurrence on purchase
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):
@@ -113,13 +127,15 @@ def sync_detailed(
 
 def sync(
     purchase_id: int,
-    recurrence_id: int,
     *,
     client: AuthenticatedClient,
+    recurrence_id: int,
 ) -> ApiError | PurchaseCanChangeRecurrenceResponse | None:
     """Can change recurrence
 
      Know if it's possible to change the recurrence on purchase
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):
@@ -135,20 +151,22 @@ def sync(
 
     return sync_detailed(
         purchase_id=purchase_id,
-        recurrence_id=recurrence_id,
         client=client,
+        recurrence_id=recurrence_id,
     ).parsed
 
 
 async def asyncio_detailed(
     purchase_id: int,
-    recurrence_id: int,
     *,
     client: AuthenticatedClient,
+    recurrence_id: int,
 ) -> Response[ApiError | PurchaseCanChangeRecurrenceResponse]:
     """Can change recurrence
 
      Know if it's possible to change the recurrence on purchase
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):
@@ -174,13 +192,15 @@ async def asyncio_detailed(
 
 async def asyncio(
     purchase_id: int,
-    recurrence_id: int,
     *,
     client: AuthenticatedClient,
+    recurrence_id: int,
 ) -> ApiError | PurchaseCanChangeRecurrenceResponse | None:
     """Can change recurrence
 
      Know if it's possible to change the recurrence on purchase
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):
@@ -197,7 +217,7 @@ async def asyncio(
     return (
         await asyncio_detailed(
             purchase_id=purchase_id,
-            recurrence_id=recurrence_id,
             client=client,
+            recurrence_id=recurrence_id,
         )
     ).parsed

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar
+from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -11,11 +11,13 @@ T = TypeVar("T", bound="PurchaseName")
 
 @_attrs_define
 class PurchaseName:
+    """Names of the purchase: the name of the service, the name of its object and the two together"""
+
     name: str
     """ Service name """
     full_name: str
     """ Complete name (Service and object name) """
-    object_name: str
+    object_name: None | str
     """ Name of the purchase object (ie. domain name, server hostname, etc.) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -24,6 +26,7 @@ class PurchaseName:
 
         full_name = self.full_name
 
+        object_name: None | str
         object_name = self.object_name
 
         field_dict: dict[str, Any] = {}
@@ -45,7 +48,12 @@ class PurchaseName:
 
         full_name = d.pop("full_name")
 
-        object_name = d.pop("object_name")
+        def _parse_object_name(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        object_name = _parse_object_name(d.pop("object_name"))
 
         purchase_name = cls(
             name=name,

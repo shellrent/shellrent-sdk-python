@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -82,7 +87,11 @@ def sync_detailed(
 ) -> Response[ApiError | ServerCanActionResponse]:
     """Check if server can hard reboot
 
-     Check if server can hard reboot
+     Whether the server can be forcibly rebooted now with `POST /api/v3/servers/{server_id}/power-
+    actions` and `action` `hard_reboot`. `can_action` is false for a physical server, which only has
+    `reboot`, and for the server of a private cloud; also while the server is not ready, its service is
+    not active or is under maintenance, another operation does not allow the action, or the virtual
+    machine is not running
 
     Args:
         server_id (int):
@@ -113,7 +122,11 @@ def sync(
 ) -> ApiError | ServerCanActionResponse | None:
     """Check if server can hard reboot
 
-     Check if server can hard reboot
+     Whether the server can be forcibly rebooted now with `POST /api/v3/servers/{server_id}/power-
+    actions` and `action` `hard_reboot`. `can_action` is false for a physical server, which only has
+    `reboot`, and for the server of a private cloud; also while the server is not ready, its service is
+    not active or is under maintenance, another operation does not allow the action, or the virtual
+    machine is not running
 
     Args:
         server_id (int):
@@ -139,7 +152,11 @@ async def asyncio_detailed(
 ) -> Response[ApiError | ServerCanActionResponse]:
     """Check if server can hard reboot
 
-     Check if server can hard reboot
+     Whether the server can be forcibly rebooted now with `POST /api/v3/servers/{server_id}/power-
+    actions` and `action` `hard_reboot`. `can_action` is false for a physical server, which only has
+    `reboot`, and for the server of a private cloud; also while the server is not ready, its service is
+    not active or is under maintenance, another operation does not allow the action, or the virtual
+    machine is not running
 
     Args:
         server_id (int):
@@ -168,7 +185,11 @@ async def asyncio(
 ) -> ApiError | ServerCanActionResponse | None:
     """Check if server can hard reboot
 
-     Check if server can hard reboot
+     Whether the server can be forcibly rebooted now with `POST /api/v3/servers/{server_id}/power-
+    actions` and `action` `hard_reboot`. `can_action` is false for a physical server, which only has
+    `reboot`, and for the server of a private cloud; also while the server is not ready, its service is
+    not active or is under maintenance, another operation does not allow the action, or the virtual
+    machine is not running
 
     Args:
         server_id (int):

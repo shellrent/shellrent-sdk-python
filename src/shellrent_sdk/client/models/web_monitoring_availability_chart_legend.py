@@ -6,16 +6,16 @@ from typing import Any, Self, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
 T = TypeVar("T", bound="WebMonitoringAvailabilityChartLegend")
 
 
 @_attrs_define
 class WebMonitoringAvailabilityChartLegend:
-    up: int | Unset = UNSET
-    down: int | Unset = UNSET
-    warning: int | Unset = UNSET
+    """Codes of the `y` values: 0 up, 1 down (HTTP 5xx), 2 warning (HTTP 4xx)"""
+
+    up: int
+    down: int
+    warning: int
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -27,24 +27,24 @@ class WebMonitoringAvailabilityChartLegend:
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
-        field_dict.update({})
-        if up is not UNSET:
-            field_dict["up"] = up
-        if down is not UNSET:
-            field_dict["down"] = down
-        if warning is not UNSET:
-            field_dict["warning"] = warning
+        field_dict.update(
+            {
+                "up": up,
+                "down": down,
+                "warning": warning,
+            }
+        )
 
         return field_dict
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        up = d.pop("up", UNSET)
+        up = d.pop("up")
 
-        down = d.pop("down", UNSET)
+        down = d.pop("down")
 
-        warning = d.pop("warning", UNSET)
+        warning = d.pop("warning")
 
         web_monitoring_availability_chart_legend = cls(
             up=up,

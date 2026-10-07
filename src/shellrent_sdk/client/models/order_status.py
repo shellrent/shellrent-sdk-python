@@ -11,8 +11,12 @@ T = TypeVar("T", bound="OrderStatus")
 
 @_attrs_define
 class OrderStatus:
+    """Processing status of an order"""
+
     status_code: str
+    """ One of `NEW`, `TO_MANAGE` (to be processed), `EMITTED` (completed), `CANCELED` or `CLOSED` """
     status_name: str
+    """ Name of the status shown to the customer, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

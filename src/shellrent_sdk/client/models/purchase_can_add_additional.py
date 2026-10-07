@@ -15,10 +15,14 @@ T = TypeVar("T", bound="PurchaseCanAddAdditional")
 
 @_attrs_define
 class PurchaseCanAddAdditional:
+    """Whether additional services can be bought for the purchase, with the services available"""
+
     purchase_id: int
+    """ Id of the purchase (`GET /api/v3/purchases/{purchase_id}`) """
     can_add_additional: bool
+    """ Whether additional services can be bought for the purchase now """
     services: list[Service]
-    """ Collection of Services to which it is possible to make the change. """
+    """ Additional services that can be bought for the purchase; empty when `can_add_additional` is false """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

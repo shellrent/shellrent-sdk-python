@@ -17,19 +17,18 @@ T = TypeVar("T", bound="BuyServiceCpanelLicenseRequestData")
 class BuyServiceCpanelLicenseRequestData:
     """Details about where to install the license"""
 
-    installation_type: BuyServiceCpanelLicenseRequestDataInstallationType | Unset = UNSET
+    installation_type: BuyServiceCpanelLicenseRequestDataInstallationType
     """ Choose to install the license on an active server or on external IP address """
     purchase_server: int | Unset = UNSET
-    """ ID of the server where the license will be installed to. Required only if "installation_type" has value
+    """ Id of the purchase of the server where the license will be installed (`purchase_id` of `GET
+    /api/v3/servers/{server_id}`), not the id of the server. Required only if "installation_type" has value
     "internal_installation_type" """
     ip_address: str | Unset = UNSET
     """ IP address of the external host where the license will be installed to. Required only if "installation_type"
     has value "external_installation_type" """
 
     def to_dict(self) -> dict[str, Any]:
-        installation_type: str | Unset = UNSET
-        if not isinstance(self.installation_type, Unset):
-            installation_type = self.installation_type.value
+        installation_type = self.installation_type.value
 
         purchase_server = self.purchase_server
 
@@ -37,9 +36,11 @@ class BuyServiceCpanelLicenseRequestData:
 
         field_dict: dict[str, Any] = {}
 
-        field_dict.update({})
-        if installation_type is not UNSET:
-            field_dict["installation_type"] = installation_type
+        field_dict.update(
+            {
+                "installation_type": installation_type,
+            }
+        )
         if purchase_server is not UNSET:
             field_dict["purchase_server"] = purchase_server
         if ip_address is not UNSET:
@@ -50,14 +51,9 @@ class BuyServiceCpanelLicenseRequestData:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        _installation_type = d.pop("installation_type", UNSET)
-        installation_type: BuyServiceCpanelLicenseRequestDataInstallationType | Unset
-        if isinstance(_installation_type, Unset):
-            installation_type = UNSET
-        else:
-            installation_type = BuyServiceCpanelLicenseRequestDataInstallationType(
-                _installation_type
-            )
+        installation_type = BuyServiceCpanelLicenseRequestDataInstallationType(
+            d.pop("installation_type")
+        )
 
         purchase_server = d.pop("purchase_server", UNSET)
 

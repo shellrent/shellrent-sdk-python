@@ -13,9 +13,14 @@ T = TypeVar("T", bound="OAuthError")
 
 @_attrs_define
 class OAuthError:
+    """Error of the token endpoint, in the OAuth2 format (RFC 6749, section 5.2)"""
+
     error: str
+    """ OAuth2 error code, for example `invalid_client`, `invalid_scope` or `rate_limited` """
     error_description: None | str | Unset = UNSET
+    """ Description of the error, for the developers of the client """
     error_uri: None | str | Unset = UNSET
+    """ Page that describes the error, when there is one """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

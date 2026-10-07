@@ -23,7 +23,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/shop/microsoft-365/domain-available",
+        "url": "/api/v3/shop/microsoft-365/domain-availability",
         "params": params,
     }
 
@@ -63,6 +63,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -89,8 +94,10 @@ def sync_detailed(
 
      Check if a new Microsoft 365 tenant domain is available
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        domain_prefix (str): Prefix to search for (for ".onmicrosoft.com" tenant domains)
+        domain_prefix (str):  Example: mycompany.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -120,8 +127,10 @@ def sync(
 
      Check if a new Microsoft 365 tenant domain is available
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        domain_prefix (str): Prefix to search for (for ".onmicrosoft.com" tenant domains)
+        domain_prefix (str):  Example: mycompany.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -146,8 +155,10 @@ async def asyncio_detailed(
 
      Check if a new Microsoft 365 tenant domain is available
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        domain_prefix (str): Prefix to search for (for ".onmicrosoft.com" tenant domains)
+        domain_prefix (str):  Example: mycompany.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -175,8 +186,10 @@ async def asyncio(
 
      Check if a new Microsoft 365 tenant domain is available
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        domain_prefix (str): Prefix to search for (for ".onmicrosoft.com" tenant domains)
+        domain_prefix (str):  Example: mycompany.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

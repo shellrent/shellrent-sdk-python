@@ -11,8 +11,12 @@ T = TypeVar("T", bound="PurchaseCanChangeRecurrence")
 
 @_attrs_define
 class PurchaseCanChangeRecurrence:
+    """Whether the recurrence of the purchase can be changed (`PATCH /api/v3/purchases/{purchase_id}/recurrence`)"""
+
     purchase_id: int
+    """ Id of the purchase (`GET /api/v3/purchases/{purchase_id}`) """
     can_change_recurrence: bool
+    """ Whether the recurrence can be changed to the one in the `recurrence_id` query parameter """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

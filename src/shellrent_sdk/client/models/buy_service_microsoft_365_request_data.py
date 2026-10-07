@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
 
@@ -18,120 +18,84 @@ T = TypeVar("T", bound="BuyServiceMicrosoft365RequestData")
 
 @_attrs_define
 class BuyServiceMicrosoft365RequestData:
-    """Information about the Microsoft 365 tenant to associate to the subscription"""
+    """Microsoft 365 tenant of the subscription. All the data is checked before the order is created: with "select" the
+    tenant must be one of the account (409 if it already has 2 active subscriptions of the same service); with
+    "transfer" and "new" no tenant can have the domain prefix already, and at Microsoft the ".onmicrosoft.com" domain
+    must exist ("transfer") or be available ("new"), otherwise 409. Send only the fields of the chosen option.
+
+    """
 
     tenant_choice: BuyServiceMicrosoft365RequestDataTenantChoice
     """ Select whether to choose an existing tenant ("select"), transfer one ("transfer") or create a new tenant
     ("new"). When transferring a tenant, approve the Microsoft Partner Relationship before sending API requests """
-    tenant_select: int | None | Unset = UNSET
-    """ Tenant ID to which to assign the subscription when selecting an existing tenant """
-    domain_prefix: None | str | Unset = UNSET
-    """ Prefix of the ".onmicrosoft.com" tenant domain when creating or transferring a tenant """
-    first_name: None | str | Unset = UNSET
-    """ Contact first name for the tenant when not selecting an existing tenant """
-    last_name: None | str | Unset = UNSET
-    """ Contact last name for the tenant when not selecting an existing tenant """
-    company_name: None | str | Unset = UNSET
-    """ Company name for the tenant when not selecting an existing tenant """
-    address: None | str | Unset = UNSET
-    """ Address for the tenant when not selecting an existing tenant """
-    city: None | str | Unset = UNSET
-    """ City for the tenant when not selecting an existing tenant """
-    state: None | str | Unset = UNSET
-    """ State/Province for the tenant address when not selecting an existing tenant """
-    postal_code: None | str | Unset = UNSET
-    """ Postal code for the tenant address when not selecting an existing tenant """
-    country: None | str | Unset = UNSET
-    """ ISO country code with 2 letters (e.g. "IT" or "ES") when not selecting an existing tenant """
-    email_address: None | str | Unset = UNSET
-    """ Administrative email address for the tenant when not selecting an existing tenant """
-    phone_prefix: None | str | Unset = UNSET
-    """ Country code phone prefix with leading "+" sign when not selecting an existing tenant """
-    phone_number: None | str | Unset = UNSET
-    """ Phone number for the tenant contact when not selecting an existing tenant """
+    tenant_select: int | Unset = UNSET
+    """ ID of the tenant to which to assign the subscription, as listed by `GET /api/v3/shop/microsoft-365/tenants`.
+    Required with "select", not allowed otherwise """
+    domain_prefix: str | Unset = UNSET
+    """ Prefix of the ".onmicrosoft.com" tenant domain: lowercase letters and digits, at most 27 characters.
+    Required with "transfer" and "new", not allowed otherwise """
+    first_name: str | Unset = UNSET
+    """ Contact first name for the tenant: letters, spaces and hyphens. Required with "transfer" and "new", not
+    allowed otherwise """
+    last_name: str | Unset = UNSET
+    """ Contact last name for the tenant: letters, spaces and hyphens. Required with "transfer" and "new", not
+    allowed otherwise """
+    company_name: str | Unset = UNSET
+    """ Company name for the tenant: letters, digits and spaces. Required with "transfer" and "new", not allowed
+    otherwise """
+    address: str | Unset = UNSET
+    """ Address for the tenant. Required with "transfer" and "new", not allowed otherwise """
+    city: str | Unset = UNSET
+    """ City for the tenant address: letters, spaces and hyphens. Required with "transfer" and "new", not allowed
+    otherwise """
+    state: str | Unset = UNSET
+    """ State/Province for the tenant address: letters, spaces and hyphens. Required with "transfer" and "new", not
+    allowed otherwise """
+    postal_code: str | Unset = UNSET
+    """ Postal code for the tenant address: letters, digits and spaces. Required with "transfer" and "new", not
+    allowed otherwise """
+    country: str | Unset = UNSET
+    """ ISO country code with 2 letters (e.g. "IT" or "ES"). Required with "transfer" and "new", not allowed
+    otherwise """
+    email_address: str | Unset = UNSET
+    """ Administrative email address for the tenant. Required with "transfer" and "new", not allowed otherwise """
+    phone_prefix: str | Unset = UNSET
+    """ International phone prefix of a country, with the leading "+" sign (e.g. "+44" for UK or "+39" for Italy).
+    Required with "transfer" and "new", not allowed otherwise """
+    phone_number: str | Unset = UNSET
+    """ Phone number for the tenant contact: from 3 to 25 digits, spaces, dots, hyphens and parentheses. Required
+    with "transfer" and "new", not allowed otherwise """
     locale: BuyServiceMicrosoft365RequestDataLocale | Unset = UNSET
-    """ Locale to use for the tenant when not selecting an existing tenant """
+    """ Locale to use for the tenant. Required with "transfer" and "new", not allowed otherwise """
 
     def to_dict(self) -> dict[str, Any]:
         tenant_choice = self.tenant_choice.value
 
-        tenant_select: int | None | Unset
-        if isinstance(self.tenant_select, Unset):
-            tenant_select = UNSET
-        else:
-            tenant_select = self.tenant_select
+        tenant_select = self.tenant_select
 
-        domain_prefix: None | str | Unset
-        if isinstance(self.domain_prefix, Unset):
-            domain_prefix = UNSET
-        else:
-            domain_prefix = self.domain_prefix
+        domain_prefix = self.domain_prefix
 
-        first_name: None | str | Unset
-        if isinstance(self.first_name, Unset):
-            first_name = UNSET
-        else:
-            first_name = self.first_name
+        first_name = self.first_name
 
-        last_name: None | str | Unset
-        if isinstance(self.last_name, Unset):
-            last_name = UNSET
-        else:
-            last_name = self.last_name
+        last_name = self.last_name
 
-        company_name: None | str | Unset
-        if isinstance(self.company_name, Unset):
-            company_name = UNSET
-        else:
-            company_name = self.company_name
+        company_name = self.company_name
 
-        address: None | str | Unset
-        if isinstance(self.address, Unset):
-            address = UNSET
-        else:
-            address = self.address
+        address = self.address
 
-        city: None | str | Unset
-        if isinstance(self.city, Unset):
-            city = UNSET
-        else:
-            city = self.city
+        city = self.city
 
-        state: None | str | Unset
-        if isinstance(self.state, Unset):
-            state = UNSET
-        else:
-            state = self.state
+        state = self.state
 
-        postal_code: None | str | Unset
-        if isinstance(self.postal_code, Unset):
-            postal_code = UNSET
-        else:
-            postal_code = self.postal_code
+        postal_code = self.postal_code
 
-        country: None | str | Unset
-        if isinstance(self.country, Unset):
-            country = UNSET
-        else:
-            country = self.country
+        country = self.country
 
-        email_address: None | str | Unset
-        if isinstance(self.email_address, Unset):
-            email_address = UNSET
-        else:
-            email_address = self.email_address
+        email_address = self.email_address
 
-        phone_prefix: None | str | Unset
-        if isinstance(self.phone_prefix, Unset):
-            phone_prefix = UNSET
-        else:
-            phone_prefix = self.phone_prefix
+        phone_prefix = self.phone_prefix
 
-        phone_number: None | str | Unset
-        if isinstance(self.phone_number, Unset):
-            phone_number = UNSET
-        else:
-            phone_number = self.phone_number
+        phone_number = self.phone_number
 
         locale: str | Unset = UNSET
         if not isinstance(self.locale, Unset):
@@ -180,122 +144,31 @@ class BuyServiceMicrosoft365RequestData:
         d = dict(src_dict)
         tenant_choice = BuyServiceMicrosoft365RequestDataTenantChoice(d.pop("tenant_choice"))
 
-        def _parse_tenant_select(data: object) -> int | None | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(int | None | Unset, data)
+        tenant_select = d.pop("tenant_select", UNSET)
 
-        tenant_select = _parse_tenant_select(d.pop("tenant_select", UNSET))
+        domain_prefix = d.pop("domain_prefix", UNSET)
 
-        def _parse_domain_prefix(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
+        first_name = d.pop("first_name", UNSET)
 
-        domain_prefix = _parse_domain_prefix(d.pop("domain_prefix", UNSET))
+        last_name = d.pop("last_name", UNSET)
 
-        def _parse_first_name(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
+        company_name = d.pop("company_name", UNSET)
 
-        first_name = _parse_first_name(d.pop("first_name", UNSET))
+        address = d.pop("address", UNSET)
 
-        def _parse_last_name(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
+        city = d.pop("city", UNSET)
 
-        last_name = _parse_last_name(d.pop("last_name", UNSET))
+        state = d.pop("state", UNSET)
 
-        def _parse_company_name(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
+        postal_code = d.pop("postal_code", UNSET)
 
-        company_name = _parse_company_name(d.pop("company_name", UNSET))
+        country = d.pop("country", UNSET)
 
-        def _parse_address(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
+        email_address = d.pop("email_address", UNSET)
 
-        address = _parse_address(d.pop("address", UNSET))
+        phone_prefix = d.pop("phone_prefix", UNSET)
 
-        def _parse_city(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        city = _parse_city(d.pop("city", UNSET))
-
-        def _parse_state(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        state = _parse_state(d.pop("state", UNSET))
-
-        def _parse_postal_code(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        postal_code = _parse_postal_code(d.pop("postal_code", UNSET))
-
-        def _parse_country(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        country = _parse_country(d.pop("country", UNSET))
-
-        def _parse_email_address(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        email_address = _parse_email_address(d.pop("email_address", UNSET))
-
-        def _parse_phone_prefix(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        phone_prefix = _parse_phone_prefix(d.pop("phone_prefix", UNSET))
-
-        def _parse_phone_number(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        phone_number = _parse_phone_number(d.pop("phone_number", UNSET))
+        phone_number = d.pop("phone_number", UNSET)
 
         _locale = d.pop("locale", UNSET)
         locale: BuyServiceMicrosoft365RequestDataLocale | Unset

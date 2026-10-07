@@ -11,22 +11,41 @@ T = TypeVar("T", bound="PrivateCloud")
 
 @_attrs_define
 class PrivateCloud:
+    """Private cloud, with the resources of its plan and the limits of its virtual machines"""
+
     purchase_id: int
+    """ Id of the purchase of the private cloud (`GET /api/v3/purchases/{purchase_id}`) """
     server_id: int | None
+    """ Id of the server of the private cloud (`GET /api/v3/servers/{server_id}`) """
     max_vm: int | None
+    """ Maximum number of virtual machines of the private cloud """
     available_vm: int | None
+    """ Number of virtual machines that can still be created: `max_vm` minus the current ones """
     max_cpu: int | None
+    """ Total vCPUs of the private cloud, `cpu_overallocation` included """
     cpu_overallocation: int | None
+    """ vCPUs of `max_cpu` that come from overallocation (extra cores); null when the private cloud has none """
     min_vm_cpu: int | None
+    """ Minimum vCPUs of a virtual machine """
     max_vm_cpu: int | None
+    """ Maximum vCPUs of a virtual machine """
     max_ram: int | None
+    """ Total RAM of the private cloud, in MB """
     min_vm_ram: int | None
+    """ Minimum RAM of a virtual machine, in MB """
     max_vm_ram: int | None
+    """ Maximum RAM of a virtual machine, in MB """
     max_disk: int | None
+    """ Total disk space of the private cloud, in GB """
     min_vm_disk: int | None
+    """ Minimum disk space of a virtual machine, in GB """
     max_vm_disk: int | None
+    """ Maximum disk space of a virtual machine, in GB """
     max_backup: int | None
+    """ Total backup space of the private cloud, in GB """
     max_disk_backup: int | None
+    """ Daily backup space of the private cloud, in GB: the disk space of its virtual machines with the daily backup
+    cannot go beyond it """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

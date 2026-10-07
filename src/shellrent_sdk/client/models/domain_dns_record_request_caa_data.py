@@ -14,8 +14,11 @@ class DomainDnsRecordRequestCaaData:
     """Use this for CAA type record only"""
 
     flag: int
+    """ Flags of the CAA record: only `0` is accepted """
     tag_value: str
+    """ Tag of the CAA record, for example `issue` or `issuewild`; its value goes in `destination` """
     can_sign_http_exchanges: bool
+    """ Whether to add the parameter `cansignhttpexchanges=yes` to the value of the tag """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

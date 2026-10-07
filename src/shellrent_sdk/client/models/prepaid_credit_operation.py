@@ -7,8 +7,6 @@ from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
 if TYPE_CHECKING:
     from ..models.amount_simple import AmountSimple
     from ..models.creditnote import Creditnote
@@ -21,16 +19,26 @@ T = TypeVar("T", bound="PrepaidCreditOperation")
 
 @_attrs_define
 class PrepaidCreditOperation:
+    """Operation on the prepaid credit, such as a top-up or a payment with the credit"""
+
     operation_id: int
     operation_id_related: int | None
+    """ Id of the payment with the credit (`REDEMPTION`) that the operation cancels, for `REDEMPTION_CANCELLATION`
+    (`GET /api/v3/prepaid-credit/operations/{operation_id}`); null for the other types """
     prepaid_credit_topup: PrepaidCreditTopup
+    """ Top-up of the prepaid credit, with its deposit invoice and the credit left """
     operation_type: PrepaidCreditOperationType
+    """ Type of an operation on the prepaid credit """
+    creditnote: Creditnote | None
+    """ Credit note issued for the operation, for `REFUND` and `CREDIT_CANCELLATION`; null for the other types """
     amount: AmountSimple
+    """ Amount in euros, without the VAT details of `Amount` """
     date_created: datetime.datetime
-    creditnote: Creditnote | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        from ..models.creditnote import Creditnote
+
         operation_id = self.operation_id
 
         operation_id_related: int | None
@@ -40,13 +48,15 @@ class PrepaidCreditOperation:
 
         operation_type = self.operation_type.to_dict()
 
+        creditnote: dict[str, Any] | None
+        if isinstance(self.creditnote, Creditnote):
+            creditnote = self.creditnote.to_dict()
+        else:
+            creditnote = self.creditnote
+
         amount = self.amount.to_dict()
 
         date_created = self.date_created.isoformat()
-
-        creditnote: dict[str, Any] | Unset = UNSET
-        if not isinstance(self.creditnote, Unset):
-            creditnote = self.creditnote.to_dict()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -56,12 +66,11 @@ class PrepaidCreditOperation:
                 "operation_id_related": operation_id_related,
                 "prepaid_credit_topup": prepaid_credit_topup,
                 "operation_type": operation_type,
+                "creditnote": creditnote,
                 "amount": amount,
                 "date_created": date_created,
             }
         )
-        if creditnote is not UNSET:
-            field_dict["creditnote"] = creditnote
 
         return field_dict
 
@@ -88,25 +97,33 @@ class PrepaidCreditOperation:
 
         operation_type = PrepaidCreditOperationType.from_dict(d.pop("operation_type"))
 
+        def _parse_creditnote(data: object) -> Creditnote | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                creditnote_type_0 = Creditnote.from_dict(data)
+
+                return creditnote_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(Creditnote | None, data)
+
+        creditnote = _parse_creditnote(d.pop("creditnote"))
+
         amount = AmountSimple.from_dict(d.pop("amount"))
 
         date_created = datetime.datetime.fromisoformat(d.pop("date_created"))
-
-        _creditnote = d.pop("creditnote", UNSET)
-        creditnote: Creditnote | Unset
-        if isinstance(_creditnote, Unset):
-            creditnote = UNSET
-        else:
-            creditnote = Creditnote.from_dict(_creditnote)
 
         prepaid_credit_operation = cls(
             operation_id=operation_id,
             operation_id_related=operation_id_related,
             prepaid_credit_topup=prepaid_credit_topup,
             operation_type=operation_type,
+            creditnote=creditnote,
             amount=amount,
             date_created=date_created,
-            creditnote=creditnote,
         )
 
         prepaid_credit_operation.additional_properties = d

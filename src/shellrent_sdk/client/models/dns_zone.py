@@ -11,10 +11,17 @@ T = TypeVar("T", bound="DnsZone")
 
 @_attrs_define
 class DnsZone:
+    """DNS zone of a domain, on our nameservers or at Cloudflare"""
+
     zone_id: str
+    """ Id of the zone on our nameservers or at Cloudflare """
     zone_name: str
+    """ Name of the zone: the domain name in punycode """
     nameservers: list[str]
-    ttl: int
+    """ Hostnames of the nameservers of the zone; with Cloudflare, the ones that Cloudflare assigned to it """
+    ttl: int | None
+    """ TTL of the zone, in seconds, which with the standard and external nameservers is also the TTL of every
+    record; null with Cloudflare, whose zones have no TTL """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -24,6 +31,7 @@ class DnsZone:
 
         nameservers = self.nameservers
 
+        ttl: int | None
         ttl = self.ttl
 
         field_dict: dict[str, Any] = {}
@@ -48,7 +56,12 @@ class DnsZone:
 
         nameservers = cast(list[str], d.pop("nameservers"))
 
-        ttl = d.pop("ttl")
+        def _parse_ttl(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        ttl = _parse_ttl(d.pop("ttl"))
 
         dns_zone = cls(
             zone_id=zone_id,

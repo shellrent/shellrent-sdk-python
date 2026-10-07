@@ -16,10 +16,14 @@ T = TypeVar("T", bound="SmsPhonebookContact")
 
 @_attrs_define
 class SmsPhonebookContact:
+    """Contact of the SMS phonebooks of the account"""
+
     id: int
     phonebooks: list[int]
+    """ Ids of the phonebooks that contain the contact (`GET /api/v3/sms-phonebooks/{phonebook_id}`) """
     country: Country
     phone_number: str
+    """ Phone number without the international prefix: the country is in `country` """
     name: None | str
     surname: None | str
     birth_date: datetime.date | None

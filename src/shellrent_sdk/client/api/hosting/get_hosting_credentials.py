@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -82,7 +87,8 @@ def sync_detailed(
 ) -> Response[ApiError | HostingCredentialListResponse]:
     """Get hosting credentials
 
-     Get hosting credentials
+     Lists the active FTP, secondary FTP, MySQL and MSSQL accounts of the hosting, with their passwords.
+    The accounts belong to the purchase: a subdomain returns those of its main hosting
 
     Args:
         hosting_id (int):
@@ -113,7 +119,8 @@ def sync(
 ) -> ApiError | HostingCredentialListResponse | None:
     """Get hosting credentials
 
-     Get hosting credentials
+     Lists the active FTP, secondary FTP, MySQL and MSSQL accounts of the hosting, with their passwords.
+    The accounts belong to the purchase: a subdomain returns those of its main hosting
 
     Args:
         hosting_id (int):
@@ -139,7 +146,8 @@ async def asyncio_detailed(
 ) -> Response[ApiError | HostingCredentialListResponse]:
     """Get hosting credentials
 
-     Get hosting credentials
+     Lists the active FTP, secondary FTP, MySQL and MSSQL accounts of the hosting, with their passwords.
+    The accounts belong to the purchase: a subdomain returns those of its main hosting
 
     Args:
         hosting_id (int):
@@ -168,7 +176,8 @@ async def asyncio(
 ) -> ApiError | HostingCredentialListResponse | None:
     """Get hosting credentials
 
-     Get hosting credentials
+     Lists the active FTP, secondary FTP, MySQL and MSSQL accounts of the hosting, with their passwords.
+    The accounts belong to the purchase: a subdomain returns those of its main hosting
 
     Args:
         hosting_id (int):

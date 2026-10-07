@@ -15,17 +15,29 @@ T = TypeVar("T", bound="Recurrence")
 
 @_attrs_define
 class Recurrence:
+    """Billing recurrence: its frequency and, in days, the timings of renewal, suspension and dismission"""
+
     recurrence_id: int
     frequency: RecurrenceFrequency
+    """ Frequency of a recurrence: a number of years, months or weeks, or a one-off charge """
     days_renew: int | None
+    """ Days before the expiry from which the purchase can be renewed and the renewal order is created """
     days_autorenew: int | None
+    """ Days before the expiry when the automatic renewal is attempted """
     days_suspension: int | None
+    """ Days after the expiry when a purchase not renewed is suspended; null if it is not suspended """
     days_restore: int | None
+    """ Days after the expiry from which the restore price is charged in addition to the renewal price """
     days_dismission: int | None
-    days_cancel: int
+    """ Days after the expiry when a purchase not renewed is dismissed """
+    days_cancel: int | None
+    """ Days after the start of the activation when a purchase never activated is cancelled automatically """
     days_renew_dismission: int | None
+    """ Days after the expiry when a purchase whose renewal was not completed is dismissed automatically """
     days_no_secondary: int | None
+    """ Days before the expiry from which additional services can no longer be bought for the purchase """
     days_no_service_change: int | None
+    """ Days before the expiry from which the service of the purchase can no longer be changed """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -48,6 +60,7 @@ class Recurrence:
         days_dismission: int | None
         days_dismission = self.days_dismission
 
+        days_cancel: int | None
         days_cancel = self.days_cancel
 
         days_renew_dismission: int | None
@@ -123,7 +136,12 @@ class Recurrence:
 
         days_dismission = _parse_days_dismission(d.pop("days_dismission"))
 
-        days_cancel = d.pop("days_cancel")
+        def _parse_days_cancel(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        days_cancel = _parse_days_cancel(d.pop("days_cancel"))
 
         def _parse_days_renew_dismission(data: object) -> int | None:
             if data is None:

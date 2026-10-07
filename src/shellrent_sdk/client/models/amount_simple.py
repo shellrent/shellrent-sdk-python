@@ -11,8 +11,12 @@ T = TypeVar("T", bound="AmountSimple")
 
 @_attrs_define
 class AmountSimple:
+    """Amount in euros, without the VAT details of `Amount`"""
+
     amount: float
+    """ Amount, in euros """
     currency: str
+    """ Currency code: always `EUR` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

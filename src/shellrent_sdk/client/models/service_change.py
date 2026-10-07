@@ -16,8 +16,13 @@ T = TypeVar("T", bound="ServiceChange")
 
 @_attrs_define
 class ServiceChange:
+    """Service the purchase can change to, with the price of the change"""
+
     service: Service
+    """ Service of the price list, with its category, recurrences, prices and purchase options """
     activation_price: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

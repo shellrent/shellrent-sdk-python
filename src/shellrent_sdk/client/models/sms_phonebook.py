@@ -11,9 +11,12 @@ T = TypeVar("T", bound="SmsPhonebook")
 
 @_attrs_define
 class SmsPhonebook:
+    """Phonebook of SMS recipients of the account"""
+
     id: int
     name: None | str
     contacts_count: int
+    """ Number of contacts in the phonebook (`GET /api/v3/sms-phonebooks/{phonebook_id}/contacts`) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

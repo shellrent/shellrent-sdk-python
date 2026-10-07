@@ -8,18 +8,30 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
 from ...models.sms_message_paginated_list_response import SmsMessagePaginatedListResponse
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     sms_id: int,
+    *,
+    page: int | Unset = 1,
+    per_page: int | Unset = 20,
 ) -> dict[str, Any]:
+
+    params: dict[str, Any] = {}
+
+    params["page"] = page
+
+    params["per_page"] = per_page
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "get",
         "url": "/api/v3/sms/{sms_id}/messages".format(
             sms_id=quote(str(sms_id), safe=""),
         ),
+        "params": params,
     }
 
     return _kwargs
@@ -58,6 +70,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -79,6 +96,8 @@ def sync_detailed(
     sms_id: int,
     *,
     client: AuthenticatedClient,
+    page: int | Unset = 1,
+    per_page: int | Unset = 20,
 ) -> Response[ApiError | SmsMessagePaginatedListResponse]:
     """List all messages of an SMS
 
@@ -86,6 +105,8 @@ def sync_detailed(
 
     Args:
         sms_id (int):
+        page (int | Unset):  Default: 1.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -97,6 +118,8 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         sms_id=sms_id,
+        page=page,
+        per_page=per_page,
     )
 
     response = client.get_httpx_client().request(
@@ -110,6 +133,8 @@ def sync(
     sms_id: int,
     *,
     client: AuthenticatedClient,
+    page: int | Unset = 1,
+    per_page: int | Unset = 20,
 ) -> ApiError | SmsMessagePaginatedListResponse | None:
     """List all messages of an SMS
 
@@ -117,6 +142,8 @@ def sync(
 
     Args:
         sms_id (int):
+        page (int | Unset):  Default: 1.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -129,6 +156,8 @@ def sync(
     return sync_detailed(
         sms_id=sms_id,
         client=client,
+        page=page,
+        per_page=per_page,
     ).parsed
 
 
@@ -136,6 +165,8 @@ async def asyncio_detailed(
     sms_id: int,
     *,
     client: AuthenticatedClient,
+    page: int | Unset = 1,
+    per_page: int | Unset = 20,
 ) -> Response[ApiError | SmsMessagePaginatedListResponse]:
     """List all messages of an SMS
 
@@ -143,6 +174,8 @@ async def asyncio_detailed(
 
     Args:
         sms_id (int):
+        page (int | Unset):  Default: 1.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -154,6 +187,8 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         sms_id=sms_id,
+        page=page,
+        per_page=per_page,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -165,6 +200,8 @@ async def asyncio(
     sms_id: int,
     *,
     client: AuthenticatedClient,
+    page: int | Unset = 1,
+    per_page: int | Unset = 20,
 ) -> ApiError | SmsMessagePaginatedListResponse | None:
     """List all messages of an SMS
 
@@ -172,6 +209,8 @@ async def asyncio(
 
     Args:
         sms_id (int):
+        page (int | Unset):  Default: 1.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -185,5 +224,7 @@ async def asyncio(
         await asyncio_detailed(
             sms_id=sms_id,
             client=client,
+            page=page,
+            per_page=per_page,
         )
     ).parsed

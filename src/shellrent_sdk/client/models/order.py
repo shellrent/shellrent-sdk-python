@@ -22,22 +22,44 @@ T = TypeVar("T", bound="Order")
 
 @_attrs_define
 class Order:
+    """Order of the account, with its statuses, amounts and invoice"""
+
     order_id: int
     type_: str
+    """ Type of the order: `P` (purchase), `R` (renewal) or `U` (update) """
     status: OrderStatus
+    """ Processing status of an order """
     payment_status: OrderPaymentStatus
+    """ Payment status of an order """
     invoice_status: OrderInvoiceStatus
+    """ Invoicing status of an order """
     invoice: Invoice | None
+    """ Invoice of the order; null while the order is not invoiced """
     billing: AccountBilling
+    """ Billing profile: the holder the documents are made out to, with its tax and electronic invoicing data """
     intent_type: str
+    """ Intent of the order: `DEFAULT`, `DEPOSIT` (top-up of the prepaid credit) or `BALANCE` (paid with the prepaid
+    credit) """
     date_payed: datetime.date | None
+    """ Date on which the order was fully paid; null while it is not """
     date_confirmed: datetime.datetime | None
+    """ When the order was confirmed with deferred payment, to be paid later; null otherwise """
     payed: bool
+    """ Whether the order is fully paid """
     total_amount: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     payment_amount: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     origin: str
+    """ Where the order was created: `web` (control panel or cart), `api` (this API), `api2` (API v2) or `cli`
+    (automatic procedures, such as the renewals) """
     promotions: list[Promotion]
+    """ Promotions applied to the rows of the order; those that increase the price are shown only to administrators
+    """
     rows_count: int
+    """ Number of rows of the order (`GET /api/v3/orders/{order_id}/rows`) """
     date_created: datetime.datetime
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

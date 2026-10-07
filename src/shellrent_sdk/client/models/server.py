@@ -12,15 +12,28 @@ T = TypeVar("T", bound="Server")
 
 @_attrs_define
 class Server:
+    """Server of the account: dedicated server, cloud server, private cloud or virtual machine of a private cloud"""
+
     server_id: int
     purchase_id: int | None
+    """ Id of the purchase of the server (`GET /api/v3/purchases/{purchase_id}`) """
     hostname: None | str
     server_type: None | str
+    """ Type of the server: `PH` for a dedicated (physical) server, `VM` for a virtual machine, `HV` for a
+    hypervisor or a private cloud """
     active: bool
+    """ Whether the server is active: false once it has been deleted """
     consolidated: bool
+    """ Whether the server is ready, with its provisioning complete """
     ip_address_id: int | None
+    """ Id of the primary IP address of the server (`GET /api/v3/servers/{server_id}/ip-addresses/{ip_address_id}`)
+    """
     ip_address: None | str
+    """ Primary IP address of the server """
     service_category_code: None | str
+    """ Code of the service category of the server: `DEDICATED` (dedicated server), `CLOUD` (Cloud Server),
+    `CLOUD_SERVER_IOPS` (Cloud VPS), `CLOUD_SERVER_HA` (Cloud Server HA), `PRIVATE_CLOUD` (private cloud) or
+    `PRIVATE_CLOUD_VM` (virtual machine of a private cloud) """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

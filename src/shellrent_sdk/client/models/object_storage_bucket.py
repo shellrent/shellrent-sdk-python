@@ -12,28 +12,53 @@ T = TypeVar("T", bound="ObjectStorageBucket")
 
 @_attrs_define
 class ObjectStorageBucket:
+    """Bucket of an object storage, with its usage from the latest daily usage data of the storage: a null figure means
+    zero or not available yet
+
+    """
+
     bucket_id: int
     object_storage_id: int
+    """ Id of the object storage (`GET /api/v3/object-storages/{object_storage_id}`) """
     sub_account_id: int | None
+    """ Id of the sub-account of the object storage, the account at the storage that holds its buckets and IAM users
+    (not the account id of the storage) """
     region_id: int | None
+    """ Id of the storage region of the bucket """
     bucket_remote_id: int | None
-    code: None | str
+    code: int | None
+    """ Progressive number of the bucket in the object storage """
     code_full: None | str
+    """ Same value as `name` """
     bucket_number: None | str
     name: None | str
     versioning: None | str
-    creation_date: datetime.datetime | None
+    """ Versioning status of the bucket: `ENABLED`, `SUSPENDED`, or `DISABLED` if it has never been enabled """
+    creation_date: datetime.date | None
+    """ Date the bucket was created on the storage """
     arn: None | str
+    """ ARN (Amazon Resource Name) of the bucket, used in the policies (`arn:aws:s3:::<name>`) """
     policy_json: None | str
+    """ Policy of the bucket on the storage, as a JSON string, with the firewall entries; null if the bucket has
+    none """
     active_storage_bytes: int | None
+    """ Space used by the active objects, in bytes """
     deleted_storage_bytes: int | None
+    """ Space of the deleted objects that still counts toward the purchased space, in bytes """
     active_objects: int | None
+    """ Number of active objects """
     deleted_objects: int | None
+    """ Number of deleted objects still counted in `deleted_storage_bytes` """
     api_calls_count: int | None
+    """ Number of API calls in the day of the latest usage data """
     storage_wrote_bytes: int | None
+    """ Data written in the day of the latest usage data, in bytes """
     storage_read_bytes: int | None
+    """ Data read in the day of the latest usage data, in bytes """
     egress_traffic_bytes: int | None
+    """ Outgoing traffic in the day of the latest usage data, in bytes """
     ingress_traffic_bytes: int | None
+    """ Incoming traffic in the day of the latest usage data, in bytes """
     reference_date: datetime.date | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -51,7 +76,7 @@ class ObjectStorageBucket:
         bucket_remote_id: int | None
         bucket_remote_id = self.bucket_remote_id
 
-        code: None | str
+        code: int | None
         code = self.code
 
         code_full: None | str
@@ -67,7 +92,7 @@ class ObjectStorageBucket:
         versioning = self.versioning
 
         creation_date: None | str
-        if isinstance(self.creation_date, datetime.datetime):
+        if isinstance(self.creation_date, datetime.date):
             creation_date = self.creation_date.isoformat()
         else:
             creation_date = self.creation_date
@@ -171,10 +196,10 @@ class ObjectStorageBucket:
 
         bucket_remote_id = _parse_bucket_remote_id(d.pop("bucket_remote_id"))
 
-        def _parse_code(data: object) -> None | str:
+        def _parse_code(data: object) -> int | None:
             if data is None:
                 return data
-            return cast(None | str, data)
+            return cast(int | None, data)
 
         code = _parse_code(d.pop("code"))
 
@@ -206,18 +231,18 @@ class ObjectStorageBucket:
 
         versioning = _parse_versioning(d.pop("versioning"))
 
-        def _parse_creation_date(data: object) -> datetime.datetime | None:
+        def _parse_creation_date(data: object) -> datetime.date | None:
             if data is None:
                 return data
             try:
                 if not isinstance(data, str):
                     raise TypeError()
-                creation_date_type_0 = datetime.datetime.fromisoformat(data)
+                creation_date_type_0 = datetime.date.fromisoformat(data)
 
                 return creation_date_type_0
             except (TypeError, ValueError, AttributeError, KeyError):
                 pass
-            return cast(datetime.datetime | None, data)
+            return cast(datetime.date | None, data)
 
         creation_date = _parse_creation_date(d.pop("creation_date"))
 

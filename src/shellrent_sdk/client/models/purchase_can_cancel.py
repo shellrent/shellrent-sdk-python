@@ -11,8 +11,13 @@ T = TypeVar("T", bound="PurchaseCanCancel")
 
 @_attrs_define
 class PurchaseCanCancel:
+    """Whether the purchase can be cancelled (`DELETE /api/v3/purchases/{purchase_id}`)"""
+
     purchase_id: int
+    """ Id of the purchase (`GET /api/v3/purchases/{purchase_id}`) """
     can_cancel: bool
+    """ Whether the purchase can be cancelled: only before its activation, and if its additional purchases can be
+    cancelled too """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

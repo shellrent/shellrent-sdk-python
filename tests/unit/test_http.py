@@ -122,7 +122,7 @@ def test_sends_the_body_again() -> None:
     api, sleeps = FakeApi(too_many_requests("1"), health_response()), Sleeps()
 
     with retrying_client(api, sleeps) as client:
-        client.post("/api/v3/orders/pay", json={"order_ids": [1, 2]})
+        client.post("/api/v3/payments/prepaid-credit", json={"order_ids": [1, 2]})
 
     assert [body(request) for request in api.requests] == [{"order_ids": [1, 2]}] * 2
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,10 +16,17 @@ T = TypeVar("T", bound="DomainDnssecResponse")
 
 @_attrs_define
 class DomainDnssecResponse:
-    error: int
+    """Successful response with one `DomainDnssec`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: DomainDnssec
+    """ Active DNSSEC records of the domain: the ones of our zone with the standard nameservers, the ones set with
+    `PATCH /api/v3/domains/{domain_id}/dnssec` with the external nameservers """
     meta: DomainDnssecResponseMetaType0 | None
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -59,7 +66,9 @@ class DomainDnssecResponse:
         )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:

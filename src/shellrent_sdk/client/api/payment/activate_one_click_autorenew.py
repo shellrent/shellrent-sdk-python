@@ -14,7 +14,7 @@ def _get_kwargs() -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/one-clicks/autorenew",
+        "url": "/api/v3/one-clicks/auto-renewal",
     }
 
     return _kwargs
@@ -23,10 +23,10 @@ def _get_kwargs() -> dict[str, Any]:
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | OneClickAutorenewResponse | None:
-    if response.status_code == 200:
-        response_200 = OneClickAutorenewResponse.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = OneClickAutorenewResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -48,10 +48,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -78,6 +88,8 @@ def sync_detailed(
 
      Activate automatic renewal service with One-Click Payment
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -103,6 +115,8 @@ def sync(
 
      Activate automatic renewal service with One-Click Payment
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -123,6 +137,8 @@ async def asyncio_detailed(
     """Activate One-Click autorenew
 
      Activate automatic renewal service with One-Click Payment
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -146,6 +162,8 @@ async def asyncio(
     """Activate One-Click autorenew
 
      Activate automatic renewal service with One-Click Payment
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

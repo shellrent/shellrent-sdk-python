@@ -15,7 +15,7 @@ from ...types import Response
 
 
 def _get_kwargs(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     body: Microsoft365SubscriptionQuantityRequest,
 ) -> dict[str, Any]:
@@ -23,8 +23,8 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/microsoft365-subscriptions/{microsoft365_id}/quantity-upgrade".format(
-            microsoft365_id=quote(str(microsoft365_id), safe=""),
+        "url": "/api/v3/microsoft-365-subscriptions/{microsoft_365_subscription_id}/quantity-upgrades".format(
+            microsoft_365_subscription_id=quote(str(microsoft_365_subscription_id), safe=""),
         ),
     }
 
@@ -39,10 +39,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | OrderResponse | None:
-    if response.status_code == 200:
-        response_200 = OrderResponse.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = OrderResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -64,10 +64,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -87,7 +97,7 @@ def _build_response(
 
 
 def sync_detailed(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     client: AuthenticatedClient,
     body: Microsoft365SubscriptionQuantityRequest,
@@ -96,8 +106,10 @@ def sync_detailed(
 
      Increase the Microsoft 365 seats quantity. Returns the generated Order to pay the additional seats.
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        microsoft365_id (int):
+        microsoft_365_subscription_id (int):
         body (Microsoft365SubscriptionQuantityRequest):
 
     Raises:
@@ -109,7 +121,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        microsoft365_id=microsoft365_id,
+        microsoft_365_subscription_id=microsoft_365_subscription_id,
         body=body,
     )
 
@@ -121,7 +133,7 @@ def sync_detailed(
 
 
 def sync(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     client: AuthenticatedClient,
     body: Microsoft365SubscriptionQuantityRequest,
@@ -130,8 +142,10 @@ def sync(
 
      Increase the Microsoft 365 seats quantity. Returns the generated Order to pay the additional seats.
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        microsoft365_id (int):
+        microsoft_365_subscription_id (int):
         body (Microsoft365SubscriptionQuantityRequest):
 
     Raises:
@@ -143,14 +157,14 @@ def sync(
     """
 
     return sync_detailed(
-        microsoft365_id=microsoft365_id,
+        microsoft_365_subscription_id=microsoft_365_subscription_id,
         client=client,
         body=body,
     ).parsed
 
 
 async def asyncio_detailed(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     client: AuthenticatedClient,
     body: Microsoft365SubscriptionQuantityRequest,
@@ -159,8 +173,10 @@ async def asyncio_detailed(
 
      Increase the Microsoft 365 seats quantity. Returns the generated Order to pay the additional seats.
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        microsoft365_id (int):
+        microsoft_365_subscription_id (int):
         body (Microsoft365SubscriptionQuantityRequest):
 
     Raises:
@@ -172,7 +188,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        microsoft365_id=microsoft365_id,
+        microsoft_365_subscription_id=microsoft_365_subscription_id,
         body=body,
     )
 
@@ -182,7 +198,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     client: AuthenticatedClient,
     body: Microsoft365SubscriptionQuantityRequest,
@@ -191,8 +207,10 @@ async def asyncio(
 
      Increase the Microsoft 365 seats quantity. Returns the generated Order to pay the additional seats.
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        microsoft365_id (int):
+        microsoft_365_subscription_id (int):
         body (Microsoft365SubscriptionQuantityRequest):
 
     Raises:
@@ -205,7 +223,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            microsoft365_id=microsoft365_id,
+            microsoft_365_subscription_id=microsoft_365_subscription_id,
             client=client,
             body=body,
         )

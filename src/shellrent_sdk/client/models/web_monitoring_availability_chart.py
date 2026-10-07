@@ -20,11 +20,18 @@ T = TypeVar("T", bound="WebMonitoringAvailabilityChart")
 
 @_attrs_define
 class WebMonitoringAvailabilityChart:
+    """Availability of the monitored site in the last hour"""
+
     web_monitoring_id: int
+    """ Id of the web monitoring (`GET /api/v3/web-monitorings/{web_monitoring_id}`) """
     interval: str
+    """ Period covered by the chart, as an ISO 8601 duration: always `PT1H`, the last hour """
     unit: str
+    """ Unit of the `y` values: always `status`, a code explained in `legend` """
     legend: WebMonitoringAvailabilityChartLegend
+    """ Codes of the `y` values: 0 up, 1 down (HTTP 5xx), 2 warning (HTTP 4xx) """
     points: list[WebMonitoringAvailabilityChartPointsItem]
+    """ Checks of the last hour, one point per check """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

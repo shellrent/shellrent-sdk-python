@@ -11,7 +11,10 @@ T = TypeVar("T", bound="HealthStatus")
 
 @_attrs_define
 class HealthStatus:
+    """Status of the API"""
+
     status: str
+    """ `ok` when the API is up """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

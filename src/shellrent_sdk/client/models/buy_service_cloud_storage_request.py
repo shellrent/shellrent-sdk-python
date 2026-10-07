@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -16,10 +15,11 @@ class BuyServiceCloudStorageRequest:
     service_id: int
     """ ID of the Service to buy """
     recurrence_id: int | Unset = UNSET
-    """ ID of the Recurrence to assign to the purchased service """
+    """ ID of the billing recurrence of the purchased service: one of the `recurrences_available` of the chosen
+    service, as listed by `GET /api/v3/shop/cloud-storage`. If omitted, the default recurrence of the service
+    (`recurrence`) is used. """
     account_id: int | Unset = UNSET
     """ ID of the account of the user that will be the owner of the purchase (available to Resellers only) """
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         service_id = self.service_id
@@ -29,7 +29,7 @@ class BuyServiceCloudStorageRequest:
         account_id = self.account_id
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update(
             {
                 "service_id": service_id,
@@ -57,21 +57,4 @@ class BuyServiceCloudStorageRequest:
             account_id=account_id,
         )
 
-        buy_service_cloud_storage_request.additional_properties = d
         return buy_service_cloud_storage_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

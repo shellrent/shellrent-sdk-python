@@ -12,15 +12,25 @@ T = TypeVar("T", bound="ObjectStorageIamUser")
 
 @_attrs_define
 class ObjectStorageIamUser:
+    """IAM user of an object storage: a user of the storage with its own S3 keys"""
+
     iam_user_id: int
     object_storage_id: int
+    """ Id of the object storage (`GET /api/v3/object-storages/{object_storage_id}`) """
     sub_account_id: int
-    code: None | str
+    """ Id of the sub-account of the object storage, the account at the storage that holds its buckets and IAM users
+    (not the account id of the storage) """
+    code: int | None
+    """ Progressive number of the IAM user in the object storage """
     code_full: None | str
+    """ Username of the IAM user on the storage """
     iam_id: None | str
+    """ Id of the user in the IAM service of the storage """
     arn: None | str
+    """ ARN (Amazon Resource Name) of the IAM user, used in the policies (`arn:aws:iam::<account>:user/<username>`)
+    """
     active: bool | None
-    firewall_policy: None | str
+    """ Whether the IAM user is active: deleted users are not returned """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -31,7 +41,7 @@ class ObjectStorageIamUser:
 
         sub_account_id = self.sub_account_id
 
-        code: None | str
+        code: int | None
         code = self.code
 
         code_full: None | str
@@ -45,9 +55,6 @@ class ObjectStorageIamUser:
 
         active: bool | None
         active = self.active
-
-        firewall_policy: None | str
-        firewall_policy = self.firewall_policy
 
         date_created: None | str
         if isinstance(self.date_created, datetime.datetime):
@@ -67,7 +74,6 @@ class ObjectStorageIamUser:
                 "iam_id": iam_id,
                 "arn": arn,
                 "active": active,
-                "firewall_policy": firewall_policy,
                 "date_created": date_created,
             }
         )
@@ -83,10 +89,10 @@ class ObjectStorageIamUser:
 
         sub_account_id = d.pop("sub_account_id")
 
-        def _parse_code(data: object) -> None | str:
+        def _parse_code(data: object) -> int | None:
             if data is None:
                 return data
-            return cast(None | str, data)
+            return cast(int | None, data)
 
         code = _parse_code(d.pop("code"))
 
@@ -118,13 +124,6 @@ class ObjectStorageIamUser:
 
         active = _parse_active(d.pop("active"))
 
-        def _parse_firewall_policy(data: object) -> None | str:
-            if data is None:
-                return data
-            return cast(None | str, data)
-
-        firewall_policy = _parse_firewall_policy(d.pop("firewall_policy"))
-
         def _parse_date_created(data: object) -> datetime.datetime | None:
             if data is None:
                 return data
@@ -149,7 +148,6 @@ class ObjectStorageIamUser:
             iam_id=iam_id,
             arn=arn,
             active=active,
-            firewall_policy=firewall_policy,
             date_created=date_created,
         )
 

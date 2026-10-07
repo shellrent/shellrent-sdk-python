@@ -17,10 +17,17 @@ T = TypeVar("T", bound="SmsPrice")
 
 @_attrs_define
 class SmsPrice:
+    """Prices of an SMS sent to a country, for each delivery quality"""
+
     country: Country
     standard_price: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     premium_price: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     valid_from: datetime.datetime | None
+    """ Date and time from which these prices apply """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

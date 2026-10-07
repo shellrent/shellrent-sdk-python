@@ -7,6 +7,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
+from ...models.empty_response import EmptyResponse
 from ...models.private_cloud_vm_update_request import PrivateCloudVmUpdateRequest
 from ...models.task_response import TaskResponse
 from ...types import Response
@@ -22,7 +23,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "patch",
-        "url": "/api/v3/servers/{server_id}/private_cloud/virtual-machines/{vm_id}".format(
+        "url": "/api/v3/servers/{server_id}/private-cloud/virtual-machines/{vm_id}".format(
             server_id=quote(str(server_id), safe=""),
             vm_id=quote(str(vm_id), safe=""),
         ),
@@ -38,11 +39,16 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | TaskResponse | None:
+) -> ApiError | EmptyResponse | TaskResponse | None:
     if response.status_code == 200:
-        response_200 = TaskResponse.from_dict(response.json())
+        response_200 = EmptyResponse.from_dict(response.json())
 
         return response_200
+
+    if response.status_code == 202:
+        response_202 = TaskResponse.from_dict(response.json())
+
+        return response_202
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -64,10 +70,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -77,7 +93,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | TaskResponse]:
+) -> Response[ApiError | EmptyResponse | TaskResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -92,10 +108,12 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: PrivateCloudVmUpdateRequest,
-) -> Response[ApiError | TaskResponse]:
+) -> Response[ApiError | EmptyResponse | TaskResponse]:
     """Update private cloud VM
 
-     Update private cloud VM
+     Updates the note and the resources of a private cloud VM. The change of cpu, ram or disk starts an
+    asynchronous operation, returned as a Task; when none of them differs from the current value no
+    operation starts and `data` is null.
 
     Args:
         server_id (int):
@@ -107,7 +125,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | TaskResponse]
+        Response[ApiError | EmptyResponse | TaskResponse]
     """
 
     kwargs = _get_kwargs(
@@ -129,10 +147,12 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: PrivateCloudVmUpdateRequest,
-) -> ApiError | TaskResponse | None:
+) -> ApiError | EmptyResponse | TaskResponse | None:
     """Update private cloud VM
 
-     Update private cloud VM
+     Updates the note and the resources of a private cloud VM. The change of cpu, ram or disk starts an
+    asynchronous operation, returned as a Task; when none of them differs from the current value no
+    operation starts and `data` is null.
 
     Args:
         server_id (int):
@@ -144,7 +164,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | TaskResponse
+        ApiError | EmptyResponse | TaskResponse
     """
 
     return sync_detailed(
@@ -161,10 +181,12 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: PrivateCloudVmUpdateRequest,
-) -> Response[ApiError | TaskResponse]:
+) -> Response[ApiError | EmptyResponse | TaskResponse]:
     """Update private cloud VM
 
-     Update private cloud VM
+     Updates the note and the resources of a private cloud VM. The change of cpu, ram or disk starts an
+    asynchronous operation, returned as a Task; when none of them differs from the current value no
+    operation starts and `data` is null.
 
     Args:
         server_id (int):
@@ -176,7 +198,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | TaskResponse]
+        Response[ApiError | EmptyResponse | TaskResponse]
     """
 
     kwargs = _get_kwargs(
@@ -196,10 +218,12 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: PrivateCloudVmUpdateRequest,
-) -> ApiError | TaskResponse | None:
+) -> ApiError | EmptyResponse | TaskResponse | None:
     """Update private cloud VM
 
-     Update private cloud VM
+     Updates the note and the resources of a private cloud VM. The change of cpu, ram or disk starts an
+    asynchronous operation, returned as a Task; when none of them differs from the current value no
+    operation starts and `data` is null.
 
     Args:
         server_id (int):
@@ -211,7 +235,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | TaskResponse
+        ApiError | EmptyResponse | TaskResponse
     """
 
     return (

@@ -1,29 +1,56 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from io import BytesIO
 from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
+
+from .. import types
+from ..types import File
 
 T = TypeVar("T", bound="UploadFileBody")
 
 
 @_attrs_define
 class UploadFileBody:
+    file: File
+    """ File to upload, at most 5 MB, with extension pdf, p7m, jpg, jpeg, png, txt, doc, docx, xls or xlsx. The
+    content must match the extension """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        file = self.file.to_tuple()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
+        field_dict.update(
+            {
+                "file": file,
+            }
+        )
 
         return field_dict
+
+    def to_multipart(self) -> types.RequestFiles:
+        files: types.RequestFiles = []
+
+        files.append(("file", self.file.to_tuple()))
+
+        for prop_name, prop in self.additional_properties.items():
+            files.append((prop_name, (None, str(prop).encode(), "text/plain")))
+
+        return files
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        upload_file_body = cls()
+        file = File(payload=BytesIO(d.pop("file")))
+
+        upload_file_body = cls(
+            file=file,
+        )
 
         upload_file_body.additional_properties = d
         return upload_file_body

@@ -54,9 +54,9 @@ def sync_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[JwksResponse | OAuthError]:
-    """Esponi JWKS
+    """Get the JWKS
 
-     Restituisce le chiavi pubbliche usate per firmare gli access token JWT.
+     Returns the public keys used to sign the JWT access tokens.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -79,9 +79,9 @@ def sync(
     *,
     client: AuthenticatedClient | Client,
 ) -> JwksResponse | OAuthError | None:
-    """Esponi JWKS
+    """Get the JWKS
 
-     Restituisce le chiavi pubbliche usate per firmare gli access token JWT.
+     Returns the public keys used to sign the JWT access tokens.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -100,9 +100,9 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient | Client,
 ) -> Response[JwksResponse | OAuthError]:
-    """Esponi JWKS
+    """Get the JWKS
 
-     Restituisce le chiavi pubbliche usate per firmare gli access token JWT.
+     Returns the public keys used to sign the JWT access tokens.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -123,9 +123,9 @@ async def asyncio(
     *,
     client: AuthenticatedClient | Client,
 ) -> JwksResponse | OAuthError | None:
-    """Esponi JWKS
+    """Get the JWKS
 
-     Restituisce le chiavi pubbliche usate per firmare gli access token JWT.
+     Returns the public keys used to sign the JWT access tokens.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

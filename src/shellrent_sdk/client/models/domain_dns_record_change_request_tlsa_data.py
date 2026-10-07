@@ -14,8 +14,11 @@ class DomainDnsRecordChangeRequestTlsaData:
     """Use this for TLSA type record only"""
 
     usage: str
+    """ Certificate usage: `0` (PKIX-TA), `1` (PKIX-EE), `2` (DANE-TA) or `3` (DANE-EE) """
     selector: str
+    """ Selector: `0` for the full certificate, `1` for its public key (SubjectPublicKeyInfo) """
     matching_type: str
+    """ Matching type: `0` for the data without hashing, `1` for SHA-256, `2` for SHA-512 """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

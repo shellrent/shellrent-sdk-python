@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -11,14 +11,14 @@ T = TypeVar("T", bound="Microsoft365DomainAvailable")
 
 @_attrs_define
 class Microsoft365DomainAvailable:
+    """Availability of a `.onmicrosoft.com` domain for a new Microsoft 365 tenant"""
+
     domain_prefix: str
     """ Requested tenant domain prefix """
     microsoft_domain: str
     """ Full ".onmicrosoft.com" domain """
     available: bool
-    """ Whether the domain is available """
-    microsoft_uuid: None | str
-    """ Microsoft tenant UUID if available """
+    """ Whether the domain is available for a new tenant: false if a tenant already has it at Microsoft """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -28,9 +28,6 @@ class Microsoft365DomainAvailable:
 
         available = self.available
 
-        microsoft_uuid: None | str
-        microsoft_uuid = self.microsoft_uuid
-
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -38,7 +35,6 @@ class Microsoft365DomainAvailable:
                 "domain_prefix": domain_prefix,
                 "microsoft_domain": microsoft_domain,
                 "available": available,
-                "microsoft_uuid": microsoft_uuid,
             }
         )
 
@@ -53,18 +49,10 @@ class Microsoft365DomainAvailable:
 
         available = d.pop("available")
 
-        def _parse_microsoft_uuid(data: object) -> None | str:
-            if data is None:
-                return data
-            return cast(None | str, data)
-
-        microsoft_uuid = _parse_microsoft_uuid(d.pop("microsoft_uuid"))
-
         microsoft_365_domain_available = cls(
             domain_prefix=domain_prefix,
             microsoft_domain=microsoft_domain,
             available=available,
-            microsoft_uuid=microsoft_uuid,
         )
 
         microsoft_365_domain_available.additional_properties = d

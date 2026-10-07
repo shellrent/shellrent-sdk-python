@@ -17,13 +17,13 @@ T = TypeVar("T", bound="RequestAccessTokenBody")
 class RequestAccessTokenBody:
     grant_type: RequestAccessTokenBodyGrantType
     client_id: None | str | Unset = UNSET
-    """ Client ID se non fornito tramite Authorization header Basic. """
+    """ Client ID, when it is not sent in the Basic Authorization header. """
     client_secret: None | str | Unset = UNSET
-    """ Client secret se non fornito tramite Authorization header Basic. """
+    """ Client secret, when it is not sent in the Basic Authorization header. """
     scope: None | str | Unset = UNSET
-    """ Scope separati da spazio. Se omesso: tutti gli scope assegnati al client. """
+    """ Space-separated scopes. When omitted: all the scopes assigned to the client. """
     audience: None | OAuthAudience | Unset = UNSET
-    """ Se omessa: l'unica audience del client. """
+    """ When omitted or empty: the only audience of the client. """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

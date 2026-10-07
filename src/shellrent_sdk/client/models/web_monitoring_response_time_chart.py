@@ -17,10 +17,16 @@ T = TypeVar("T", bound="WebMonitoringResponseTimeChart")
 
 @_attrs_define
 class WebMonitoringResponseTimeChart:
+    """Response time of the monitored site in the last hour"""
+
     web_monitoring_id: int
+    """ Id of the web monitoring (`GET /api/v3/web-monitorings/{web_monitoring_id}`) """
     interval: str
+    """ Period covered by the chart, as an ISO 8601 duration: always `PT1H`, the last hour """
     unit: str
+    """ Unit of the `y` values: always `ms` """
     points: list[WebMonitoringResponseTimeChartPointsItem]
+    """ Response times measured in the last hour, one point per check """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

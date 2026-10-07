@@ -17,25 +17,46 @@ T = TypeVar("T", bound="Service")
 
 @_attrs_define
 class Service:
+    """Service of the price list, with its category, recurrences, prices and purchase options"""
+
     service_id: int
     service_category: ServiceCategory
     service_name: str
+    """ Name of the service, in Italian """
     recurrence: Recurrence
+    """ Billing recurrence: its frequency and, in days, the timings of renewal, suspension and dismission """
     recurrences_available: list[Recurrence]
+    """ Recurrences that can be chosen when buying the service (`recurrence_id`) """
     tld_id: int | None
+    """ Id of the TLD of a domain service (`GET /api/v3/tlds/{tld_id}`); null for the other services """
     service_code: str
+    """ Code of the service, for example `CLOUD_STORAGE_100` or `BOX_PEC` """
     service_url: str
-    activation_price: Amount
+    """ URL of the cart page of the service """
+    activation_price: Amount | None
+    """ Activation price of the price list; null for sub-accounts """
     renew_price: Amount | None
+    """ Renew price of the price list; null when the service has none and for sub-accounts """
     restore_price: Amount | None
+    """ Restore price of the price list; null when the service has none and for sub-accounts """
     transfer_price: Amount | None
+    """ Transfer price of the price list; null when the service has none and for sub-accounts """
     is_primary: bool | None
+    """ Whether the service can be sold as a primary service """
     is_secondary: bool | None
+    """ Whether the service is an additional service of a primary one """
     is_presale: bool | None
+    """ Whether the service can be bought as an additional service together with its primary service (presale) """
     is_aftersale: bool | None
+    """ Whether the service can be bought as an additional service after the activation of its primary service
+    (aftersale) """
     is_quantifiable: bool | None
+    """ Whether the service can be added to the cart more than once; the quantity of one purchase is set by
+    `quantity_min` and `quantity_max` """
     quantity_min: int | None
+    """ Minimum quantity of the service in one purchase """
     quantity_max: int | None
+    """ Maximum quantity of the service in one purchase; null when the quantity cannot be chosen """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -61,7 +82,11 @@ class Service:
 
         service_url = self.service_url
 
-        activation_price = self.activation_price.to_dict()
+        activation_price: dict[str, Any] | None
+        if isinstance(self.activation_price, Amount):
+            activation_price = self.activation_price.to_dict()
+        else:
+            activation_price = self.activation_price
 
         renew_price: dict[str, Any] | None
         if isinstance(self.renew_price, Amount):
@@ -163,7 +188,20 @@ class Service:
 
         service_url = d.pop("service_url")
 
-        activation_price = Amount.from_dict(d.pop("activation_price"))
+        def _parse_activation_price(data: object) -> Amount | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                activation_price_type_0 = Amount.from_dict(data)
+
+                return activation_price_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(Amount | None, data)
+
+        activation_price = _parse_activation_price(d.pop("activation_price"))
 
         def _parse_renew_price(data: object) -> Amount | None:
             if data is None:

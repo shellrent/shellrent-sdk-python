@@ -7,6 +7,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-10-07
+
+Functions and models regenerated from the updated specification of the Shellrent API, which renames
+paths, parameters and models: see the lists below to update the code written for 0.3.0.
+
+### Added
+
+- `create_prepaid_credit_payment` and `create_one_click_payment` (`payment`), which replace
+  `pay_orders`, with `PrepaidCreditPaymentCreateRequest` and `OneClickPaymentCreateRequest`.
+- `create_server_power_action` (`server`), with `ServerPowerActionRequest`: it replaces
+  `start_server`, `stop_server`, `reboot_server`, `hard_stop_server` and `hard_reboot_server`.
+- `can_reissue_ssl_certificate` and `reissue_ssl_certificate` (`ssl`), which replace
+  `can_reemit_ssl_certificate` and `reemit_ssl_certificate`.
+- `get_pec_mailbox_owner_change` (`pec`) and `list_private_cloud_available_ip_addresses` (`server`).
+- `License`, `LicenseResponse` and `LicensePaginatedListResponse`, for both cPanel and Plesk.
+- `DomainDetail` and `DomainDetailResponse`, returned by `get_domain`; `DomainNameserver` and
+  `DomainPremiumPrices`.
+- `Hosting.http_version`, `Hosting.file_protection_enabled` and `Hosting.php_settings`
+  (`HostingPhpSetting`), `DomainAvailability.premium` and `DomainAvailability.premium_prices`,
+  `ApiErrorMetaType0.errors` (the errors of each field in validation errors).
+- Enums for request fields that were `str` or `int`: `DomainDnsRecordRequestType`,
+  `DomainDnsZoneRequestZoneTtl`, `HostingCronjobCreateRequestRequestProtocol`,
+  `HostingCronjobCreateRequestHttpRequestMethod`, `HostingHttpVersionUpdateRequestVersion`,
+  `HostingPhpSettingsUpdateRequestSetting`, `HostingSslCertificateInstallRequestCnType`,
+  `HostingSslCertificateInstallRequestDestinationType` and `SslCertificateExportRequestFormat`.
+
+### Changed
+
+- `unwrap()` returns `None` for a 204 No Content response instead of raising `UnexpectedStatus`:
+  the specification now documents 204 for the deletions, `cancel_order`, `cancel_purchase`,
+  `apply_domain_contact_changes`, `revoke_one_click_autorenew` and the payments with nothing to pay.
+  The generated functions type these responses as `Any` instead of `EmptyResponse`.
+- Path parameters renamed: `creditnote_id` → `credit_note_id` (`billing`), `cronjob_id` →
+  `cron_job_id` (`hosting`), `microsoft365_id` → `microsoft_365_subscription_id` (`license_`),
+  `topup_id` → `top_up_id` (`get_prepaid_credit_topup`).
+- Parameters moved from the path to keyword-only query parameters: `recurrence_id` of
+  `can_change_purchase_recurrence`, `status` of `can_change_purchase_renew_status`, `domain_name`
+  of `list_ssl_approver_emails`. `export_ssl_certificate` takes the format in the body
+  (`SslCertificateExportRequest`) instead of the positional `format_`.
+- `create_hosting_database` has no body: the API chooses the name of the database.
+- New keyword-only parameters: `one_click_id` and `prepaid_credit` of `can_pay_order`, `page` and
+  `per_page` of `list_sms_messages` and `list_sms_prices`. The `body` of `upload_file` is required
+  and `UploadFileBody` has the `file` field.
+- Return types: `create_server_network_interface`, `delete_server_network_interface`,
+  `create_object_storage_bucket_firewall_entry` and `delete_object_storage_bucket_firewall_entry`
+  return `TaskResponse`; `update_private_cloud_virtual_machine` returns `EmptyResponse` when no
+  resource changes; `get_hosting_antivirus` returns `HostingAntivirusNullableResponse`.
+- The default of `per_page` in the list operations is 20, as in the specification.
+- `error` of the success envelopes is `Literal[0]`; `ApiError.data` is `Any` (always null).
+- The package is classified as `Development Status :: 5 - Production/Stable`.
+- Model fields: many fields are now nullable or required as in the API, some request fields are
+  enums (see Added), `Domain.nameservers` is a list of `DomainNameserver`,
+  `Payment.provider_data` is `PaymentProviderData | None`, `ObjectStorage.code`,
+  `ObjectStorageBucket.code` and `ObjectStorageIamUser.code` are `int | None`,
+  `ObjectStorageBucket.creation_date` is a date, `ApiUpload.upload_date` a datetime, the `tlsa_*`
+  fields of `HostingDnsRecord` are `int | None`, `Creditnote.creditnote_year` is `int | None`.
+
+### Removed
+
+- `pay_orders` and `OrderPayRequest`: use `create_prepaid_credit_payment` or
+  `create_one_click_payment`.
+- `start_server`, `stop_server`, `reboot_server`, `hard_stop_server` and `hard_reboot_server`: use
+  `create_server_power_action`. `start_server_first_backup` and `create_hosting_catch_all` (use
+  `update_hosting_catch_all`, which creates or replaces it).
+- Secure Mail: `buy_secure_mail`, `buy_secure_mail_for_google_workspace`,
+  `buy_secure_mail_for_microsoft_365`, `list_secure_mails`, `get_secure_mail`,
+  `get_secure_mail_statistics`, `list_secure_mail_mailboxes`, `upgrade_secure_mail_quantity`,
+  `downgrade_secure_mail_quantity`, the `Securemail*` and `BuyServiceSecuremail*` models and
+  `Purchase.securemail_id`.
+- `can_reemit_ssl_certificate`, `reemit_ssl_certificate` and `SslCertificateCanReemit*`.
+- Models renamed: `CpanelLicense*` and `PleskLicense*` → `License*`, `DomainResponse` →
+  `DomainDetailResponse`, `HostingEmailBlocList*` → `HostingEmailBlockList*`,
+  `PaymentProviderDataType0` → `PaymentProviderData`, `GetHostingAntivirusResponse200` →
+  `HostingAntivirusNullableResponse`. Also removed: `ApiErrorDataType0`,
+  `HostingDatabaseCreateRequest`, `PayOrdersResponse200`,
+  `BuyServiceObjectStorageRequestConfigurationTbSize` (`tb_size` is an `int`).
+- Fields no longer in the API: `Domain.dnssec_enabled`, the `ns_*_ip` of
+  `DomainDnsNameserversChangeRequest`, `HostingSubdomainCreateRequest.subdomain`,
+  `Microsoft365DomainAvailable.microsoft_uuid`, `ObjectStorageIamUser.firewall_policy`,
+  `OneClick.one_click_preference`, `PecOwnerChange.person_id_accept` and `person_id_reject`,
+  `ServerBackup.backup_path` and `backup_path_parent`.
+
 ## [0.3.0] - 2026-10-01
 
 ### Added
@@ -73,7 +155,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `invalid_client` or, for its rate limit, `rate_limited`.
 - The `shellrent` command, with `shellrent api` and `shellrent token`.
 
-[Unreleased]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/shellrent/shellrent-sdk-python/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.3.0...v1.0.0
 [0.3.0]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/shellrent/shellrent-sdk-python/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/shellrent/shellrent-sdk-python/releases/tag/v0.1.0

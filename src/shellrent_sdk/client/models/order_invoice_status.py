@@ -11,8 +11,13 @@ T = TypeVar("T", bound="OrderInvoiceStatus")
 
 @_attrs_define
 class OrderInvoiceStatus:
+    """Invoicing status of an order"""
+
     status_code: str
+    """ One of `UNKNOWN`, `EVALUATION`, `NO_INVOICE` (not to be invoiced), `READY`, `PROCESSING`, `TO_INVOICE`,
+    `INVOICING` or `INVOICED` """
     status_name: str
+    """ Name of the status, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

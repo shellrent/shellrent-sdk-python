@@ -12,13 +12,13 @@ from ...types import Response
 
 
 def _get_kwargs(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
 ) -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/microsoft365-subscriptions/{microsoft365_id}".format(
-            microsoft365_id=quote(str(microsoft365_id), safe=""),
+        "url": "/api/v3/microsoft-365-subscriptions/{microsoft_365_subscription_id}".format(
+            microsoft_365_subscription_id=quote(str(microsoft_365_subscription_id), safe=""),
         ),
     }
 
@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -76,7 +81,7 @@ def _build_response(
 
 
 def sync_detailed(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | Microsoft365Response]:
@@ -85,7 +90,7 @@ def sync_detailed(
      Get details of a Microsoft 365 subscription
 
     Args:
-        microsoft365_id (int):
+        microsoft_365_subscription_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -96,7 +101,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        microsoft365_id=microsoft365_id,
+        microsoft_365_subscription_id=microsoft_365_subscription_id,
     )
 
     response = client.get_httpx_client().request(
@@ -107,7 +112,7 @@ def sync_detailed(
 
 
 def sync(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     client: AuthenticatedClient,
 ) -> ApiError | Microsoft365Response | None:
@@ -116,7 +121,7 @@ def sync(
      Get details of a Microsoft 365 subscription
 
     Args:
-        microsoft365_id (int):
+        microsoft_365_subscription_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -127,13 +132,13 @@ def sync(
     """
 
     return sync_detailed(
-        microsoft365_id=microsoft365_id,
+        microsoft_365_subscription_id=microsoft_365_subscription_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | Microsoft365Response]:
@@ -142,7 +147,7 @@ async def asyncio_detailed(
      Get details of a Microsoft 365 subscription
 
     Args:
-        microsoft365_id (int):
+        microsoft_365_subscription_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -153,7 +158,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        microsoft365_id=microsoft365_id,
+        microsoft_365_subscription_id=microsoft_365_subscription_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -162,7 +167,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    microsoft365_id: int,
+    microsoft_365_subscription_id: int,
     *,
     client: AuthenticatedClient,
 ) -> ApiError | Microsoft365Response | None:
@@ -171,7 +176,7 @@ async def asyncio(
      Get details of a Microsoft 365 subscription
 
     Args:
-        microsoft365_id (int):
+        microsoft_365_subscription_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -183,7 +188,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            microsoft365_id=microsoft365_id,
+            microsoft_365_subscription_id=microsoft_365_subscription_id,
             client=client,
         )
     ).parsed

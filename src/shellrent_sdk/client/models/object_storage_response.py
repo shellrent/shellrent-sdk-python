@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,10 +16,17 @@ T = TypeVar("T", bound="ObjectStorageResponse")
 
 @_attrs_define
 class ObjectStorageResponse:
-    error: int
+    """Successful response with one `ObjectStorage`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: ObjectStorage
+    """ S3-compatible object storage of the account, with the usage of all its buckets from the latest daily usage
+    data of the storage: a null figure means zero or not available yet """
     meta: None | ObjectStorageResponseMetaType0
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -59,7 +66,9 @@ class ObjectStorageResponse:
         )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:

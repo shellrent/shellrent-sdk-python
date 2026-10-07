@@ -25,28 +25,37 @@ T = TypeVar("T", bound="Purchase")
 
 @_attrs_define
 class Purchase:
+    """Purchase of a service, with its status, prices, recurrence, billing data and the resources linked to it"""
+
     purchase_id: int
     """ ID of purchase """
     account: Account | None
     """ Account information of the user owner of the purchase. NULL if the purchase is not billed to a Reseller. """
     service: Service
+    """ Service of the price list, with its category, recurrences, prices and purchase options """
     billing: AccountBilling
+    """ Billing profile: the holder the documents are made out to, with its tax and electronic invoicing data """
     recurrence: Recurrence
+    """ Billing recurrence: its frequency and, in days, the timings of renewal, suspension and dismission """
     recurrence_default: Recurrence
+    """ Billing recurrence: its frequency and, in days, the timings of renewal, suspension and dismission """
     purchase_id_primary: int | None
     """ ID of primary purchase if this is an additional purchase. """
     purchase_status: PurchaseStatus
     purchase_provisioning_status: PurchaseProvisioningStatus
+    """ Operation in progress on the purchase, such as its activation or renewal """
     purchase_name: PurchaseName
+    """ Names of the purchase: the name of the service, the name of its object and the two together """
     activation_quantity: int
     """ Quantity (instances) purchased. """
     quantity: int
     """ Current purchase quantity (instances). """
-    activation_price: Amount
+    activation_price: Amount | None
+    """ Purchase price; null for sub-accounts. """
     renew_price: Amount | None
-    """ Renew price (applied on recurring purchases only). """
+    """ Renew price (applied on recurring purchases only); null for sub-accounts. """
     restore_price: Amount | None
-    """ Restore/reactivation price (applied on domains only). """
+    """ Restore/reactivation price (applied on domains only); null for sub-accounts. """
     date_activation: datetime.date | None
     """ Purchase date. """
     date_activation_start: datetime.date | None
@@ -59,9 +68,10 @@ class Purchase:
     """ Tells if purchase has to be renewed. """
     suspended: bool
     """ Tells if purchase is currently suspended. """
-    comment: str
+    comment: None | str
     """ User comment (will be included in invoice description). """
     billing_data: BillingData
+    """ Italian public administration codes of a document row: CIG, CUP and ODA """
     tasks: list[Task]
     """ Tasks currently running on the purchase. """
     purchase_additionals: list[int]
@@ -84,8 +94,6 @@ class Purchase:
     """ ID of the license associated with this purchase. """
     microsoft365_id: int | None
     """ ID of the Microsoft 365 subscription associated with this purchase. """
-    securemail_id: int | None
-    """ ID of the SecureMail by LibraESVA associated with this purchase. """
     cloud_storage_id: int | None
     """ ID of the cloud storage associated with this purchase. """
     object_storage_id: int | None
@@ -129,7 +137,11 @@ class Purchase:
 
         quantity = self.quantity
 
-        activation_price = self.activation_price.to_dict()
+        activation_price: dict[str, Any] | None
+        if isinstance(self.activation_price, Amount):
+            activation_price = self.activation_price.to_dict()
+        else:
+            activation_price = self.activation_price
 
         renew_price: dict[str, Any] | None
         if isinstance(self.renew_price, Amount):
@@ -171,6 +183,7 @@ class Purchase:
 
         suspended = self.suspended
 
+        comment: None | str
         comment = self.comment
 
         billing_data = self.billing_data.to_dict()
@@ -208,9 +221,6 @@ class Purchase:
 
         microsoft365_id: int | None
         microsoft365_id = self.microsoft365_id
-
-        securemail_id: int | None
-        securemail_id = self.securemail_id
 
         cloud_storage_id: int | None
         cloud_storage_id = self.cloud_storage_id
@@ -261,7 +271,6 @@ class Purchase:
                 "monitoring_id": monitoring_id,
                 "license_id": license_id,
                 "microsoft365_id": microsoft365_id,
-                "securemail_id": securemail_id,
                 "cloud_storage_id": cloud_storage_id,
                 "object_storage_id": object_storage_id,
                 "veeam_baas_id": veeam_baas_id,
@@ -331,7 +340,20 @@ class Purchase:
 
         quantity = d.pop("quantity")
 
-        activation_price = Amount.from_dict(d.pop("activation_price"))
+        def _parse_activation_price(data: object) -> Amount | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                activation_price_type_0 = Amount.from_dict(data)
+
+                return activation_price_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(Amount | None, data)
+
+        activation_price = _parse_activation_price(d.pop("activation_price"))
 
         def _parse_renew_price(data: object) -> Amount | None:
             if data is None:
@@ -427,7 +449,12 @@ class Purchase:
 
         suspended = d.pop("suspended")
 
-        comment = d.pop("comment")
+        def _parse_comment(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        comment = _parse_comment(d.pop("comment"))
 
         billing_data = BillingData.from_dict(d.pop("billing_data"))
 
@@ -503,13 +530,6 @@ class Purchase:
 
         microsoft365_id = _parse_microsoft365_id(d.pop("microsoft365_id"))
 
-        def _parse_securemail_id(data: object) -> int | None:
-            if data is None:
-                return data
-            return cast(int | None, data)
-
-        securemail_id = _parse_securemail_id(d.pop("securemail_id"))
-
         def _parse_cloud_storage_id(data: object) -> int | None:
             if data is None:
                 return data
@@ -568,7 +588,6 @@ class Purchase:
             monitoring_id=monitoring_id,
             license_id=license_id,
             microsoft365_id=microsoft365_id,
-            securemail_id=securemail_id,
             cloud_storage_id=cloud_storage_id,
             object_storage_id=object_storage_id,
             veeam_baas_id=veeam_baas_id,

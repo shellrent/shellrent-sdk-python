@@ -7,7 +7,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.get_hosting_antivirus_response_200 import GetHostingAntivirusResponse200
+from ...models.hosting_antivirus_nullable_response import HostingAntivirusNullableResponse
 from ...types import Response
 
 
@@ -27,9 +27,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | GetHostingAntivirusResponse200 | None:
+) -> ApiError | HostingAntivirusNullableResponse | None:
     if response.status_code == 200:
-        response_200 = GetHostingAntivirusResponse200.from_dict(response.json())
+        response_200 = HostingAntivirusNullableResponse.from_dict(response.json())
 
         return response_200
 
@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -66,7 +71,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | GetHostingAntivirusResponse200]:
+) -> Response[ApiError | HostingAntivirusNullableResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -79,7 +84,7 @@ def sync_detailed(
     hosting_id: int,
     *,
     client: AuthenticatedClient,
-) -> Response[ApiError | GetHostingAntivirusResponse200]:
+) -> Response[ApiError | HostingAntivirusNullableResponse]:
     """Get antivirus status
 
      Get latest antivirus scan status for hosting
@@ -92,7 +97,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | GetHostingAntivirusResponse200]
+        Response[ApiError | HostingAntivirusNullableResponse]
     """
 
     kwargs = _get_kwargs(
@@ -110,7 +115,7 @@ def sync(
     hosting_id: int,
     *,
     client: AuthenticatedClient,
-) -> ApiError | GetHostingAntivirusResponse200 | None:
+) -> ApiError | HostingAntivirusNullableResponse | None:
     """Get antivirus status
 
      Get latest antivirus scan status for hosting
@@ -123,7 +128,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | GetHostingAntivirusResponse200
+        ApiError | HostingAntivirusNullableResponse
     """
 
     return sync_detailed(
@@ -136,7 +141,7 @@ async def asyncio_detailed(
     hosting_id: int,
     *,
     client: AuthenticatedClient,
-) -> Response[ApiError | GetHostingAntivirusResponse200]:
+) -> Response[ApiError | HostingAntivirusNullableResponse]:
     """Get antivirus status
 
      Get latest antivirus scan status for hosting
@@ -149,7 +154,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | GetHostingAntivirusResponse200]
+        Response[ApiError | HostingAntivirusNullableResponse]
     """
 
     kwargs = _get_kwargs(
@@ -165,7 +170,7 @@ async def asyncio(
     hosting_id: int,
     *,
     client: AuthenticatedClient,
-) -> ApiError | GetHostingAntivirusResponse200 | None:
+) -> ApiError | HostingAntivirusNullableResponse | None:
     """Get antivirus status
 
      Get latest antivirus scan status for hosting
@@ -178,7 +183,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | GetHostingAntivirusResponse200
+        ApiError | HostingAntivirusNullableResponse
     """
 
     return (

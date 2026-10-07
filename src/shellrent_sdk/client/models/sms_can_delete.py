@@ -11,8 +11,12 @@ T = TypeVar("T", bound="SmsCanDelete")
 
 @_attrs_define
 class SmsCanDelete:
+    """Whether an SMS can be deleted (`DELETE /api/v3/sms/{sms_id}`)"""
+
     sms_id: int
+    """ Id of the SMS (`GET /api/v3/sms/{sms_id}`) """
     can_delete: bool
+    """ Whether the SMS can be deleted: only a `DRAFT` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

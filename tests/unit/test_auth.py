@@ -305,7 +305,7 @@ def test_sends_the_body_again_after_401() -> None:
     )
 
     with sync_client(api, OAuth2Auth(credentials())) as client:
-        client.post("/api/v3/orders/pay", json={"order_ids": [1]})
+        client.post("/api/v3/payments/prepaid-credit", json={"order_ids": [1]})
 
     first, second = api.api_requests
     assert body(first) == body(second) == {"order_ids": [1]}

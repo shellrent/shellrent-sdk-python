@@ -11,9 +11,15 @@ T = TypeVar("T", bound="DnsRecordCaaData")
 
 @_attrs_define
 class DnsRecordCaaData:
+    """Flags and tag of a CAA record; the value of the tag is in `destination` of the record"""
+
     flag: int | None
+    """ Flags of the CAA record; the API writes only `0` """
     tag_value: None | str
+    """ Tag of the CAA record, for example `issue` or `issuewild` """
     can_sign_http_exchanges: bool | None
+    """ Whether the value of the tag has the parameter `cansignhttpexchanges=yes`; null when the parameter is
+    missing """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

@@ -53,6 +53,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -77,6 +82,8 @@ def sync_detailed(
     """Prepaid credit account
 
      Get details of the Prepaid Credit for the account
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -103,6 +110,8 @@ def sync(
 
      Get details of the Prepaid Credit for the account
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -123,6 +132,8 @@ async def asyncio_detailed(
     """Prepaid credit account
 
      Get details of the Prepaid Credit for the account
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -146,6 +157,8 @@ async def asyncio(
     """Prepaid credit account
 
      Get details of the Prepaid Credit for the account
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

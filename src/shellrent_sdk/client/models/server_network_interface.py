@@ -12,19 +12,36 @@ T = TypeVar("T", bound="ServerNetworkInterface")
 
 @_attrs_define
 class ServerNetworkInterface:
+    """Network interface (VIF) of a virtual machine, on a public or a local network"""
+
     network_interface_id: int
     server_id: int
+    """ Id of the server of the interface (`GET /api/v3/servers/{server_id}`) """
     network_id: int | None
+    """ Id of the network of the interface: for a local network, the `network_id` accepted by `POST
+    /api/v3/servers/{server_id}/network-interfaces` """
     ip_address_id: int | None
+    """ Id of the IP address of the interface (`GET /api/v3/servers/{server_id}/ip-addresses/{ip_address_id}`);
+    always null on a local network """
     vif_uuid: None | str
+    """ UUID of the interface on the hypervisor """
     device_name: None | str
+    """ Device of the interface: usually its number (`0` for `eth0`), otherwise a name such as `ens3` """
     mac_address: None | str
+    """ MAC address of the interface """
     is_default: bool | None
+    """ Whether it is the default interface of the server, which cannot be deleted """
     is_active: bool | None
+    """ Whether the interface is active: the endpoints return only active interfaces """
     network_type: None | str
+    """ Type of the network: `P` for public, `L` for local """
     network_label: None | str
+    """ Name of the network """
     network_bridge: None | str
+    """ Bridge of the network on the hypervisor, for example `xenbr0`; `N.D.` when the hypervisor does not report it
+    """
     ip_address: None | str
+    """ IP address of the interface; null when `ip_address_id` is null """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

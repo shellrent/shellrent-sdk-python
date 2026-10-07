@@ -11,22 +11,44 @@ T = TypeVar("T", bound="ServerMonitoring")
 
 @_attrs_define
 class ServerMonitoring:
+    """Server monitoring service of the account, with the host it checks and its settings"""
+
     server_monitoring_id: int
     purchase_monitoring_id: int | None
+    """ Id of the purchase of the monitoring service (`GET /api/v3/purchases/{purchase_id}`) """
     purchase_server_id: int | None
+    """ Id of the purchase of the monitored server (`GET /api/v3/purchases/{purchase_id}`); null when the monitoring
+    checks a hostname or an IP address """
     service_name: None | str
+    """ Name of the service of the monitoring purchase """
     purchase_name: None | str
+    """ Name of the object of the monitoring purchase, usually the monitored hostname or IP address """
     purchase_status_code: None | str
+    """ Status code of the monitoring purchase, for example `ACTIVE_V2` or `NEW_V2` (not active yet) """
     monitoring_key: None | str
+    """ Host checked by the monitoring: the hostname of the monitored server, or the hostname or IP address given
+    """
     is_server_monitored: bool
+    """ Whether the monitoring checks a server, given by its purchase (`purchase_server_id`) or by its hostname """
     is_ip_monitored: bool
+    """ Whether the monitoring checks an IP address """
     is_external_device_monitored: bool
+    """ Whether the monitoring checks an external device, given by hostname or IP address instead of a server or an
+    IP address of the account """
     monitoring_host_enabled: bool
+    """ Whether the monitoring of the host is enabled """
     monitoring_type: None | str
+    """ Type of the monitoring: `default` (Base) or `plus` (Managed), which can also run the automatic actions of
+    the probes """
     probe_limit: int | None
+    """ Maximum number of probes of the monitoring, counting the probes with `advanced_item` """
     severity_level: None | str
+    """ Severity of the problems detected by the probes: `default`, `high` or `disaster` """
     email_notification: None | str
+    """ Default email address for the notifications of the probes; each probe has its own (`notification_email`) """
     sms_notification: None | str
+    """ Default phone number for the SMS notifications of the probes; each probe has its own (`notification_sms`)
+    """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

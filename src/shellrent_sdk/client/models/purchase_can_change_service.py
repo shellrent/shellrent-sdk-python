@@ -15,8 +15,12 @@ T = TypeVar("T", bound="PurchaseCanChangeService")
 
 @_attrs_define
 class PurchaseCanChangeService:
+    """Whether the service of the purchase can be changed (plan change), with the services available"""
+
     purchase_id: int
+    """ Id of the purchase (`GET /api/v3/purchases/{purchase_id}`) """
     can_change_service: bool
+    """ Whether the purchase allows a change of service now """
     services: list[ServiceChange]
     """ Collection of Services to which it is possible to make the change. """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)

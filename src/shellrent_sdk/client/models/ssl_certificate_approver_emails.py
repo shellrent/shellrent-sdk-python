@@ -11,8 +11,12 @@ T = TypeVar("T", bound="SslCertificateApproverEmails")
 
 @_attrs_define
 class SslCertificateApproverEmails:
+    """Email addresses that can approve the validation of a domain name (`approver_email` of the certificate)"""
+
     domain_name: str
     approver_emails: list[str]
+    """ Addresses `admin`, `webmaster`, `hostmaster`, `postmaster` and `administrator` at the domain name and at
+    each of its parent domains """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

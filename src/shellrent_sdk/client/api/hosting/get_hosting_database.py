@@ -60,6 +60,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -85,7 +90,8 @@ def sync_detailed(
 ) -> Response[ApiError | HostingDatabaseResponse]:
     """Get hosting database
 
-     Get hosting database
+     Returns a database of the hosting, read from the database servers: `database_id` is the name of the
+    database. 404 when the hosting has no database with that name
 
     Args:
         hosting_id (int):
@@ -119,7 +125,8 @@ def sync(
 ) -> ApiError | HostingDatabaseResponse | None:
     """Get hosting database
 
-     Get hosting database
+     Returns a database of the hosting, read from the database servers: `database_id` is the name of the
+    database. 404 when the hosting has no database with that name
 
     Args:
         hosting_id (int):
@@ -148,7 +155,8 @@ async def asyncio_detailed(
 ) -> Response[ApiError | HostingDatabaseResponse]:
     """Get hosting database
 
-     Get hosting database
+     Returns a database of the hosting, read from the database servers: `database_id` is the name of the
+    database. 404 when the hosting has no database with that name
 
     Args:
         hosting_id (int):
@@ -180,7 +188,8 @@ async def asyncio(
 ) -> ApiError | HostingDatabaseResponse | None:
     """Get hosting database
 
-     Get hosting database
+     Returns a database of the hosting, read from the database servers: `database_id` is the name of the
+    database. 404 when the hosting has no database with that name
 
     Args:
         hosting_id (int):
