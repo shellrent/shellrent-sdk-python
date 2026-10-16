@@ -18,7 +18,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": "/api/v3/servers/{server_id}/private_cloud/virtual-machines/{vm_id}".format(
+        "url": "/api/v3/servers/{server_id}/private-cloud/virtual-machines/{vm_id}".format(
             server_id=quote(str(server_id), safe=""),
             vm_id=quote(str(vm_id), safe=""),
         ),
@@ -30,10 +30,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | TaskResponse | None:
-    if response.status_code == 200:
-        response_200 = TaskResponse.from_dict(response.json())
+    if response.status_code == 202:
+        response_202 = TaskResponse.from_dict(response.json())
 
-        return response_200
+        return response_202
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -55,10 +55,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -85,7 +95,11 @@ def sync_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Delete private cloud VM
 
-     Delete private cloud VM
+     Deletes a virtual machine of the private cloud `server_id`, dismissing its purchase; the operation
+    goes on in the background as the returned Task. 404 when the virtual machine is not on the private
+    cloud; 409 when `server_id` is not a private cloud, while the private cloud is not active or is
+    suspended, or while the purchase of the virtual machine cannot be dismissed or another operation
+    does not allow it
 
     Args:
         server_id (int):
@@ -119,7 +133,11 @@ def sync(
 ) -> ApiError | TaskResponse | None:
     """Delete private cloud VM
 
-     Delete private cloud VM
+     Deletes a virtual machine of the private cloud `server_id`, dismissing its purchase; the operation
+    goes on in the background as the returned Task. 404 when the virtual machine is not on the private
+    cloud; 409 when `server_id` is not a private cloud, while the private cloud is not active or is
+    suspended, or while the purchase of the virtual machine cannot be dismissed or another operation
+    does not allow it
 
     Args:
         server_id (int):
@@ -148,7 +166,11 @@ async def asyncio_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Delete private cloud VM
 
-     Delete private cloud VM
+     Deletes a virtual machine of the private cloud `server_id`, dismissing its purchase; the operation
+    goes on in the background as the returned Task. 404 when the virtual machine is not on the private
+    cloud; 409 when `server_id` is not a private cloud, while the private cloud is not active or is
+    suspended, or while the purchase of the virtual machine cannot be dismissed or another operation
+    does not allow it
 
     Args:
         server_id (int):
@@ -180,7 +202,11 @@ async def asyncio(
 ) -> ApiError | TaskResponse | None:
     """Delete private cloud VM
 
-     Delete private cloud VM
+     Deletes a virtual machine of the private cloud `server_id`, dismissing its purchase; the operation
+    goes on in the background as the returned Task. 404 when the virtual machine is not on the private
+    cloud; 409 when `server_id` is not a private cloud, while the private cloud is not active or is
+    suspended, or while the purchase of the virtual machine cannot be dismissed or another operation
+    does not allow it
 
     Args:
         server_id (int):

@@ -12,12 +12,19 @@ T = TypeVar("T", bound="ServerSnapshot")
 
 @_attrs_define
 class ServerSnapshot:
+    """Snapshot of a virtual server"""
+
     snapshot_id: int
     server_id: int
+    """ Id of the server (`GET /api/v3/servers/{server_id}`) """
     snapshot_name: None | str
     snapshot_reference: None | str
+    """ Id of the snapshot on the virtualization platform; null until the snapshot is created """
     active: bool
+    """ Whether the snapshot is active: false once it is deleted or expired. The list returns only active snapshots
+    """
     date_expiry: datetime.datetime | None
+    """ Date after which the snapshot is deleted automatically; null if it does not expire """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -15,11 +15,18 @@ T = TypeVar("T", bound="DomainContact")
 
 @_attrs_define
 class DomainContact:
+    """Contact of a domain at the registry, with its data"""
+
     domain_contact_id: int
     domain_id: int
+    """ Id of the domain (`GET /api/v3/domains/{domain_id}`) """
     type_: str
-    to_sync: bool
+    """ Role of the contact: `R` (registrant), `A` (administrative), `T` (technical) or `O` (organization) """
+    to_sync: bool | None
+    """ Whether the contact has changes not yet sent to the registry (`POST
+    /api/v3/domains/{domain_id}/contacts/synchronizations`) """
     contact_data: list[DomainContactData]
+    """ Data of the contact, one item per field """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -29,6 +36,7 @@ class DomainContact:
 
         type_ = self.type_
 
+        to_sync: bool | None
         to_sync = self.to_sync
 
         contact_data = []
@@ -61,7 +69,12 @@ class DomainContact:
 
         type_ = d.pop("type")
 
-        to_sync = d.pop("to_sync")
+        def _parse_to_sync(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        to_sync = _parse_to_sync(d.pop("to_sync"))
 
         contact_data = []
         _contact_data = d.pop("contact_data")

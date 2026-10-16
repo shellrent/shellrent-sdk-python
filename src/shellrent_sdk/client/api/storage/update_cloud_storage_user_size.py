@@ -22,7 +22,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "patch",
-        "url": "/api/v3/cloud-storages/{cloud_storage_id}/users/{cloud_storage_user_id}/size".format(
+        "url": "/api/v3/cloud-storages/{cloud_storage_id}/users/{cloud_storage_user_id}".format(
             cloud_storage_id=quote(str(cloud_storage_id), safe=""),
             cloud_storage_user_id=quote(str(cloud_storage_user_id), safe=""),
         ),
@@ -64,10 +64,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -100,7 +110,8 @@ def sync_detailed(
     Args:
         cloud_storage_id (int):
         cloud_storage_user_id (int):
-        body (CloudStorageUserSizeUpdateRequest):
+        body (CloudStorageUserSizeUpdateRequest): New quota of an additional user of the cloud
+            storage
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -137,7 +148,8 @@ def sync(
     Args:
         cloud_storage_id (int):
         cloud_storage_user_id (int):
-        body (CloudStorageUserSizeUpdateRequest):
+        body (CloudStorageUserSizeUpdateRequest): New quota of an additional user of the cloud
+            storage
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -169,7 +181,8 @@ async def asyncio_detailed(
     Args:
         cloud_storage_id (int):
         cloud_storage_user_id (int):
-        body (CloudStorageUserSizeUpdateRequest):
+        body (CloudStorageUserSizeUpdateRequest): New quota of an additional user of the cloud
+            storage
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -204,7 +217,8 @@ async def asyncio(
     Args:
         cloud_storage_id (int):
         cloud_storage_user_id (int):
-        body (CloudStorageUserSizeUpdateRequest):
+        body (CloudStorageUserSizeUpdateRequest): New quota of an additional user of the cloud
+            storage
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

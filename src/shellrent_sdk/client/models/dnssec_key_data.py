@@ -11,11 +11,18 @@ T = TypeVar("T", bound="DnssecKeyData")
 
 @_attrs_define
 class DnssecKeyData:
+    """DNSKEY record of the domain"""
+
     zone_ttl: int
+    """ TTL of the zone, in seconds """
     flags: int
+    """ Flags of the key: `256` for a zone signing key (ZSK), `257` for a key signing key (KSK) """
     key_protocol: int
+    """ Protocol of the key, `3` for DNSSEC """
     key_algorithm: int
+    """ DNSSEC algorithm of the key, for example `8` (RSA/SHA-256) or `13` (ECDSAP256SHA256) """
     public_key: str
+    """ Public key, in base64 """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

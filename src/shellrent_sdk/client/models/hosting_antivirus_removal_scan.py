@@ -12,11 +12,17 @@ T = TypeVar("T", bound="HostingAntivirusRemovalScan")
 
 @_attrs_define
 class HostingAntivirusRemovalScan:
+    """Antivirus cleaning of the hosting, which removes or cleans the infected files and database contents"""
+
     removal_scan_id: int
     hosting_id: int
+    """ Id of the hosting (`GET /api/v3/hostings/{hosting_id}`) """
     task_id: int | None
+    """ Id of the task of the cleaning (`GET /api/v3/tasks/{task_id}`); null when the task is not available """
     status: bool | None
+    """ Whether the cleaning succeeded; null until the antivirus sends the result """
     error: None | str
+    """ Error message of a failed cleaning; null otherwise """
     date_created: datetime.datetime
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

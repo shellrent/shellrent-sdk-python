@@ -7,21 +7,30 @@ from typing import Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
 T = TypeVar("T", bound="OneClick")
 
 
 @_attrs_define
 class OneClick:
+    """One-Click payment method: a card or an account saved by the customer, used for One-Click payments and automatic
+    renewals
+
+    """
+
     one_click_id: int
     payment_method: str
-    description: str
+    """ Name of the payment method, in Italian, for example `Carta di credito` or `PayPal` """
+    description: None | str
+    """ Description of the method: the name of the payment method followed by the card (brand, last digits and
+    expiry) or the email of the account """
     method_type: None | str
+    """ Type of the method: `VISA`, `MASTERCARD`, `MAESTRO`, `AMERICAN_EXPRESS`, `PAYPAL`, `APPLEPAY`, `GOOGLEPAY`,
+    `AMAZONPAY` or `SATISPAY`; null when unknown """
     creditcard_pan: None | str
+    """ Number of the card, masked or reduced to the last digits; null for the methods without a card """
     date_expiry: datetime.date | None
+    """ Expiry of the method: the expiry of the card or, without a card, four years after the activation """
     date_created: datetime.datetime
-    one_click_preference: list[OneClick] | Unset = UNSET
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -29,6 +38,7 @@ class OneClick:
 
         payment_method = self.payment_method
 
+        description: None | str
         description = self.description
 
         method_type: None | str
@@ -45,13 +55,6 @@ class OneClick:
 
         date_created = self.date_created.isoformat()
 
-        one_click_preference: list[dict[str, Any]] | Unset = UNSET
-        if not isinstance(self.one_click_preference, Unset):
-            one_click_preference = []
-            for one_click_preference_item_data in self.one_click_preference:
-                one_click_preference_item = one_click_preference_item_data.to_dict()
-                one_click_preference.append(one_click_preference_item)
-
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
@@ -65,8 +68,6 @@ class OneClick:
                 "date_created": date_created,
             }
         )
-        if one_click_preference is not UNSET:
-            field_dict["one_click_preference"] = one_click_preference
 
         return field_dict
 
@@ -77,7 +78,12 @@ class OneClick:
 
         payment_method = d.pop("payment_method")
 
-        description = d.pop("description")
+        def _parse_description(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        description = _parse_description(d.pop("description"))
 
         def _parse_method_type(data: object) -> None | str:
             if data is None:
@@ -110,15 +116,6 @@ class OneClick:
 
         date_created = datetime.datetime.fromisoformat(d.pop("date_created"))
 
-        _one_click_preference = d.pop("one_click_preference", UNSET)
-        one_click_preference: list[OneClick] | Unset = UNSET
-        if _one_click_preference is not UNSET:
-            one_click_preference = []
-            for one_click_preference_item_data in _one_click_preference:
-                one_click_preference_item = OneClick.from_dict(one_click_preference_item_data)
-
-                one_click_preference.append(one_click_preference_item)
-
         one_click = cls(
             one_click_id=one_click_id,
             payment_method=payment_method,
@@ -127,7 +124,6 @@ class OneClick:
             creditcard_pan=creditcard_pan,
             date_expiry=date_expiry,
             date_created=date_created,
-            one_click_preference=one_click_preference,
         )
 
         one_click.additional_properties = d

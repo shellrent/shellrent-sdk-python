@@ -1,16 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.server_monitoring_probe import ServerMonitoringProbe
-    from ..models.server_monitoring_probe_list_response_meta_type_0 import (
-        ServerMonitoringProbeListResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="ServerMonitoringProbeListResponse")
@@ -18,17 +15,19 @@ T = TypeVar("T", bound="ServerMonitoringProbeListResponse")
 
 @_attrs_define
 class ServerMonitoringProbeListResponse:
-    error: int
+    """Successful response with a list of `ServerMonitoringProbe`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: list[ServerMonitoringProbe]
-    meta: None | ServerMonitoringProbeListResponseMetaType0
+    """ Items returned by the operation """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.server_monitoring_probe_list_response_meta_type_0 import (
-            ServerMonitoringProbeListResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -39,11 +38,7 @@ class ServerMonitoringProbeListResponse:
             data_item = data_item_data.to_dict()
             data.append(data_item)
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, ServerMonitoringProbeListResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,12 +56,11 @@ class ServerMonitoringProbeListResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.server_monitoring_probe import ServerMonitoringProbe
-        from ..models.server_monitoring_probe_list_response_meta_type_0 import (
-            ServerMonitoringProbeListResponseMetaType0,
-        )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -82,20 +76,7 @@ class ServerMonitoringProbeListResponse:
 
             data.append(data_item)
 
-        def _parse_meta(data: object) -> None | ServerMonitoringProbeListResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = ServerMonitoringProbeListResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | ServerMonitoringProbeListResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         server_monitoring_probe_list_response = cls(
             error=error,

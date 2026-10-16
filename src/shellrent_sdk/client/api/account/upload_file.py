@@ -8,24 +8,23 @@ from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
 from ...models.api_upload_response import ApiUploadResponse
 from ...models.upload_file_body import UploadFileBody
-from ...types import UNSET, Response, Unset
+from ...types import Response
 
 
 def _get_kwargs(
     *,
-    body: UploadFileBody | Unset = UNSET,
+    body: UploadFileBody,
 ) -> dict[str, Any]:
     headers: dict[str, Any] = {}
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/upload",
+        "url": "/api/v3/uploads",
     }
 
-    if not isinstance(body, Unset):
-        _kwargs["json"] = body.to_dict()
+    _kwargs["files"] = body.to_multipart()
 
-    headers["Content-Type"] = "application/json"
+    headers["Content-Type"] = "multipart/form-data; boundary=+++"
 
     _kwargs["headers"] = headers
     return _kwargs
@@ -34,10 +33,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | ApiUploadResponse | None:
-    if response.status_code == 200:
-        response_200 = ApiUploadResponse.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = ApiUploadResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -64,6 +63,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -84,14 +88,14 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-    body: UploadFileBody | Unset = UNSET,
+    body: UploadFileBody,
 ) -> Response[ApiError | ApiUploadResponse]:
     """Upload file
 
-     Upload one or more files
+     Uploads a file, whose upload_id is then used by other calls (e.g. the PEC documents).
 
     Args:
-        body (UploadFileBody | Unset):
+        body (UploadFileBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -115,14 +119,14 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-    body: UploadFileBody | Unset = UNSET,
+    body: UploadFileBody,
 ) -> ApiError | ApiUploadResponse | None:
     """Upload file
 
-     Upload one or more files
+     Uploads a file, whose upload_id is then used by other calls (e.g. the PEC documents).
 
     Args:
-        body (UploadFileBody | Unset):
+        body (UploadFileBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -141,14 +145,14 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-    body: UploadFileBody | Unset = UNSET,
+    body: UploadFileBody,
 ) -> Response[ApiError | ApiUploadResponse]:
     """Upload file
 
-     Upload one or more files
+     Uploads a file, whose upload_id is then used by other calls (e.g. the PEC documents).
 
     Args:
-        body (UploadFileBody | Unset):
+        body (UploadFileBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -170,14 +174,14 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-    body: UploadFileBody | Unset = UNSET,
+    body: UploadFileBody,
 ) -> ApiError | ApiUploadResponse | None:
     """Upload file
 
-     Upload one or more files
+     Uploads a file, whose upload_id is then used by other calls (e.g. the PEC documents).
 
     Args:
-        body (UploadFileBody | Unset):
+        body (UploadFileBody):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

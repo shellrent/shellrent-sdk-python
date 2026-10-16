@@ -12,23 +12,39 @@ T = TypeVar("T", bound="HostingAntivirus")
 
 @_attrs_define
 class HostingAntivirus:
+    """Antivirus scan running on the hosting, or the latest one"""
+
     antivirus_id: int
-    hosting_id: int
+    """ Id of the scan (`GET /api/v3/hostings/{hosting_id}/antivirus/scans/{antivirus_id}`) """
+    hosting_id: int | None
+    """ Id of the main hosting (`GET /api/v3/hostings/{hosting_id}`): the scan covers its whole space, subdomains
+    included """
     status_code: None | str
+    """ Status of the scan: `RUNNING`, `FAILED`, `SUCCESS` (no infection found) or `PROBLEM` (infections found) """
     status_name: None | str
+    """ Translated name of the status, for display """
     status_color: None | str
+    """ Color of the status, in hexadecimal, for display """
     antivirus_type: str
+    """ Type of the scan: `M` manual, `A` automatic """
     date_started: datetime.datetime | None
+    """ Start of the scan, as sent by the antivirus; null until the scan completes, and for a failed scan """
     date_completed: datetime.datetime | None
+    """ End of the scan, as sent by the antivirus; null until the scan completes, and for a failed scan """
     date_timeout: datetime.datetime | None
+    """ When the scan was marked as failed because it ran too long; null otherwise """
     total_files: int | None
+    """ Files scanned; null when zero, and until the scan completes """
     total_infected: int | None
+    """ Infected files found; null when zero, and until the scan completes """
     total_cleaned: int | None
+    """ Infected files cleaned by the antivirus; null when zero, and until the scan completes """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         antivirus_id = self.antivirus_id
 
+        hosting_id: int | None
         hosting_id = self.hosting_id
 
         status_code: None | str
@@ -95,7 +111,12 @@ class HostingAntivirus:
         d = dict(src_dict)
         antivirus_id = d.pop("antivirus_id")
 
-        hosting_id = d.pop("hosting_id")
+        def _parse_hosting_id(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        hosting_id = _parse_hosting_id(d.pop("hosting_id"))
 
         def _parse_status_code(data: object) -> None | str:
             if data is None:

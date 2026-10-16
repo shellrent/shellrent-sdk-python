@@ -12,14 +12,14 @@ from ...types import Response
 
 
 def _get_kwargs(
-    creditnote_id: int,
+    credit_note_id: int,
     row_id: int,
 ) -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/creditnotes/{creditnote_id}/rows/{row_id}".format(
-            creditnote_id=quote(str(creditnote_id), safe=""),
+        "url": "/api/v3/credit-notes/{credit_note_id}/rows/{row_id}".format(
+            credit_note_id=quote(str(credit_note_id), safe=""),
             row_id=quote(str(row_id), safe=""),
         ),
     }
@@ -60,6 +60,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -78,7 +83,7 @@ def _build_response(
 
 
 def sync_detailed(
-    creditnote_id: int,
+    credit_note_id: int,
     row_id: int,
     *,
     client: AuthenticatedClient,
@@ -87,8 +92,10 @@ def sync_detailed(
 
      Get details of a Credit note row
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
         row_id (int):
 
     Raises:
@@ -100,7 +107,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
         row_id=row_id,
     )
 
@@ -112,7 +119,7 @@ def sync_detailed(
 
 
 def sync(
-    creditnote_id: int,
+    credit_note_id: int,
     row_id: int,
     *,
     client: AuthenticatedClient,
@@ -121,8 +128,10 @@ def sync(
 
      Get details of a Credit note row
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
         row_id (int):
 
     Raises:
@@ -134,14 +143,14 @@ def sync(
     """
 
     return sync_detailed(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
         row_id=row_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    creditnote_id: int,
+    credit_note_id: int,
     row_id: int,
     *,
     client: AuthenticatedClient,
@@ -150,8 +159,10 @@ async def asyncio_detailed(
 
      Get details of a Credit note row
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
         row_id (int):
 
     Raises:
@@ -163,7 +174,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
         row_id=row_id,
     )
 
@@ -173,7 +184,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    creditnote_id: int,
+    credit_note_id: int,
     row_id: int,
     *,
     client: AuthenticatedClient,
@@ -182,8 +193,10 @@ async def asyncio(
 
      Get details of a Credit note row
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
         row_id (int):
 
     Raises:
@@ -196,7 +209,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            creditnote_id=creditnote_id,
+            credit_note_id=credit_note_id,
             row_id=row_id,
             client=client,
         )

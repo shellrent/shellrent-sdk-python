@@ -60,6 +60,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -86,6 +91,8 @@ def sync_detailed(
     """Get an order row
 
      Get details of an Order row
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         order_id (int):
@@ -121,6 +128,8 @@ def sync(
 
      Get details of an Order row
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         order_id (int):
         row_id (int):
@@ -149,6 +158,8 @@ async def asyncio_detailed(
     """Get an order row
 
      Get details of an Order row
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         order_id (int):
@@ -181,6 +192,8 @@ async def asyncio(
     """Get an order row
 
      Get details of an Order row
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         order_id (int):

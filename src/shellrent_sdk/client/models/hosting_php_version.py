@@ -11,9 +11,14 @@ T = TypeVar("T", bound="HostingPhpVersion")
 
 @_attrs_define
 class HostingPhpVersion:
+    """PHP version available for the hosting"""
+
     version: str
+    """ PHP version, for example `8.3`: send it to `PATCH /api/v3/hostings/{hosting_id}/php-version` """
     is_current: bool
+    """ Whether the hosting uses this version """
     is_default: bool
+    """ Whether it is the default version of the web server """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

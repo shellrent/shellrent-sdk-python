@@ -19,24 +19,49 @@ T = TypeVar("T", bound="Invoice")
 
 @_attrs_define
 class Invoice:
+    """Invoice of the account, with its totals and electronic invoicing data"""
+
     invoice_id: int
     billing: AccountBilling
+    """ Billing profile: the holder the documents are made out to, with its tax and electronic invoicing data """
     type_: None | str
+    """ Type of the invoice: `NORMAL`, `DEPOSIT` (top-up of the prepaid credit) or `BALANCE` (paid with the prepaid
+    credit: some rows deduct the deposit invoices) """
     sdi_document_status: None | SdiDocumentStatus
+    """ Status of the invoice on SDI, the Italian e-invoicing exchange system; null for the invoices not sent
+    through SDI, issued before electronic invoicing """
     sdi_document_type: None | SdiDocumentType
+    """ Type of the electronic document on SDI; `TD01` (invoice) when the invoice has none """
     date_emitted: datetime.date
-    invoice_year: int
+    """ Date of issue of the invoice """
+    invoice_year: int | None
+    """ Year of the numbering of the invoice """
     invoice_number: str
+    """ Complete number of the invoice: the year followed by the number on 6 digits, for example `2025000123` """
     invoice_caption: None | str
+    """ Legal note of the tax regime printed on the invoice, in Italian, such as the law under which VAT is not
+    applied; null when the regime has none """
     invoice_caption_additional: None | str
+    """ Additional reason (`Causale`) of the electronic invoice; null when there is none """
     payed: bool
+    """ Whether the invoice is paid """
     sdi_identifier: None | str
+    """ Identifier assigned by SDI to the invoice; null when it has not been sent to SDI """
     sdi_filename: None | str
+    """ Name of the file sent to SDI; null when not sent, and for most invoices issued before November 2024 """
     total_amount: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     amount_no_balance: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     payment_amount: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     orders: list[int]
+    """ Ids of the orders of the invoice (`GET /api/v3/orders/{order_id}`) """
     rows_count: int
+    """ Number of rows of the invoice (`GET /api/v3/invoices/{invoice_id}/rows`) """
     date_created: datetime.datetime
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -65,6 +90,7 @@ class Invoice:
 
         date_emitted = self.date_emitted.isoformat()
 
+        invoice_year: int | None
         invoice_year = self.invoice_year
 
         invoice_number = self.invoice_number
@@ -174,7 +200,12 @@ class Invoice:
 
         date_emitted = datetime.date.fromisoformat(d.pop("date_emitted"))
 
-        invoice_year = d.pop("invoice_year")
+        def _parse_invoice_year(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        invoice_year = _parse_invoice_year(d.pop("invoice_year"))
 
         invoice_number = d.pop("invoice_number")
 

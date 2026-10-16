@@ -11,10 +11,17 @@ T = TypeVar("T", bound="HostingEmailCatchAll")
 
 @_attrs_define
 class HostingEmailCatchAll:
+    """Catch-all of the mail domain of the hosting"""
+
     is_active: bool
+    """ Whether the catch-all is set: mail sent to addresses of the domain that do not exist goes to `destinations`
+    """
     address: str
+    """ Address of the catch-all: `@` and the mail domain, in punycode """
     address_idna: str
+    """ Address of the catch-all, with the domain in Unicode """
     destinations: list[str]
+    """ Destination addresses of the catch-all, with the domains in Unicode; empty when it is not set """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

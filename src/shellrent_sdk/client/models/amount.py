@@ -11,12 +11,17 @@ T = TypeVar("T", bound="Amount")
 
 @_attrs_define
 class Amount:
+    """Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the total, which
+    are null otherwise
+
+    """
+
     amount: float | None
     """ Taxable amount """
     currency: str
-    """ Currency (EUR, USD, GBP, ...) """
+    """ Currency code: always `EUR` """
     tax_rate: float | None
-    """ VAT rate in cents (iva/vat) """
+    """ VAT rate as a fraction, for example `0.22` for 22% """
     tax: float | None
     """ VAT (tax) amount """
     total: float | None

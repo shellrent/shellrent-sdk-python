@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -84,6 +89,8 @@ def sync_detailed(
 
      Know if it's possible to change the service of the purchase. It also returns the collection of
     Services to which it is possible to make the change.
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):
@@ -117,6 +124,8 @@ def sync(
      Know if it's possible to change the service of the purchase. It also returns the collection of
     Services to which it is possible to make the change.
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         purchase_id (int):
 
@@ -143,6 +152,8 @@ async def asyncio_detailed(
 
      Know if it's possible to change the service of the purchase. It also returns the collection of
     Services to which it is possible to make the change.
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):
@@ -173,6 +184,8 @@ async def asyncio(
 
      Know if it's possible to change the service of the purchase. It also returns the collection of
     Services to which it is possible to make the change.
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):

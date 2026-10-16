@@ -11,8 +11,11 @@ T = TypeVar("T", bound="SslCertificateKey")
 
 @_attrs_define
 class SslCertificateKey:
+    """CSR of a certificate"""
+
     ssl_certificate_id: int
     csr: None | str
+    """ CSR of the certificate, in PEM format (the custom one, when set) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

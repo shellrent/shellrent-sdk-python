@@ -7,23 +7,34 @@ from typing import Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
 T = TypeVar("T", bound="ApiUpload")
 
 
 @_attrs_define
 class ApiUpload:
+    """File uploaded with `POST /api/v3/uploads`, to reference by its `upload_id` in the calls that take a document, such
+    as the PEC transfer documents
+
+    """
+
     upload_id: int
+    mimetype: None | str
+    """ MIME type associated with the extension of the file, for example `application/pdf` """
     filename: str
+    """ Name given to the file by the service when storing it """
     original_filename: None | str
+    """ Name of the file as uploaded by the client """
     file_extension: None | str
-    upload_date: datetime.date
-    mimetype: str | Unset = UNSET
+    """ Extension of the file name, in lowercase, for example `pdf` """
+    upload_date: datetime.datetime
+    """ Date and time of the upload """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         upload_id = self.upload_id
+
+        mimetype: None | str
+        mimetype = self.mimetype
 
         filename = self.filename
 
@@ -35,21 +46,18 @@ class ApiUpload:
 
         upload_date = self.upload_date.isoformat()
 
-        mimetype = self.mimetype
-
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update(
             {
                 "upload_id": upload_id,
+                "mimetype": mimetype,
                 "filename": filename,
                 "original_filename": original_filename,
                 "file_extension": file_extension,
                 "upload_date": upload_date,
             }
         )
-        if mimetype is not UNSET:
-            field_dict["mimetype"] = mimetype
 
         return field_dict
 
@@ -57,6 +65,13 @@ class ApiUpload:
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
         upload_id = d.pop("upload_id")
+
+        def _parse_mimetype(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        mimetype = _parse_mimetype(d.pop("mimetype"))
 
         filename = d.pop("filename")
 
@@ -74,17 +89,15 @@ class ApiUpload:
 
         file_extension = _parse_file_extension(d.pop("file_extension"))
 
-        upload_date = datetime.date.fromisoformat(d.pop("upload_date"))
-
-        mimetype = d.pop("mimetype", UNSET)
+        upload_date = datetime.datetime.fromisoformat(d.pop("upload_date"))
 
         api_upload = cls(
             upload_id=upload_id,
+            mimetype=mimetype,
             filename=filename,
             original_filename=original_filename,
             file_extension=file_extension,
             upload_date=upload_date,
-            mimetype=mimetype,
         )
 
         api_upload.additional_properties = d

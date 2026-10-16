@@ -21,7 +21,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/servers/{server_id}/backups/exhibit".format(
+        "url": "/api/v3/servers/{server_id}/backups/exhibitions".format(
             server_id=quote(str(server_id), safe=""),
         ),
     }
@@ -37,10 +37,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | TaskResponse | None:
-    if response.status_code == 200:
-        response_200 = TaskResponse.from_dict(response.json())
+    if response.status_code == 202:
+        response_202 = TaskResponse.from_dict(response.json())
 
-        return response_200
+        return response_202
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -62,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,11 +102,17 @@ def sync_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Expose a server backup
 
-     Expose a server backup
+     Exposes a backup of the virtual machine (`backup_id`, one of `GET
+    /api/v3/servers/{server_id}/backups/exhibitions`) as an additional disk, to read its files without
+    restoring it: it replaces the backup exposed before, the server may restart, and the operation goes
+    on in the background as the returned Task. Exposed backups are removed after a few days, or with
+    `DELETE /api/v3/servers/{server_id}/backups/exhibitions`. 409 for a physical server or a virtual
+    machine that is not on oVirt, while the exposed backups are being deleted, while the server is not
+    ready, its service is not active or is under maintenance, or another operation does not allow it
 
     Args:
         server_id (int):
-        body (ServerBackupExhibitRequest):
+        body (ServerBackupExhibitRequest): Backup of the server to expose
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,11 +142,17 @@ def sync(
 ) -> ApiError | TaskResponse | None:
     """Expose a server backup
 
-     Expose a server backup
+     Exposes a backup of the virtual machine (`backup_id`, one of `GET
+    /api/v3/servers/{server_id}/backups/exhibitions`) as an additional disk, to read its files without
+    restoring it: it replaces the backup exposed before, the server may restart, and the operation goes
+    on in the background as the returned Task. Exposed backups are removed after a few days, or with
+    `DELETE /api/v3/servers/{server_id}/backups/exhibitions`. 409 for a physical server or a virtual
+    machine that is not on oVirt, while the exposed backups are being deleted, while the server is not
+    ready, its service is not active or is under maintenance, or another operation does not allow it
 
     Args:
         server_id (int):
-        body (ServerBackupExhibitRequest):
+        body (ServerBackupExhibitRequest): Backup of the server to expose
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -155,11 +177,17 @@ async def asyncio_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Expose a server backup
 
-     Expose a server backup
+     Exposes a backup of the virtual machine (`backup_id`, one of `GET
+    /api/v3/servers/{server_id}/backups/exhibitions`) as an additional disk, to read its files without
+    restoring it: it replaces the backup exposed before, the server may restart, and the operation goes
+    on in the background as the returned Task. Exposed backups are removed after a few days, or with
+    `DELETE /api/v3/servers/{server_id}/backups/exhibitions`. 409 for a physical server or a virtual
+    machine that is not on oVirt, while the exposed backups are being deleted, while the server is not
+    ready, its service is not active or is under maintenance, or another operation does not allow it
 
     Args:
         server_id (int):
-        body (ServerBackupExhibitRequest):
+        body (ServerBackupExhibitRequest): Backup of the server to expose
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,11 +215,17 @@ async def asyncio(
 ) -> ApiError | TaskResponse | None:
     """Expose a server backup
 
-     Expose a server backup
+     Exposes a backup of the virtual machine (`backup_id`, one of `GET
+    /api/v3/servers/{server_id}/backups/exhibitions`) as an additional disk, to read its files without
+    restoring it: it replaces the backup exposed before, the server may restart, and the operation goes
+    on in the background as the returned Task. Exposed backups are removed after a few days, or with
+    `DELETE /api/v3/servers/{server_id}/backups/exhibitions`. 409 for a physical server or a virtual
+    machine that is not on oVirt, while the exposed backups are being deleted, while the server is not
+    ready, its service is not active or is under maintenance, or another operation does not allow it
 
     Args:
         server_id (int):
-        body (ServerBackupExhibitRequest):
+        body (ServerBackupExhibitRequest): Backup of the server to expose
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

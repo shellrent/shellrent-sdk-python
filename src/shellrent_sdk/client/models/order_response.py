@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.order import Order
-    from ..models.order_response_meta_type_0 import OrderResponseMetaType0
 
 
 T = TypeVar("T", bound="OrderResponse")
@@ -16,15 +15,19 @@ T = TypeVar("T", bound="OrderResponse")
 
 @_attrs_define
 class OrderResponse:
-    error: int
+    """Successful response with one `Order`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: Order
-    meta: None | OrderResponseMetaType0
+    """ Order of the account, with its statuses, amounts and invoice """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.order_response_meta_type_0 import OrderResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -32,11 +35,7 @@ class OrderResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, OrderResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -54,10 +53,11 @@ class OrderResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.order import Order
-        from ..models.order_response_meta_type_0 import OrderResponseMetaType0
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -68,20 +68,7 @@ class OrderResponse:
 
         data = Order.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | OrderResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = OrderResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | OrderResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         order_response = cls(
             error=error,

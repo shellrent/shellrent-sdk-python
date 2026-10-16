@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar
+from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -12,9 +12,13 @@ T = TypeVar("T", bound="ServiceCategory")
 @_attrs_define
 class ServiceCategory:
     category_code: str
+    """ Code of the category, for example `PEC` or `CLOUD_STORAGE` """
     category_name: str
-    area_code: str
+    """ Name of the category, in Italian """
+    area_code: None | str
+    """ Code of the area that groups the category, for example `HOSTING`, `DOMAIN` or `LICENSE` """
     area_name: str
+    """ Name of the area, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -22,6 +26,7 @@ class ServiceCategory:
 
         category_name = self.category_name
 
+        area_code: None | str
         area_code = self.area_code
 
         area_name = self.area_name
@@ -46,7 +51,12 @@ class ServiceCategory:
 
         category_name = d.pop("category_name")
 
-        area_code = d.pop("area_code")
+        def _parse_area_code(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        area_code = _parse_area_code(d.pop("area_code"))
 
         area_name = d.pop("area_name")
 

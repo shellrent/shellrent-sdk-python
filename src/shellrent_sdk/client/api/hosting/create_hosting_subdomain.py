@@ -21,7 +21,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/hostings/{hosting_id}".format(
+        "url": "/api/v3/hostings/{hosting_id}/subdomains".format(
             hosting_id=quote(str(hosting_id), safe=""),
         ),
     }
@@ -37,10 +37,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | HostingResponse | None:
-    if response.status_code == 200:
-        response_200 = HostingResponse.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = HostingResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -62,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,7 +102,10 @@ def sync_detailed(
 ) -> Response[ApiError | HostingResponse]:
     """Create subdomain
 
-     Create subdomain
+     Creates a subdomain of a main hosting and returns it. When the DNS of the domain is a purchase of
+    the same account, it also adds the A record of the subdomain. Not available (403) when the plan does
+    not include subdomains; 409 on a subdomain, when the limit is reached or when the subdomain or its
+    DNS record already exists
 
     Args:
         hosting_id (int):
@@ -126,7 +139,10 @@ def sync(
 ) -> ApiError | HostingResponse | None:
     """Create subdomain
 
-     Create subdomain
+     Creates a subdomain of a main hosting and returns it. When the DNS of the domain is a purchase of
+    the same account, it also adds the A record of the subdomain. Not available (403) when the plan does
+    not include subdomains; 409 on a subdomain, when the limit is reached or when the subdomain or its
+    DNS record already exists
 
     Args:
         hosting_id (int):
@@ -155,7 +171,10 @@ async def asyncio_detailed(
 ) -> Response[ApiError | HostingResponse]:
     """Create subdomain
 
-     Create subdomain
+     Creates a subdomain of a main hosting and returns it. When the DNS of the domain is a purchase of
+    the same account, it also adds the A record of the subdomain. Not available (403) when the plan does
+    not include subdomains; 409 on a subdomain, when the limit is reached or when the subdomain or its
+    DNS record already exists
 
     Args:
         hosting_id (int):
@@ -187,7 +206,10 @@ async def asyncio(
 ) -> ApiError | HostingResponse | None:
     """Create subdomain
 
-     Create subdomain
+     Creates a subdomain of a main hosting and returns it. When the DNS of the domain is a purchase of
+    the same account, it also adds the A record of the subdomain. Not available (403) when the plan does
+    not include subdomains; 409 on a subdomain, when the limit is reached or when the subdomain or its
+    DNS record already exists
 
     Args:
         hosting_id (int):

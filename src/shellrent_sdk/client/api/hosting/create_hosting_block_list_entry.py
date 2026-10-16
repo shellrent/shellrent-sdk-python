@@ -7,7 +7,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.hosting_email_bloc_list_response import HostingEmailBlocListResponse
+from ...models.hosting_email_block_list_response import HostingEmailBlockListResponse
 from ...models.hosting_email_wblist_request import HostingEmailWblistRequest
 from ...types import Response
 
@@ -36,11 +36,11 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | HostingEmailBlocListResponse | None:
-    if response.status_code == 200:
-        response_200 = HostingEmailBlocListResponse.from_dict(response.json())
+) -> ApiError | HostingEmailBlockListResponse | None:
+    if response.status_code == 201:
+        response_201 = HostingEmailBlockListResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -67,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -75,7 +80,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | HostingEmailBlocListResponse]:
+) -> Response[ApiError | HostingEmailBlockListResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -89,21 +94,22 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: HostingEmailWblistRequest,
-) -> Response[ApiError | HostingEmailBlocListResponse]:
+) -> Response[ApiError | HostingEmailBlockListResponse]:
     """Create block list entry
 
      Create a new block list entry for hosting
 
     Args:
         hosting_id (int):
-        body (HostingEmailWblistRequest):
+        body (HostingEmailWblistRequest): Sender to add to the allow list or the block list of the
+            antispam: a whole domain or an address
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | HostingEmailBlocListResponse]
+        Response[ApiError | HostingEmailBlockListResponse]
     """
 
     kwargs = _get_kwargs(
@@ -123,21 +129,22 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: HostingEmailWblistRequest,
-) -> ApiError | HostingEmailBlocListResponse | None:
+) -> ApiError | HostingEmailBlockListResponse | None:
     """Create block list entry
 
      Create a new block list entry for hosting
 
     Args:
         hosting_id (int):
-        body (HostingEmailWblistRequest):
+        body (HostingEmailWblistRequest): Sender to add to the allow list or the block list of the
+            antispam: a whole domain or an address
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | HostingEmailBlocListResponse
+        ApiError | HostingEmailBlockListResponse
     """
 
     return sync_detailed(
@@ -152,21 +159,22 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: HostingEmailWblistRequest,
-) -> Response[ApiError | HostingEmailBlocListResponse]:
+) -> Response[ApiError | HostingEmailBlockListResponse]:
     """Create block list entry
 
      Create a new block list entry for hosting
 
     Args:
         hosting_id (int):
-        body (HostingEmailWblistRequest):
+        body (HostingEmailWblistRequest): Sender to add to the allow list or the block list of the
+            antispam: a whole domain or an address
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | HostingEmailBlocListResponse]
+        Response[ApiError | HostingEmailBlockListResponse]
     """
 
     kwargs = _get_kwargs(
@@ -184,21 +192,22 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: HostingEmailWblistRequest,
-) -> ApiError | HostingEmailBlocListResponse | None:
+) -> ApiError | HostingEmailBlockListResponse | None:
     """Create block list entry
 
      Create a new block list entry for hosting
 
     Args:
         hosting_id (int):
-        body (HostingEmailWblistRequest):
+        body (HostingEmailWblistRequest): Sender to add to the allow list or the block list of the
+            antispam: a whole domain or an address
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | HostingEmailBlocListResponse
+        ApiError | HostingEmailBlockListResponse
     """
 
     return (

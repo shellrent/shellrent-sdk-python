@@ -12,13 +12,13 @@ from ...types import Response
 
 
 def _get_kwargs(
-    creditnote_id: int,
+    credit_note_id: int,
 ) -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/creditnotes/{creditnote_id}".format(
-            creditnote_id=quote(str(creditnote_id), safe=""),
+        "url": "/api/v3/credit-notes/{credit_note_id}".format(
+            credit_note_id=quote(str(credit_note_id), safe=""),
         ),
     }
 
@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -76,7 +81,7 @@ def _build_response(
 
 
 def sync_detailed(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | CreditnoteResponse]:
@@ -84,8 +89,10 @@ def sync_detailed(
 
      Get details of a credit note
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -96,7 +103,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
     )
 
     response = client.get_httpx_client().request(
@@ -107,7 +114,7 @@ def sync_detailed(
 
 
 def sync(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     client: AuthenticatedClient,
 ) -> ApiError | CreditnoteResponse | None:
@@ -115,8 +122,10 @@ def sync(
 
      Get details of a credit note
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -127,13 +136,13 @@ def sync(
     """
 
     return sync_detailed(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | CreditnoteResponse]:
@@ -141,8 +150,10 @@ async def asyncio_detailed(
 
      Get details of a credit note
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -153,7 +164,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        creditnote_id=creditnote_id,
+        credit_note_id=credit_note_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -162,7 +173,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    creditnote_id: int,
+    credit_note_id: int,
     *,
     client: AuthenticatedClient,
 ) -> ApiError | CreditnoteResponse | None:
@@ -170,8 +181,10 @@ async def asyncio(
 
      Get details of a credit note
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        creditnote_id (int):
+        credit_note_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -183,7 +196,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            creditnote_id=creditnote_id,
+            credit_note_id=credit_note_id,
             client=client,
         )
     ).parsed

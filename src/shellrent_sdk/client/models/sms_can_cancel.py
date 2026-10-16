@@ -11,8 +11,12 @@ T = TypeVar("T", bound="SmsCanCancel")
 
 @_attrs_define
 class SmsCanCancel:
+    """Whether the sending of an SMS can be cancelled (`POST /api/v3/sms/{sms_id}/cancellation`)"""
+
     sms_id: int
+    """ Id of the SMS (`GET /api/v3/sms/{sms_id}`) """
     can_cancel: bool
+    """ Whether the sending can be cancelled: only while it is `PROCESSING` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

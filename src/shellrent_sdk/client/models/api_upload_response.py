@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.api_upload import ApiUpload
-    from ..models.api_upload_response_meta_type_0 import ApiUploadResponseMetaType0
 
 
 T = TypeVar("T", bound="ApiUploadResponse")
@@ -16,15 +15,20 @@ T = TypeVar("T", bound="ApiUploadResponse")
 
 @_attrs_define
 class ApiUploadResponse:
-    error: int
+    """Successful response with one `ApiUpload`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: ApiUpload
-    meta: ApiUploadResponseMetaType0 | None
+    """ File uploaded with `POST /api/v3/uploads`, to reference by its `upload_id` in the calls that take a
+    document, such as the PEC transfer documents """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.api_upload_response_meta_type_0 import ApiUploadResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -32,11 +36,7 @@ class ApiUploadResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, ApiUploadResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -54,12 +54,11 @@ class ApiUploadResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.api_upload import ApiUpload
-        from ..models.api_upload_response_meta_type_0 import (
-            ApiUploadResponseMetaType0,
-        )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -70,20 +69,7 @@ class ApiUploadResponse:
 
         data = ApiUpload.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> ApiUploadResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = ApiUploadResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(ApiUploadResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         api_upload_response = cls(
             error=error,

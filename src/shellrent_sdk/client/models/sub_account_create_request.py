@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -14,25 +13,32 @@ T = TypeVar("T", bound="SubAccountCreateRequest")
 @_attrs_define
 class SubAccountCreateRequest:
     person_password: str
+    """ Password of the account: at least 13 characters, with at least one uppercase letter, one lowercase letter,
+    one number and one symbol """
     administrative_person_name: str
+    """ First name of the administrative contact of the account """
     administrative_person_surname: str
+    """ Surname of the administrative contact """
     administrative_address: str
+    """ Address of the administrative contact """
     administrative_city: str
+    """ City of the administrative contact """
     administrative_state: str
-    """ State or province """
+    """ Acronym of the Italian province, ie. "VI" for Vicenza, or "EE" for an address outside Italy """
     administrative_country: str
     """ Country ISO code with 2 letters, ie. "IT" for Italy, "ES" for Spain, etc. """
     administrative_postal_code: str
+    """ Postal code of the administrative contact """
     administrative_phone: str
     """ Phone number without international phone code """
     administrative_email: str
+    """ Email address of the administrative contact """
     administrative_phone_prefix: str | Unset = UNSET
     """ International phone code (prefix) for "Phone", ie. "39" for Italy, "44" for United Kingdom """
     administrative_mobile_prefix: str | Unset = UNSET
-    """ International phone code (prefix) for "Phone", ie. "39" for Italy, "44" for United Kingdom """
+    """ International phone code (prefix) for "Mobile", ie. "39" for Italy, "44" for United Kingdom """
     administrative_mobile: str | Unset = UNSET
     """ Mobile phone number without international phone code """
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         person_password = self.person_password
@@ -62,7 +68,7 @@ class SubAccountCreateRequest:
         administrative_mobile = self.administrative_mobile
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update(
             {
                 "person_password": person_password,
@@ -131,21 +137,4 @@ class SubAccountCreateRequest:
             administrative_mobile=administrative_mobile,
         )
 
-        sub_account_create_request.additional_properties = d
         return sub_account_create_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

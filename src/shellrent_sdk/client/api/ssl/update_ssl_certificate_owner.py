@@ -67,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -92,7 +97,9 @@ def sync_detailed(
 ) -> Response[ApiError | SslCertificateResponse]:
     """Edit SSL certificate owner
 
-     Edit SSL certificate owner
+     Changes the administrative contact of the certificate (the `admin_*` fields) and returns the
+    certificate; only the fields sent change. The certificate already issued does not change: the CSRs
+    we generate afterwards take the organization, city, state and country of the contact
 
     Args:
         ssl_certificate_id (int):
@@ -126,7 +133,9 @@ def sync(
 ) -> ApiError | SslCertificateResponse | None:
     """Edit SSL certificate owner
 
-     Edit SSL certificate owner
+     Changes the administrative contact of the certificate (the `admin_*` fields) and returns the
+    certificate; only the fields sent change. The certificate already issued does not change: the CSRs
+    we generate afterwards take the organization, city, state and country of the contact
 
     Args:
         ssl_certificate_id (int):
@@ -155,7 +164,9 @@ async def asyncio_detailed(
 ) -> Response[ApiError | SslCertificateResponse]:
     """Edit SSL certificate owner
 
-     Edit SSL certificate owner
+     Changes the administrative contact of the certificate (the `admin_*` fields) and returns the
+    certificate; only the fields sent change. The certificate already issued does not change: the CSRs
+    we generate afterwards take the organization, city, state and country of the contact
 
     Args:
         ssl_certificate_id (int):
@@ -187,7 +198,9 @@ async def asyncio(
 ) -> ApiError | SslCertificateResponse | None:
     """Edit SSL certificate owner
 
-     Edit SSL certificate owner
+     Changes the administrative contact of the certificate (the `admin_*` fields) and returns the
+    certificate; only the fields sent change. The certificate already issued does not change: the CSRs
+    we generate afterwards take the organization, city, state and country of the contact
 
     Args:
         ssl_certificate_id (int):

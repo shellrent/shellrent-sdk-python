@@ -11,8 +11,13 @@ T = TypeVar("T", bound="PurchaseProvisioningStatus")
 
 @_attrs_define
 class PurchaseProvisioningStatus:
+    """Operation in progress on the purchase, such as its activation or renewal"""
+
     status_code: str
+    """ Code of the operation in progress: `SLEEPY` (none), `TO_ACTIVATE`, `TO_RENEW`, `TO_SUSPEND`, `TO_RESUME`
+    (reactivation), `TO_DISMISS` or `TO_CANCEL` """
     status_name: str
+    """ Name of the operation in progress, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

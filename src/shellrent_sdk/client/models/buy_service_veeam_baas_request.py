@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -19,24 +18,26 @@ T = TypeVar("T", bound="BuyServiceVeeamBaasRequest")
 
 @_attrs_define
 class BuyServiceVeeamBaasRequest:
-    configuration: BuyServiceVeeamBaasRequestConfiguration
-    """ Veeam BaaS configuration options """
+    configuration: BuyServiceVeeamBaasRequestConfiguration | Unset = UNSET
+    """ Veeam BaaS configuration. Every field is optional: an omitted workload quantity counts as 0, and an omitted
+    configuration is the same as an empty object. The limits of each workload quantity depend on the corresponding
+    workload service: a value outside them is rejected with a validation error (code 1000) that states the limit in
+    `meta.errors`. """
     account_id: int | Unset = UNSET
     """ ID of the account of the user that will be the owner of the purchase (available to Resellers only) """
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        configuration = self.configuration.to_dict()
+        configuration: dict[str, Any] | Unset = UNSET
+        if not isinstance(self.configuration, Unset):
+            configuration = self.configuration.to_dict()
 
         account_id = self.account_id
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
-        field_dict.update(
-            {
-                "configuration": configuration,
-            }
-        )
+
+        field_dict.update({})
+        if configuration is not UNSET:
+            field_dict["configuration"] = configuration
         if account_id is not UNSET:
             field_dict["account_id"] = account_id
 
@@ -49,7 +50,12 @@ class BuyServiceVeeamBaasRequest:
         )
 
         d = dict(src_dict)
-        configuration = BuyServiceVeeamBaasRequestConfiguration.from_dict(d.pop("configuration"))
+        _configuration = d.pop("configuration", UNSET)
+        configuration: BuyServiceVeeamBaasRequestConfiguration | Unset
+        if isinstance(_configuration, Unset):
+            configuration = UNSET
+        else:
+            configuration = BuyServiceVeeamBaasRequestConfiguration.from_dict(_configuration)
 
         account_id = d.pop("account_id", UNSET)
 
@@ -58,21 +64,4 @@ class BuyServiceVeeamBaasRequest:
             account_id=account_id,
         )
 
-        buy_service_veeam_baas_request.additional_properties = d
         return buy_service_veeam_baas_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

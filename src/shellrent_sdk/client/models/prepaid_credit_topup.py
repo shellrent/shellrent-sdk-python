@@ -17,12 +17,19 @@ T = TypeVar("T", bound="PrepaidCreditTopup")
 
 @_attrs_define
 class PrepaidCreditTopup:
+    """Top-up of the prepaid credit, with its deposit invoice and the credit left"""
+
     topup_id: int
     invoice: Invoice | None
+    """ Deposit invoice of the top-up; null until it is issued """
     initial_credit: AmountSimple
+    """ Amount in euros, without the VAT details of `Amount` """
     current_credit: AmountSimple
+    """ Amount in euros, without the VAT details of `Amount` """
     refund_expiry: datetime.date | None
+    """ Last day on which the credit left can be refunded; null when there is no limit """
     credit_expiry: datetime.date | None
+    """ Expiry date of the credit of the top-up; null when it does not expire """
     date_created: datetime.datetime
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

@@ -1,10 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,24 +12,25 @@ T = TypeVar("T", bound="HostingModSecurityRuleCreateRequest")
 
 @_attrs_define
 class HostingModSecurityRuleCreateRequest:
-    rule_number: int | Unset = UNSET
-    description: None | str | Unset = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    """ModSecurity rule to disable on the hosting"""
+
+    rule_number: int
+    """ Number of the ModSecurity rule to disable on the hosting """
+    description: str | Unset = UNSET
+    """ Description of the rule; used only when the hosting does not have the rule yet """
 
     def to_dict(self) -> dict[str, Any]:
         rule_number = self.rule_number
 
-        description: None | str | Unset
-        if isinstance(self.description, Unset):
-            description = UNSET
-        else:
-            description = self.description
+        description = self.description
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
-        field_dict.update({})
-        if rule_number is not UNSET:
-            field_dict["rule_number"] = rule_number
+
+        field_dict.update(
+            {
+                "rule_number": rule_number,
+            }
+        )
         if description is not UNSET:
             field_dict["description"] = description
 
@@ -39,37 +39,13 @@ class HostingModSecurityRuleCreateRequest:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        rule_number = d.pop("rule_number", UNSET)
+        rule_number = d.pop("rule_number")
 
-        def _parse_description(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        description = _parse_description(d.pop("description", UNSET))
+        description = d.pop("description", UNSET)
 
         hosting_mod_security_rule_create_request = cls(
             rule_number=rule_number,
             description=description,
         )
 
-        hosting_mod_security_rule_create_request.additional_properties = d
         return hosting_mod_security_rule_create_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

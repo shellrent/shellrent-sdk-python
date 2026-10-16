@@ -11,13 +11,21 @@ T = TypeVar("T", bound="CloudStorageAccess")
 
 @_attrs_define
 class CloudStorageAccess:
-    access_id: str
+    """NFS access to a cloud storage: an IPv4 address allowed to mount the storage of a user"""
+
+    access_id: None | str
+    """ Id of the access, used in its path: the IPv4 address in `hostname` """
     cloud_storage_id: int
+    """ Id of the cloud storage (`GET /api/v3/cloud-storages/{cloud_storage_id}`) """
     hostname: None | str
+    """ IPv4 address allowed to mount the storage via NFS """
     username: None | str
+    """ Username of the cloud storage user whose storage the address can mount (`GET /api/v3/cloud-
+    storages/{cloud_storage_id}/users`) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        access_id: None | str
         access_id = self.access_id
 
         cloud_storage_id = self.cloud_storage_id
@@ -44,7 +52,13 @@ class CloudStorageAccess:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        access_id = d.pop("access_id")
+
+        def _parse_access_id(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        access_id = _parse_access_id(d.pop("access_id"))
 
         cloud_storage_id = d.pop("cloud_storage_id")
 

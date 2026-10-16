@@ -12,13 +12,13 @@ from ...types import Response
 
 
 def _get_kwargs(
-    topup_id: int,
+    top_up_id: int,
 ) -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/prepaid-credit/topups/{topup_id}".format(
-            topup_id=quote(str(topup_id), safe=""),
+        "url": "/api/v3/prepaid-credit/top-ups/{top_up_id}".format(
+            top_up_id=quote(str(top_up_id), safe=""),
         ),
     }
 
@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -76,7 +81,7 @@ def _build_response(
 
 
 def sync_detailed(
-    topup_id: int,
+    top_up_id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | PrepaidCreditTopupResponse]:
@@ -84,8 +89,10 @@ def sync_detailed(
 
      Get details of a Prepaid credit topup
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        topup_id (int):
+        top_up_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -96,7 +103,7 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
-        topup_id=topup_id,
+        top_up_id=top_up_id,
     )
 
     response = client.get_httpx_client().request(
@@ -107,7 +114,7 @@ def sync_detailed(
 
 
 def sync(
-    topup_id: int,
+    top_up_id: int,
     *,
     client: AuthenticatedClient,
 ) -> ApiError | PrepaidCreditTopupResponse | None:
@@ -115,8 +122,10 @@ def sync(
 
      Get details of a Prepaid credit topup
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        topup_id (int):
+        top_up_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -127,13 +136,13 @@ def sync(
     """
 
     return sync_detailed(
-        topup_id=topup_id,
+        top_up_id=top_up_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
-    topup_id: int,
+    top_up_id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | PrepaidCreditTopupResponse]:
@@ -141,8 +150,10 @@ async def asyncio_detailed(
 
      Get details of a Prepaid credit topup
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        topup_id (int):
+        top_up_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -153,7 +164,7 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
-        topup_id=topup_id,
+        top_up_id=top_up_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -162,7 +173,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    topup_id: int,
+    top_up_id: int,
     *,
     client: AuthenticatedClient,
 ) -> ApiError | PrepaidCreditTopupResponse | None:
@@ -170,8 +181,10 @@ async def asyncio(
 
      Get details of a Prepaid credit topup
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
-        topup_id (int):
+        top_up_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -183,7 +196,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            topup_id=topup_id,
+            top_up_id=top_up_id,
             client=client,
         )
     ).parsed

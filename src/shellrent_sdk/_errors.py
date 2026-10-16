@@ -91,6 +91,8 @@ def unwrap(
 ) -> object:
     """Returns the parsed body of a successful response and raises an exception for the others.
 
+    A 204 No Content response has no body: ``unwrap()`` returns ``None``.
+
     Takes the result of the ``sync_detailed()`` and ``asyncio_detailed()`` functions::
 
         purchase = unwrap(get_purchase.sync_detailed(123, client=client))
@@ -112,8 +114,8 @@ def unwrap(
 
     Raises:
         ApiException: An error response documented in the specification (``error_type``).
-        UnexpectedStatus: Any other response outside 2xx, or without a parsed body
-            (``unexpected_status_type``).
+        UnexpectedStatus: Any other response outside 2xx, or a 2xx other than 204 without a parsed
+            body (``unexpected_status_type``).
     """
     if error_type is None:
         # Imported here: importing the models takes a while, and the CLI does not need them.
@@ -124,6 +126,8 @@ def unwrap(
     parsed = response.parsed
     if isinstance(parsed, error_type):
         raise ApiException(response.status_code, parsed, response.headers, response.content)
+    if response.status_code == 204:
+        return None
     if parsed is None or not 200 <= response.status_code < 300:
         if unexpected_status_type is None:
             unexpected_status_type = UnexpectedStatus

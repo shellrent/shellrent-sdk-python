@@ -12,24 +12,44 @@ T = TypeVar("T", bound="WebMonitoring")
 
 @_attrs_define
 class WebMonitoring:
+    """Monitoring of a website: checks of the availability of the domain, and notices"""
+
     web_monitoring_id: int
     purchase_id: int | None
+    """ Id of the purchase of the monitoring (`GET /api/v3/purchases/{purchase_id}`) """
     service_name: None | str
+    """ Name of the service of the purchase """
     purchase_name: None | str
+    """ Name of the object of the purchase: the monitored domain """
     purchase_status_code: None | str
+    """ Status code of the purchase, for example `ACTIVE_V2` or `DISMISSED_V2` """
     monitored_domain: None | str
     host_ref: None | str
+    """ Id of the monitored host on the monitoring system """
     web_scenario_ref: None | str
+    """ Id of the check of the site (web scenario) on the monitoring system """
     status: None | str
+    """ Status of the site: `healthy`, `problem` (a recent check got an HTTP status outside 2xx) or
+    `frequent_problem` """
     email_notification: None | str
+    """ Email address for the notices of the monitoring (site down or back up, SSL expiry); without it no email
+    notice is sent """
     sms_notification: None | str
+    """ Italian mobile number for the SMS notices, without the international prefix; without it no SMS is sent """
     ips: None | str
+    """ IP address the monitored domain resolves to """
     ip_isp: None | str
+    """ Internet service provider of the IP address """
     ip_location: None | str
+    """ Country of the IP address, as ISO 3166-1 alpha-2 code (for example `IT`) """
     last_http_response: int | None
+    """ HTTP status code of the last check, for example `200` """
     last_down_date: datetime.datetime | None
-    send_ssl_notify: bool
-    active: bool
+    """ Last time a check found the site down (HTTP status outside 2xx) """
+    send_ssl_notify: bool | None
+    """ Whether the notices of the expiry of the SSL certificate of the site are sent """
+    active: bool | None
+    """ Whether the monitoring is active """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -83,8 +103,10 @@ class WebMonitoring:
         else:
             last_down_date = self.last_down_date
 
+        send_ssl_notify: bool | None
         send_ssl_notify = self.send_ssl_notify
 
+        active: bool | None
         active = self.active
 
         field_dict: dict[str, Any] = {}
@@ -232,9 +254,19 @@ class WebMonitoring:
 
         last_down_date = _parse_last_down_date(d.pop("last_down_date"))
 
-        send_ssl_notify = d.pop("send_ssl_notify")
+        def _parse_send_ssl_notify(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
 
-        active = d.pop("active")
+        send_ssl_notify = _parse_send_ssl_notify(d.pop("send_ssl_notify"))
+
+        def _parse_active(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        active = _parse_active(d.pop("active"))
 
         web_monitoring = cls(
             web_monitoring_id=web_monitoring_id,

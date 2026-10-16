@@ -37,10 +37,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | DnsRecordResponse | None:
-    if response.status_code == 200:
-        response_200 = DnsRecordResponse.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = DnsRecordResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -67,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -92,7 +97,8 @@ def sync_detailed(
 ) -> Response[ApiError | DnsRecordResponse]:
     """Create DNS record
 
-     Create a new DNS record
+     Creates a record in the DNS zone of the domain. `NS` and `PTR` records cannot be created, as in the
+    control panel (400)
 
     Args:
         domain_id (int):
@@ -126,7 +132,8 @@ def sync(
 ) -> ApiError | DnsRecordResponse | None:
     """Create DNS record
 
-     Create a new DNS record
+     Creates a record in the DNS zone of the domain. `NS` and `PTR` records cannot be created, as in the
+    control panel (400)
 
     Args:
         domain_id (int):
@@ -155,7 +162,8 @@ async def asyncio_detailed(
 ) -> Response[ApiError | DnsRecordResponse]:
     """Create DNS record
 
-     Create a new DNS record
+     Creates a record in the DNS zone of the domain. `NS` and `PTR` records cannot be created, as in the
+    control panel (400)
 
     Args:
         domain_id (int):
@@ -187,7 +195,8 @@ async def asyncio(
 ) -> ApiError | DnsRecordResponse | None:
     """Create DNS record
 
-     Create a new DNS record
+     Creates a record in the DNS zone of the domain. `NS` and `PTR` records cannot be created, as in the
+    control panel (400)
 
     Args:
         domain_id (int):

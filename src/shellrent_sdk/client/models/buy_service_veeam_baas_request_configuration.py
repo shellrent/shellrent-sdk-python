@@ -12,10 +12,17 @@ T = TypeVar("T", bound="BuyServiceVeeamBaasRequestConfiguration")
 
 @_attrs_define
 class BuyServiceVeeamBaasRequestConfiguration:
-    """Veeam BaaS configuration options"""
+    """Veeam BaaS configuration. Every field is optional: an omitted workload quantity counts as 0, and an omitted
+    configuration is the same as an empty object. The limits of each workload quantity depend on the corresponding
+    workload service: a value outside them is rejected with a validation error (code 1000) that states the limit in
+    `meta.errors`.
+
+    """
 
     cloud_connect_gb: int | Unset = UNSET
-    """ Veeam Cloud Connect storage: quantity (in GB) of storage. """
+    """ Veeam Cloud Connect: size of the backup storage, in GB. It must be one of the storage sizes offered for the
+    service: any other value is rejected with a validation error that lists the allowed sizes. If omitted, the
+    default storage option of the service is used. """
     agent_server: int | Unset = UNSET
     """ Veeam Agent: number of "Server" workloads. """
     agent_workstation: int | Unset = UNSET
@@ -27,8 +34,9 @@ class BuyServiceVeeamBaasRequestConfiguration:
     vbr_entplus_workstation: int | Unset = UNSET
     """ Veeam Backup & Replication (VBR) Enterprise Plus: number of "Workstation" workloads. """
     vbr_entplus_gb: int | Unset = UNSET
-    """ Veeam Backup & Replication (VBR) Enterprise Plus: number of slots for "NAS" workloads. Each slot represents
-    250 GB of storage. """
+    """ Veeam Backup & Replication (VBR) Enterprise Plus: NAS backup storage, as a number of slots of 250 GB each.
+    Despite the name, the value is a number of slots, not of GB: 1 = 250 GB, 2 = 500 GB, up to 9 = 2,250 GB. Use 0
+    or omit the field for no NAS storage. """
     vbr_standard_vm: int | Unset = UNSET
     """ Veeam Backup & Replication (VBR) Standard: number of "VM in VMware/Hyper-V" workloads. """
     vbr_standard_server: int | Unset = UNSET
@@ -36,7 +44,7 @@ class BuyServiceVeeamBaasRequestConfiguration:
     vbr_standard_workstation: int | Unset = UNSET
     """ Veeam Backup & Replication (VBR) Standard: number of "Workstation" workloads. """
     vb365_users: int | Unset = UNSET
-    """ Veeam Backup for Microsoft 365: number of Users. """
+    """ Veeam Backup for Microsoft 365: number of users. """
     cc_license_vm: int | Unset = UNSET
     """ Veeam Cloud Connect license: number of "VM in VMware/Hyper-V" workloads. """
     cc_license_server: int | Unset = UNSET

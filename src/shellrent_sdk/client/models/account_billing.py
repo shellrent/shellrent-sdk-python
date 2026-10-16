@@ -18,30 +18,56 @@ T = TypeVar("T", bound="AccountBilling")
 
 @_attrs_define
 class AccountBilling:
+    """Billing profile: the holder the documents are made out to, with its tax and electronic invoicing data"""
+
     account_billing_id: int
     legal_entity: LegalEntity
+    """ Legal form of the holder of a billing profile, with its group """
     tax_regime: TaxRegime
+    """ Tax regime: how VAT applies to the documents """
     organization: None | str
     name: None | str
     surname: None | str
     address: str
     city: str
     state: str
+    """ Province: the acronym of the Italian province, for example `VI`, or `EE` outside Italy """
     postal_code: str
     country: Country
     gender: None | str
+    """ Gender of the holder: `M` or `F`; null when not given """
     birth_date: datetime.date | None
+    """ Date of birth of the holder; null when not given """
     birth_place: None | str
-    phone: str
+    """ Place of birth of the holder; null when not given """
+    phone: None | str
+    """ Phone, usually in the form `0039.0123456789`: `00` and the international prefix, a dot, the number; null
+    when not given """
     vat_number: None | str
+    """ VAT number of the holder (`partita IVA` in Italy); null when it has none """
     is_vat_group: bool
+    """ Whether the holder belongs to an Italian VAT group (`Gruppo IVA`), whose members share the VAT number and
+    have each their own tax code """
     fiscal_code: str
+    """ Tax code of the holder (`codice fiscale` in Italy) """
     edocument_pec: None | str
+    """ PEC address (certified email, `Posta Elettronica Certificata`) to which SDI, the Italian e-invoicing
+    exchange system, delivers the electronic invoices when there is no recipient code; null when not given """
     edocument_code: None | str
+    """ Recipient code (`Codice Destinatario`) with which SDI, the Italian e-invoicing exchange system, delivers the
+    electronic invoices: 7 characters, 6 for the public administration; null when not given """
     exporter_expiry: datetime.date | None
+    """ Expiry date of the declaration of intent (`dichiarazione d'intento`) of a habitual exporter, whose invoices
+    are without VAT; null when not given """
     exporter_number: None | str
+    """ Protocol number of the declaration of intent of a habitual exporter, written on the electronic invoices;
+    null when not given """
     exporter_date: datetime.date | None
+    """ Date of the electronic receipt of the declaration of intent, issued by the Italian Revenue Agency (`Agenzia
+    delle Entrate`); null when not given """
     is_split_payment: bool
+    """ Whether split payment (`scissione dei pagamenti`) applies: the tax regime is `SPLIT_PAYMENT`, and the
+    customer pays the VAT of the invoices directly to the Italian State """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -82,6 +108,7 @@ class AccountBilling:
         birth_place: None | str
         birth_place = self.birth_place
 
+        phone: None | str
         phone = self.phone
 
         vat_number: None | str
@@ -220,7 +247,12 @@ class AccountBilling:
 
         birth_place = _parse_birth_place(d.pop("birth_place"))
 
-        phone = d.pop("phone")
+        def _parse_phone(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        phone = _parse_phone(d.pop("phone"))
 
         def _parse_vat_number(data: object) -> None | str:
             if data is None:

@@ -11,12 +11,20 @@ T = TypeVar("T", bound="DomainName")
 
 @_attrs_define
 class DomainName:
+    """Name of a domain, whole and split into name and extension, in Unicode and in punycode"""
+
     unicode: None | str
+    """ Full domain name in Unicode, for example `farò.it` """
     punycode: None | str
+    """ Full domain name in punycode, for example `xn--far-ena.it` """
     unicode_name: None | str
+    """ Name without the extension, in Unicode """
     punycode_name: None | str
+    """ Name without the extension, in punycode """
     unicode_tld: None | str
+    """ Extension (TLD) without the leading dot, in Unicode """
     punycode_tld: None | str
+    """ Extension (TLD) without the leading dot, in punycode """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

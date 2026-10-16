@@ -15,9 +15,15 @@ T = TypeVar("T", bound="PrepaidCredit")
 
 @_attrs_define
 class PrepaidCredit:
+    """Prepaid credit of the account, with its alert threshold"""
+
     credit_amount: AmountSimple
+    """ Amount in euros, without the VAT details of `Amount` """
     credit_threshold: AmountSimple | None
+    """ Alert threshold: when the credit falls below it, the customer receives an email; null without a threshold
+    """
     threshold_exceeded: bool | None
+    """ Whether the credit is below the threshold; null without a threshold """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

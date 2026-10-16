@@ -11,11 +11,17 @@ T = TypeVar("T", bound="HostingEmailAllowList")
 
 @_attrs_define
 class HostingEmailAllowList:
+    """Sender in the allow list of the antispam of the mail domain of the hosting: a whole domain or an address"""
+
     allow_list_id: int
     hosting_id: int
-    sender: str
+    """ Id of the hosting (`GET /api/v3/hostings/{hosting_id}`) """
+    sender: None | str
+    """ Sender of the entry: the domain or the address """
     domain: None | str
+    """ Sender domain; null when the entry is for an address """
     mailbox: None | str
+    """ Sender address; null when the entry is for a whole domain """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -23,6 +29,7 @@ class HostingEmailAllowList:
 
         hosting_id = self.hosting_id
 
+        sender: None | str
         sender = self.sender
 
         domain: None | str
@@ -52,7 +59,12 @@ class HostingEmailAllowList:
 
         hosting_id = d.pop("hosting_id")
 
-        sender = d.pop("sender")
+        def _parse_sender(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        sender = _parse_sender(d.pop("sender"))
 
         def _parse_domain(data: object) -> None | str:
             if data is None:

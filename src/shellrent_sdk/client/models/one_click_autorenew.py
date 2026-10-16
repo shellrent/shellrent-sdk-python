@@ -15,7 +15,10 @@ T = TypeVar("T", bound="OneClickAutorenew")
 
 @_attrs_define
 class OneClickAutorenew:
+    """Automatic renewal with One-Click payment, with the methods it uses"""
+
     one_click_preference: list[OneClick]
+    """ Active One-Click methods, in the order in which the automatic payments try them until one is authorized """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

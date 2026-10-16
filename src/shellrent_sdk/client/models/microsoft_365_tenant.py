@@ -12,28 +12,47 @@ T = TypeVar("T", bound="Microsoft365Tenant")
 
 @_attrs_define
 class Microsoft365Tenant:
+    """Microsoft 365 tenant of the account, with its contact data and the state of the Microsoft Customer Agreement"""
+
     tenant_id: int
     microsoft_uuid: None | str
+    """ Id of the tenant at Microsoft (tenant UUID); null until detected """
     domain_prefix: None | str
+    """ Prefix of the `.onmicrosoft.com` domain of the tenant """
     microsoft_domain: None | str
+    """ Full `.onmicrosoft.com` domain of the tenant """
     imported: bool
+    """ Whether the tenant was transferred from another partner (`tenant_choice` `transfer`) instead of created new
+    (`new`) """
     first_name: None | str
     last_name: None | str
     country: None | str
+    """ Country of the tenant, as an ISO 3166-1 alpha-2 code, for example `IT` """
     company_name: None | str
     address: None | str
     city: None | str
     state: None | str
+    """ State or province of the tenant address """
     postal_code: None | str
     email_address: None | str
     phone_prefix: None | str
+    """ International phone prefix with the leading `+`, for example `+39` """
     phone_number: None | str
     locale: None | str
+    """ Locale of the tenant, for example `it_IT` or `en_US` """
     account_login: None | str
-    mca_compliant: bool
+    """ Username of the administrator account of the tenant, whose password is sent by email; null when not
+    available """
+    mca_compliant: bool | None
+    """ Whether the Microsoft Customer Agreement (MCA) has been accepted for the tenant; null until checked """
     mca_sign_date: datetime.datetime | None
+    """ Date and time the Microsoft Customer Agreement was accepted; null when not known """
     mca_template_id: None | str
+    """ Template of the accepted Microsoft Customer Agreement, as an id or as the URL of the agreement; null when
+    not accepted """
     mca_error: None | str
+    """ Message of the supplier on the check of the Microsoft Customer Agreement, for example `customer is not
+    provisioned yet`; null when there is none """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -89,6 +108,7 @@ class Microsoft365Tenant:
         account_login: None | str
         account_login = self.account_login
 
+        mca_compliant: bool | None
         mca_compliant = self.mca_compliant
 
         mca_sign_date: None | str
@@ -253,7 +273,12 @@ class Microsoft365Tenant:
 
         account_login = _parse_account_login(d.pop("account_login"))
 
-        mca_compliant = d.pop("mca_compliant")
+        def _parse_mca_compliant(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        mca_compliant = _parse_mca_compliant(d.pop("mca_compliant"))
 
         def _parse_mca_sign_date(data: object) -> datetime.datetime | None:
             if data is None:

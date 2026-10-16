@@ -12,23 +12,45 @@ T = TypeVar("T", bound="ServerMonitoringProbe")
 
 @_attrs_define
 class ServerMonitoringProbe:
+    """Probe of a server monitoring: a check of the monitored host, with its state and its notification contacts"""
+
     probe_id: int
     server_monitoring_id: int
+    """ Id of the server monitoring of the probe (`GET /api/v3/server-monitorings/{server_monitoring_id}`) """
     template_id: int | None
+    """ Id of the probe template, the `server_monitoring_item_template_id` of `POST /api/v3/server-
+    monitorings/{server_monitoring_id}/probes` """
     template_code: None | str
+    """ Code of the probe template, for example `SERVER_DOWN`, `HTTP_SERVICE_DOWN` or `FREE_DISK_SPACE` """
     template_name: None | str
+    """ Name of the probe template """
     monitoring_item_id: int | None
+    """ Id of the item of the probe in the monitoring system (Zabbix); null until the probe is created there """
     monitoring_trigger_id: int | None
+    """ Id of the trigger of the probe in the monitoring system (Zabbix); null until it is created there """
     is_default: bool
+    """ Whether it is the default probe of the monitoring, the ICMP check of the host (template `SERVER_DOWN`) """
     advanced_item: bool
-    is_error: bool
+    """ Whether the probe counts towards `probe_limit` of the monitoring, like the probes added with `POST
+    /api/v3/server-monitorings/{server_monitoring_id}/probes`; the statistics probes do not """
+    is_error: bool | None
+    """ Whether the probe is in error; null when no problem was detected or the solved problem has already been
+    notified """
     monitoring_item_disabled: bool
+    """ Whether the probe is disabled in the monitoring system """
     action_enabled: bool
+    """ Whether the automatic action of the probe is enabled; the actions run only on the `plus` monitorings """
     notification_email: None | str
+    """ Email address that receives the notifications of the probe; empty or null when the probe sends no email """
     notification_sms: None | str
+    """ Phone number that receives the notifications of the probe by SMS, an Italian number without the
+    international prefix; empty or null when the probe sends no SMS """
     date_problem: datetime.datetime | None
+    """ When the last problem detected by the probe started; null when there is no problem """
     date_last_notification: datetime.datetime | None
+    """ When the last notification of the problem was sent; null when none was sent for the current problem """
     active: bool
+    """ Whether the probe is active: the endpoints return only active probes """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -55,6 +77,7 @@ class ServerMonitoringProbe:
 
         advanced_item = self.advanced_item
 
+        is_error: bool | None
         is_error = self.is_error
 
         monitoring_item_disabled = self.monitoring_item_disabled
@@ -153,7 +176,12 @@ class ServerMonitoringProbe:
 
         advanced_item = d.pop("advanced_item")
 
-        is_error = d.pop("is_error")
+        def _parse_is_error(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        is_error = _parse_is_error(d.pop("is_error"))
 
         monitoring_item_disabled = d.pop("monitoring_item_disabled")
 

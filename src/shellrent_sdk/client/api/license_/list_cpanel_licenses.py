@@ -6,14 +6,14 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.cpanel_license_paginated_list_response import CpanelLicensePaginatedListResponse
+from ...models.license_paginated_list_response import LicensePaginatedListResponse
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -35,9 +35,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | CpanelLicensePaginatedListResponse | None:
+) -> ApiError | LicensePaginatedListResponse | None:
     if response.status_code == 200:
-        response_200 = CpanelLicensePaginatedListResponse.from_dict(response.json())
+        response_200 = LicensePaginatedListResponse.from_dict(response.json())
 
         return response_200
 
@@ -66,6 +66,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -74,7 +79,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | CpanelLicensePaginatedListResponse]:
+) -> Response[ApiError | LicensePaginatedListResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -87,22 +92,22 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
-) -> Response[ApiError | CpanelLicensePaginatedListResponse]:
+    per_page: int | Unset = 20,
+) -> Response[ApiError | LicensePaginatedListResponse]:
     """List cPanel licenses
 
      Get a paginated list of cPanel licenses for the authenticated account
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | CpanelLicensePaginatedListResponse]
+        Response[ApiError | LicensePaginatedListResponse]
     """
 
     kwargs = _get_kwargs(
@@ -121,22 +126,22 @@ def sync(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
-) -> ApiError | CpanelLicensePaginatedListResponse | None:
+    per_page: int | Unset = 20,
+) -> ApiError | LicensePaginatedListResponse | None:
     """List cPanel licenses
 
      Get a paginated list of cPanel licenses for the authenticated account
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | CpanelLicensePaginatedListResponse
+        ApiError | LicensePaginatedListResponse
     """
 
     return sync_detailed(
@@ -150,22 +155,22 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
-) -> Response[ApiError | CpanelLicensePaginatedListResponse]:
+    per_page: int | Unset = 20,
+) -> Response[ApiError | LicensePaginatedListResponse]:
     """List cPanel licenses
 
      Get a paginated list of cPanel licenses for the authenticated account
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | CpanelLicensePaginatedListResponse]
+        Response[ApiError | LicensePaginatedListResponse]
     """
 
     kwargs = _get_kwargs(
@@ -182,22 +187,22 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
-) -> ApiError | CpanelLicensePaginatedListResponse | None:
+    per_page: int | Unset = 20,
+) -> ApiError | LicensePaginatedListResponse | None:
     """List cPanel licenses
 
      Get a paginated list of cPanel licenses for the authenticated account
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | CpanelLicensePaginatedListResponse
+        ApiError | LicensePaginatedListResponse
     """
 
     return (

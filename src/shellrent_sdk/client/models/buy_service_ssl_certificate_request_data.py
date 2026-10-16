@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
 
@@ -25,11 +25,14 @@ class BuyServiceSslCertificateRequestData:
     approver_email: str
     """ One of the email addresses accepted as "approver" email for the SSL Certificate validation """
     admin_role: BuyServiceSslCertificateRequestDataAdminRole
+    """ Role of the administrative contact of the certificate """
     admin_title: BuyServiceSslCertificateRequestDataAdminTitle
+    """ Title of the administrative contact """
     admin_first_name: str
     admin_last_name: str
     admin_email: str
     admin_organization: str
+    """ Organization of the administrative contact """
     admin_phone_cc: str
     """ Country code phone prefix without leading "0" and without leading "+" sign; ie. "44" for UK or "39" for
     Italy """
@@ -42,10 +45,10 @@ class BuyServiceSslCertificateRequestData:
     admin_postcode: str
     admin_country: str
     """ ISO country code with 2 letters; ie. "IT" for Italy, "ES" for Spain """
-    csr: None | str | Unset = UNSET
+    csr: str | Unset = UNSET
     """ Use this only if you wish to provide your custom-generated CSR. If you specify your own generated CSR, you
     must provide the Private Key as well. """
-    private_key: None | str | Unset = UNSET
+    private_key: str | Unset = UNSET
     """ Use this only if you wish to provide your custom-generated Private Key. If you specify your own generated
     Private Key, you must provide the CSR as well. """
 
@@ -80,17 +83,9 @@ class BuyServiceSslCertificateRequestData:
 
         admin_country = self.admin_country
 
-        csr: None | str | Unset
-        if isinstance(self.csr, Unset):
-            csr = UNSET
-        else:
-            csr = self.csr
+        csr = self.csr
 
-        private_key: None | str | Unset
-        if isinstance(self.private_key, Unset):
-            private_key = UNSET
-        else:
-            private_key = self.private_key
+        private_key = self.private_key
 
         field_dict: dict[str, Any] = {}
 
@@ -153,23 +148,9 @@ class BuyServiceSslCertificateRequestData:
 
         admin_country = d.pop("admin_country")
 
-        def _parse_csr(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
+        csr = d.pop("csr", UNSET)
 
-        csr = _parse_csr(d.pop("csr", UNSET))
-
-        def _parse_private_key(data: object) -> None | str | Unset:
-            if data is None:
-                return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
-
-        private_key = _parse_private_key(d.pop("private_key", UNSET))
+        private_key = d.pop("private_key", UNSET)
 
         buy_service_ssl_certificate_request_data = cls(
             domain=domain,

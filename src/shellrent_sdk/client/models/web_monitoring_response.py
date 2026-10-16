@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.web_monitoring import WebMonitoring
-    from ..models.web_monitoring_response_meta_type_0 import WebMonitoringResponseMetaType0
 
 
 T = TypeVar("T", bound="WebMonitoringResponse")
@@ -16,15 +15,19 @@ T = TypeVar("T", bound="WebMonitoringResponse")
 
 @_attrs_define
 class WebMonitoringResponse:
-    error: int
+    """Successful response with one `WebMonitoring`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: WebMonitoring
-    meta: None | WebMonitoringResponseMetaType0
+    """ Monitoring of a website: checks of the availability of the domain, and notices """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.web_monitoring_response_meta_type_0 import WebMonitoringResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -32,11 +35,7 @@ class WebMonitoringResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, WebMonitoringResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -54,12 +53,11 @@ class WebMonitoringResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.web_monitoring import WebMonitoring
-        from ..models.web_monitoring_response_meta_type_0 import (
-            WebMonitoringResponseMetaType0,
-        )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -70,20 +68,7 @@ class WebMonitoringResponse:
 
         data = WebMonitoring.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | WebMonitoringResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = WebMonitoringResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | WebMonitoringResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         web_monitoring_response = cls(
             error=error,

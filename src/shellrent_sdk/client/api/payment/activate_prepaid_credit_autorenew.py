@@ -14,7 +14,7 @@ def _get_kwargs() -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/prepaid-credit/autorenew",
+        "url": "/api/v3/prepaid-credit/auto-renewal",
     }
 
     return _kwargs
@@ -48,10 +48,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -78,6 +88,8 @@ def sync_detailed(
 
      Activate automatic renewal service with  Prepaid credit
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -103,6 +115,8 @@ def sync(
 
      Activate automatic renewal service with  Prepaid credit
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
@@ -123,6 +137,8 @@ async def asyncio_detailed(
     """Activate Prepaid credit autorenew
 
      Activate automatic renewal service with  Prepaid credit
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -146,6 +162,8 @@ async def asyncio(
     """Activate Prepaid credit autorenew
 
      Activate automatic renewal service with  Prepaid credit
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

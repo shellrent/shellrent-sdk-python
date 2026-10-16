@@ -12,7 +12,12 @@ T = TypeVar("T", bound="TaskStatus")
 @_attrs_define
 class TaskStatus:
     status_code: str
+    """ Status code: `TO_EXECUTE` (queued), `MACHINE` (running), `WAIT` (paused), `HUMAN_INTERVENTION` (checked by
+    an operator), `ASK_USER` (waiting for data, `POST /api/v3/tasks/{task_id}/data`), `DONE` (completed) or `FAIL`
+    (failed) """
     status_name: str
+    """ Name of the status for the customers, in Italian, as in the control panel (for example `In verifica` for
+    `HUMAN_INTERVENTION`) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

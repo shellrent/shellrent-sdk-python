@@ -7,8 +7,6 @@ from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
 if TYPE_CHECKING:
     from ..models.task_status import TaskStatus
 
@@ -18,14 +16,24 @@ T = TypeVar("T", bound="Task")
 
 @_attrs_define
 class Task:
+    """Operation on a purchase that goes on in the background, with its status and progress (`GET /api/v3/tasks/{task_id}`)"""
+
     task_id: int
     purchase_id: int
+    """ Id of the purchase the task works on (`GET /api/v3/purchases/{purchase_id}`) """
     task_status: TaskStatus
     executed_instructions: int | None
+    """ Number of the step reached by the task, out of `total_instructions`: equal to it when the task is done or
+    failed """
     total_instructions: int | None
+    """ Total number of steps of the task """
     is_started: bool
+    """ Whether the execution of the task has started """
+    ask_user_error: None | str
+    """ Error found in the data provided for the task, null when there is none: the corrected data are sent with
+    `POST /api/v3/tasks/{task_id}/data` """
     date_started: datetime.datetime
-    ask_user_error: None | str | Unset = UNSET
+    """ Date and time the task was created """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -43,13 +51,10 @@ class Task:
 
         is_started = self.is_started
 
-        date_started = self.date_started.isoformat()
+        ask_user_error: None | str
+        ask_user_error = self.ask_user_error
 
-        ask_user_error: None | str | Unset
-        if isinstance(self.ask_user_error, Unset):
-            ask_user_error = UNSET
-        else:
-            ask_user_error = self.ask_user_error
+        date_started = self.date_started.isoformat()
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,11 +66,10 @@ class Task:
                 "executed_instructions": executed_instructions,
                 "total_instructions": total_instructions,
                 "is_started": is_started,
+                "ask_user_error": ask_user_error,
                 "date_started": date_started,
             }
         )
-        if ask_user_error is not UNSET:
-            field_dict["ask_user_error"] = ask_user_error
 
         return field_dict
 
@@ -96,16 +100,14 @@ class Task:
 
         is_started = d.pop("is_started")
 
-        date_started = datetime.datetime.fromisoformat(d.pop("date_started"))
-
-        def _parse_ask_user_error(data: object) -> None | str | Unset:
+        def _parse_ask_user_error(data: object) -> None | str:
             if data is None:
                 return data
-            if isinstance(data, Unset):
-                return data
-            return cast(None | str | Unset, data)
+            return cast(None | str, data)
 
-        ask_user_error = _parse_ask_user_error(d.pop("ask_user_error", UNSET))
+        ask_user_error = _parse_ask_user_error(d.pop("ask_user_error"))
+
+        date_started = datetime.datetime.fromisoformat(d.pop("date_started"))
 
         task = cls(
             task_id=task_id,
@@ -114,8 +116,8 @@ class Task:
             executed_instructions=executed_instructions,
             total_instructions=total_instructions,
             is_started=is_started,
-            date_started=date_started,
             ask_user_error=ask_user_error,
+            date_started=date_started,
         )
 
         task.additional_properties = d

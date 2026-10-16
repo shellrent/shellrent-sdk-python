@@ -19,8 +19,8 @@ class BuyServicePrivateCloudSvRequestData:
 
     additional_backup_disk_service_quantity: (
         BuyServicePrivateCloudSvRequestDataADDITIONALBACKUPDISKSERVICEQUANTITY | Unset
-    ) = BuyServicePrivateCloudSvRequestDataADDITIONALBACKUPDISKSERVICEQUANTITY.VALUE_1
-    """ Choose to configure the Private Cloud with or without additional backup disk """
+    ) = UNSET
+    """ Choose to configure the Private Cloud with (1) or without (0) additional backup disk. Default: 1 """
 
     def to_dict(self) -> dict[str, Any]:
         additional_backup_disk_service_quantity: int | Unset = UNSET

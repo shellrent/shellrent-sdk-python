@@ -11,8 +11,12 @@ T = TypeVar("T", bound="ServerCanAction")
 
 @_attrs_define
 class ServerCanAction:
+    """Result of the check of a power action of the server"""
+
     server_id: int
+    """ Id of the server (`GET /api/v3/servers/{server_id}`) """
     can_action: bool
+    """ Whether the power action can start now with `POST /api/v3/servers/{server_id}/power-actions` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

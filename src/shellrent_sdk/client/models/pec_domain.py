@@ -11,18 +11,36 @@ T = TypeVar("T", bound="PecDomain")
 
 @_attrs_define
 class PecDomain:
+    """Domain certified for PEC (certified email, Posta Elettronica Certificata), whose mailboxes have its name after the
+    `@`
+
+    """
+
     pec_domain_id: int
     purchase_id: int | None
+    """ Id of the purchase of the PEC domain (`GET /api/v3/purchases/{purchase_id}`) """
     purchase_name: None | str
+    """ Name of the purchase object, as `purchase_name.object_name` of the purchase """
     purchase_status_code: None | str
+    """ Status code of the purchase, for example `DELIVERED_V2` or `NEW_V2` (not active yet) """
     purchase_pec_owner_id: int | None
+    """ Id of the current owner of the PEC domain, as `pec_owner_id` in the owner changes """
     domain: None | str
     provider_domain_id: None | str
-    transfer_in: bool
+    """ Id of the domain at Aruba, the PEC provider; null until the domain is certified there """
+    transfer_in: bool | None
+    """ Whether the PEC domain already existed at the provider and was transferred to us (incoming transfer) """
     force_decertify_domain: bool
+    """ Whether the activation is stopped because the provider refused to certify the domain: the domain must be
+    decertified first """
     aruba_public: bool
+    """ Whether it is a public PEC domain of Aruba, shared by many customers (for example `pec.it`) """
     shellrent_public: bool
+    """ Whether it is one of our public PEC domains, shared by many customers (for example `postacert.eu`) """
     can_require_owner_change: bool
+    """ Whether an owner change can be requested now (`POST /api/v3/pec-domains/{pec_domain_id}/owner-changes`):
+    false when the purchase is not active, when another request was not approved or when the domain is not at the
+    provider yet """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -46,6 +64,7 @@ class PecDomain:
         provider_domain_id: None | str
         provider_domain_id = self.provider_domain_id
 
+        transfer_in: bool | None
         transfer_in = self.transfer_in
 
         force_decertify_domain = self.force_decertify_domain
@@ -124,7 +143,12 @@ class PecDomain:
 
         provider_domain_id = _parse_provider_domain_id(d.pop("provider_domain_id"))
 
-        transfer_in = d.pop("transfer_in")
+        def _parse_transfer_in(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        transfer_in = _parse_transfer_in(d.pop("transfer_in"))
 
         force_decertify_domain = d.pop("force_decertify_domain")
 

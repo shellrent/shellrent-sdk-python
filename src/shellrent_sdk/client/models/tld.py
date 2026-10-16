@@ -16,26 +16,49 @@ T = TypeVar("T", bound="Tld")
 
 @_attrs_define
 class Tld:
+    """TLD (domain extension), with the rules for the names and for the contacts of its domains"""
+
     tld_id: int
     extension: str
+    """ Extension without the leading dot, in Unicode (for example `it` or `co.uk`) """
     punycode: str
+    """ Extension in punycode """
     country: Country | None
+    """ Country of the TLD, for the country-code TLDs (ccTLD); null for the others """
     char_min: int | None
+    """ Minimum length of the name, without the extension """
     char_max: int | None
+    """ Maximum length of the name, without the extension """
     hyphen_allowed: bool
+    """ Whether the name can contain hyphens """
     number_allowed: bool
+    """ Whether the name can contain numbers """
     punycode_allowed: bool
+    """ Whether the name can contain international characters (IDN) """
     dnssec_enabled: bool
+    """ Whether the TLD supports DNSSEC """
     rdap_enabled: bool
-    rdap_url: str
+    """ Whether the availability of the names is checked with RDAP """
+    rdap_url: None | str
+    """ URL of the RDAP service used for the TLD; null when not set """
     contact_data: list[TldContactSpecification]
-    update_contact_r: bool
-    update_contact_a: bool
-    update_contact_t: bool
-    update_contact_o: bool
+    """ Fields of the contact data of the domains of the TLD, with their type and allowed values (the authcode
+    excluded) """
+    update_contact_r: bool | None
+    """ Whether the registrant contact (`R`) can be changed (`PATCH
+    /api/v3/domains/{domain_id}/contacts/{domain_contact_id}`) """
+    update_contact_a: bool | None
+    """ Whether the administrative contact (`A`) can be changed """
+    update_contact_t: bool | None
+    """ Whether the technical contact (`T`) can be changed """
+    update_contact_o: bool | None
+    """ Whether the organization contact (`O`) can be changed """
     update_contact_additional: bool
+    """ Whether a change of the contacts must also send the additional data of the TLD to the registry """
     update_contact_transfer: bool
+    """ Whether a transfer must also send the additional data of the TLD to the registry """
     transfer_authcode: bool
+    """ Whether the transfer of a domain of the TLD requires the authcode """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -69,6 +92,7 @@ class Tld:
 
         rdap_enabled = self.rdap_enabled
 
+        rdap_url: None | str
         rdap_url = self.rdap_url
 
         contact_data = []
@@ -76,12 +100,16 @@ class Tld:
             contact_data_item = contact_data_item_data.to_dict()
             contact_data.append(contact_data_item)
 
+        update_contact_r: bool | None
         update_contact_r = self.update_contact_r
 
+        update_contact_a: bool | None
         update_contact_a = self.update_contact_a
 
+        update_contact_t: bool | None
         update_contact_t = self.update_contact_t
 
+        update_contact_o: bool | None
         update_contact_o = self.update_contact_o
 
         update_contact_additional = self.update_contact_additional
@@ -170,7 +198,12 @@ class Tld:
 
         rdap_enabled = d.pop("rdap_enabled")
 
-        rdap_url = d.pop("rdap_url")
+        def _parse_rdap_url(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        rdap_url = _parse_rdap_url(d.pop("rdap_url"))
 
         contact_data = []
         _contact_data = d.pop("contact_data")
@@ -179,13 +212,33 @@ class Tld:
 
             contact_data.append(contact_data_item)
 
-        update_contact_r = d.pop("update_contact_r")
+        def _parse_update_contact_r(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
 
-        update_contact_a = d.pop("update_contact_a")
+        update_contact_r = _parse_update_contact_r(d.pop("update_contact_r"))
 
-        update_contact_t = d.pop("update_contact_t")
+        def _parse_update_contact_a(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
 
-        update_contact_o = d.pop("update_contact_o")
+        update_contact_a = _parse_update_contact_a(d.pop("update_contact_a"))
+
+        def _parse_update_contact_t(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        update_contact_t = _parse_update_contact_t(d.pop("update_contact_t"))
+
+        def _parse_update_contact_o(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        update_contact_o = _parse_update_contact_o(d.pop("update_contact_o"))
 
         update_contact_additional = d.pop("update_contact_additional")
 

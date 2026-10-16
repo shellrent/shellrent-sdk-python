@@ -11,8 +11,12 @@ T = TypeVar("T", bound="DomainDnssecCanActivate")
 
 @_attrs_define
 class DomainDnssecCanActivate:
+    """Whether DNSSEC can be activated on the domain, or its data changed"""
+
     domain_id: int
     can_active: bool
+    """ Whether DNSSEC can be activated now (`POST /api/v3/domains/{domain_id}/dnssec`, standard nameservers) or its
+    data changed (`PATCH /api/v3/domains/{domain_id}/dnssec`, external nameservers) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

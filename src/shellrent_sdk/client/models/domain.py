@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from ..models.dns_type import DnsType
     from ..models.domain_data import DomainData
     from ..models.domain_name import DomainName
+    from ..models.domain_nameserver import DomainNameserver
 
 
 T = TypeVar("T", bound="Domain")
@@ -18,18 +19,31 @@ T = TypeVar("T", bound="Domain")
 
 @_attrs_define
 class Domain:
+    """Domain of the account, with its nameservers and its data at the registry"""
+
     domain_id: int
     tld_id: int
+    """ Id of the TLD of the domain (`GET /api/v3/tlds/{tld_id}`) """
     domain_name: DomainName
+    """ Name of a domain, whole and split into name and extension, in Unicode and in punycode """
     dns_type: DnsType
+    """ Nameserver type of a domain, which decides where its DNS zone is managed """
     dns_account: None | str
-    nameservers: list[str]
+    """ Email of the Cloudflare account that manages the DNS zone, with the Cloudflare nameservers; null with the
+    other nameserver types, and when the zone is on our own Cloudflare account """
+    nameservers: list[DomainNameserver]
+    """ Nameservers of the domain; `sort` gives their order """
     domain_data: DomainData | None
+    """ Data of the domain at the registry; null when there are none """
     contacts_count: int
-    dnssec_enabled: bool
+    """ Number of active contacts of the domain """
     date_info_last: datetime.datetime | None
+    """ When the data of the domain were last requested from the registry """
     date_dns_check: datetime.datetime | None
+    """ When the DNS zone and the DNSSEC of the domain were last checked """
     vanity_nameserver_enabled: bool
+    """ Whether the domain uses vanity nameservers: our nameservers with hostnames of the domain itself (for example
+    `ns1.example.com`) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -46,7 +60,10 @@ class Domain:
         dns_account: None | str
         dns_account = self.dns_account
 
-        nameservers = self.nameservers
+        nameservers = []
+        for nameservers_item_data in self.nameservers:
+            nameservers_item = nameservers_item_data.to_dict()
+            nameservers.append(nameservers_item)
 
         domain_data: dict[str, Any] | None
         if isinstance(self.domain_data, DomainData):
@@ -55,8 +72,6 @@ class Domain:
             domain_data = self.domain_data
 
         contacts_count = self.contacts_count
-
-        dnssec_enabled = self.dnssec_enabled
 
         date_info_last: None | str
         if isinstance(self.date_info_last, datetime.datetime):
@@ -84,7 +99,6 @@ class Domain:
                 "nameservers": nameservers,
                 "domain_data": domain_data,
                 "contacts_count": contacts_count,
-                "dnssec_enabled": dnssec_enabled,
                 "date_info_last": date_info_last,
                 "date_dns_check": date_dns_check,
                 "vanity_nameserver_enabled": vanity_nameserver_enabled,
@@ -98,6 +112,7 @@ class Domain:
         from ..models.dns_type import DnsType
         from ..models.domain_data import DomainData
         from ..models.domain_name import DomainName
+        from ..models.domain_nameserver import DomainNameserver
 
         d = dict(src_dict)
         domain_id = d.pop("domain_id")
@@ -115,7 +130,12 @@ class Domain:
 
         dns_account = _parse_dns_account(d.pop("dns_account"))
 
-        nameservers = cast(list[str], d.pop("nameservers"))
+        nameservers = []
+        _nameservers = d.pop("nameservers")
+        for nameservers_item_data in _nameservers:
+            nameservers_item = DomainNameserver.from_dict(nameservers_item_data)
+
+            nameservers.append(nameservers_item)
 
         def _parse_domain_data(data: object) -> DomainData | None:
             if data is None:
@@ -133,8 +153,6 @@ class Domain:
         domain_data = _parse_domain_data(d.pop("domain_data"))
 
         contacts_count = d.pop("contacts_count")
-
-        dnssec_enabled = d.pop("dnssec_enabled")
 
         def _parse_date_info_last(data: object) -> datetime.datetime | None:
             if data is None:
@@ -177,7 +195,6 @@ class Domain:
             nameservers=nameservers,
             domain_data=domain_data,
             contacts_count=contacts_count,
-            dnssec_enabled=dnssec_enabled,
             date_info_last=date_info_last,
             date_dns_check=date_dns_check,
             vanity_nameserver_enabled=vanity_nameserver_enabled,

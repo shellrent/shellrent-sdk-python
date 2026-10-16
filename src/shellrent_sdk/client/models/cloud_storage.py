@@ -12,14 +12,28 @@ T = TypeVar("T", bound="CloudStorage")
 
 @_attrs_define
 class CloudStorage:
+    """Cloud storage of the account, with its hosts and the space used"""
+
     cloud_storage_id: int
     purchase_id: int | None
+    """ Id of the purchase of the cloud storage (`GET /api/v3/purchases/{purchase_id}`) """
     name: None | str
+    """ Code of the cloud storage (7 hexadecimal characters), used in its hosts and in the username of its main user
+    """
     read_write_host: None | str
+    """ Host for the read-write access to the storage, without the domain: the full name is
+    `<read_write_host>.serverlet.com` """
     read_only_host: None | str
+    """ Host for the read-only access to the storage, served by its replica, without the domain: the full name is
+    `<read_only_host>.serverlet.com` """
     app_host: None | str
+    """ Host of the web file manager (Nextcloud), without the domain: it is reachable at
+    `https://<app_host>.serverlet.com` """
     group_disk_used_bytes: int | None
+    """ Space used by the cloud storage with all its users, those of the services included, in bytes, at the last
+    sync (`date_sync`) """
     date_sync: datetime.datetime | None
+    """ Date of the last sync of the used space with the storage server """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

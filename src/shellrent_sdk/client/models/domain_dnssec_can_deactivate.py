@@ -11,8 +11,12 @@ T = TypeVar("T", bound="DomainDnssecCanDeactivate")
 
 @_attrs_define
 class DomainDnssecCanDeactivate:
+    """Whether DNSSEC can be deactivated on the domain, or its data removed"""
+
     domain_id: int
     can_deactivate: bool
+    """ Whether DNSSEC can be deactivated now (standard nameservers) or its data removed (external nameservers) with
+    `DELETE /api/v3/domains/{domain_id}/dnssec` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

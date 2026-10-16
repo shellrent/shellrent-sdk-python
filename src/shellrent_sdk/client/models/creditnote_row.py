@@ -17,15 +17,27 @@ T = TypeVar("T", bound="CreditnoteRow")
 
 @_attrs_define
 class CreditnoteRow:
+    """Row of a credit note"""
+
     creditnote_row_id: int
     creditnote_id: int
-    invoice_row_id: int
+    """ Id of the credit note (`GET /api/v3/credit-notes/{credit_note_id}`) """
+    invoice_row_id: int | None
+    """ Id of the invoice row that the credit note row refers to (`GET
+    /api/v3/invoices/{invoice_id}/rows/{row_id}`); null when it refers to none """
     reason: None | str
+    """ Reason of the row, in Italian, for example `Errato Addebito` (wrong charge) or `Servizio non Erogato`
+    (service not provided) """
     description: str
     amount: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     billing_data: BillingData
+    """ Italian public administration codes of a document row: CIG, CUP and ODA """
     date_start: datetime.date | None
+    """ Start of the period the row refers to; null when the row has no period """
     date_end: datetime.date | None
+    """ End of the period the row refers to; null when the row has no period """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -33,6 +45,7 @@ class CreditnoteRow:
 
         creditnote_id = self.creditnote_id
 
+        invoice_row_id: int | None
         invoice_row_id = self.invoice_row_id
 
         reason: None | str
@@ -84,7 +97,12 @@ class CreditnoteRow:
 
         creditnote_id = d.pop("creditnote_id")
 
-        invoice_row_id = d.pop("invoice_row_id")
+        def _parse_invoice_row_id(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        invoice_row_id = _parse_invoice_row_id(d.pop("invoice_row_id"))
 
         def _parse_reason(data: object) -> None | str:
             if data is None:

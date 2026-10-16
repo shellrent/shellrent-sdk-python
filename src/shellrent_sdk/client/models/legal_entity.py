@@ -16,10 +16,18 @@ T = TypeVar("T", bound="LegalEntity")
 
 @_attrs_define
 class LegalEntity:
+    """Legal form of the holder of a billing profile, with its group"""
+
     legal_entity_group: LegalEntityGroup
+    """ Group of legal forms, such as private individuals or Italian companies """
     tax_regime: TaxRegime
+    """ Tax regime: how VAT applies to the documents """
     entity_code: str
+    """ Code of the legal form: `ITA_PVT`, `NOITA_PVT`, `ITA_INDIVIDUALE`, `ITA_CAPITALI`, `ITA_PERSONE`,
+    `ITA_ASSNOCOMM`, `ITA_ASSCOMM`, `ITA_ALTRO`, `ITA_PA`, `EU_ALTRO`, `NOEU_ALTRO`, `VATICAN_NOPVT`,
+    `SANMARINO_NOPVT` or `FORBIDDEN_NOITA_NOPVT` """
     entity_name: str
+    """ Name of the legal form, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

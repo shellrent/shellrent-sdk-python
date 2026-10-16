@@ -11,13 +11,19 @@ T = TypeVar("T", bound="OAuthTokenResponse")
 
 @_attrs_define
 class OAuthTokenResponse:
+    """Access token issued by the token endpoint"""
+
     token_type: str
+    """ Type of the token: always `Bearer` """
     expires_in: int
+    """ Lifetime of the token, in seconds """
     access_token: str
+    """ Access token, a JWT signed with the keys of `GET /.well-known/jwks.json`: send it in the `Authorization:
+    Bearer` header """
     scope: str
-    """ Elenco degli scope concessi separati da spazio """
+    """ Space-separated list of the granted scopes """
     audience: str
-    """ Audience associata al token """
+    """ Audience of the token: `api-public` for the public API, `api-internal` for the internal one """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

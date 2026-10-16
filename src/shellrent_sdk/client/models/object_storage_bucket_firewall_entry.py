@@ -12,11 +12,17 @@ T = TypeVar("T", bound="ObjectStorageBucketFirewallEntry")
 
 @_attrs_define
 class ObjectStorageBucketFirewallEntry:
+    """Entry of the firewall of a bucket: when the bucket has entries, the requests from other addresses are denied"""
+
     entry_id: int
     object_storage_id: int
+    """ Id of the object storage (`GET /api/v3/object-storages/{object_storage_id}`) """
     bucket_id: int
+    """ Id of the bucket (`GET /api/v3/object-storages/{object_storage_id}/buckets/{bucket_id}`) """
     ip: None | str
+    """ IPv4 or IPv6 address, or subnet in CIDR notation, allowed to access the bucket """
     active: bool | None
+    """ Whether the entry is active: removed entries are not returned """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

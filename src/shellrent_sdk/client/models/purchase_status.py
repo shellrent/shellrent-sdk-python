@@ -12,7 +12,11 @@ T = TypeVar("T", bound="PurchaseStatus")
 @_attrs_define
 class PurchaseStatus:
     status_code: str
+    """ Status code: `NEW_V2` (just created), `ACTIVE_V2` (active), `DELIVERED_V2` (active without renewals),
+    `DISMISSED_V2` (at the end of its life), `CANCELED_V2` (cancelled before the activation) or `DELETED_V2`
+    (deleted one-off purchase) """
     status_name: str
+    """ Name of the status, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

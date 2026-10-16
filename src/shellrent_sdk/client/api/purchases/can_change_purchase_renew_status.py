@@ -8,20 +8,27 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
 from ...models.purchase_can_change_renew_status_response import PurchaseCanChangeRenewStatusResponse
-from ...types import Response
+from ...types import UNSET, Response
 
 
 def _get_kwargs(
     purchase_id: int,
-    status: str,
+    *,
+    status: bool,
 ) -> dict[str, Any]:
+
+    params: dict[str, Any] = {}
+
+    params["status"] = status
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/purchases/{purchase_id}/can-change-renew-status/{status}".format(
+        "url": "/api/v3/purchases/{purchase_id}/can-change-renew-status".format(
             purchase_id=quote(str(purchase_id), safe=""),
-            status=quote(str(status), safe=""),
         ),
+        "params": params,
     }
 
     return _kwargs
@@ -60,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -79,9 +91,9 @@ def _build_response(
 
 def sync_detailed(
     purchase_id: int,
-    status: str,
     *,
     client: AuthenticatedClient,
+    status: bool,
 ) -> Response[ApiError | PurchaseCanChangeRenewStatusResponse]:
     """Can change "to renew" status
 
@@ -89,7 +101,7 @@ def sync_detailed(
 
     Args:
         purchase_id (int):
-        status (str):
+        status (bool):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -113,9 +125,9 @@ def sync_detailed(
 
 def sync(
     purchase_id: int,
-    status: str,
     *,
     client: AuthenticatedClient,
+    status: bool,
 ) -> ApiError | PurchaseCanChangeRenewStatusResponse | None:
     """Can change "to renew" status
 
@@ -123,7 +135,7 @@ def sync(
 
     Args:
         purchase_id (int):
-        status (str):
+        status (bool):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -135,16 +147,16 @@ def sync(
 
     return sync_detailed(
         purchase_id=purchase_id,
-        status=status,
         client=client,
+        status=status,
     ).parsed
 
 
 async def asyncio_detailed(
     purchase_id: int,
-    status: str,
     *,
     client: AuthenticatedClient,
+    status: bool,
 ) -> Response[ApiError | PurchaseCanChangeRenewStatusResponse]:
     """Can change "to renew" status
 
@@ -152,7 +164,7 @@ async def asyncio_detailed(
 
     Args:
         purchase_id (int):
-        status (str):
+        status (bool):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -174,9 +186,9 @@ async def asyncio_detailed(
 
 async def asyncio(
     purchase_id: int,
-    status: str,
     *,
     client: AuthenticatedClient,
+    status: bool,
 ) -> ApiError | PurchaseCanChangeRenewStatusResponse | None:
     """Can change "to renew" status
 
@@ -184,7 +196,7 @@ async def asyncio(
 
     Args:
         purchase_id (int):
-        status (str):
+        status (bool):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -197,7 +209,7 @@ async def asyncio(
     return (
         await asyncio_detailed(
             purchase_id=purchase_id,
-            status=status,
             client=client,
+            status=status,
         )
     ).parsed

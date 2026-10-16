@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -82,7 +87,8 @@ def sync_detailed(
 ) -> Response[ApiError | HostingDatabaseListResponse]:
     """Get hosting databases
 
-     Get hosting databases
+     Lists the MySQL and MSSQL databases of the hosting, read from the database servers, with the account
+    that owns them. The databases belong to the purchase: a subdomain returns those of its main hosting
 
     Args:
         hosting_id (int):
@@ -113,7 +119,8 @@ def sync(
 ) -> ApiError | HostingDatabaseListResponse | None:
     """Get hosting databases
 
-     Get hosting databases
+     Lists the MySQL and MSSQL databases of the hosting, read from the database servers, with the account
+    that owns them. The databases belong to the purchase: a subdomain returns those of its main hosting
 
     Args:
         hosting_id (int):
@@ -139,7 +146,8 @@ async def asyncio_detailed(
 ) -> Response[ApiError | HostingDatabaseListResponse]:
     """Get hosting databases
 
-     Get hosting databases
+     Lists the MySQL and MSSQL databases of the hosting, read from the database servers, with the account
+    that owns them. The databases belong to the purchase: a subdomain returns those of its main hosting
 
     Args:
         hosting_id (int):
@@ -168,7 +176,8 @@ async def asyncio(
 ) -> ApiError | HostingDatabaseListResponse | None:
     """Get hosting databases
 
-     Get hosting databases
+     Lists the MySQL and MSSQL databases of the hosting, read from the database servers, with the account
+    that owns them. The databases belong to the purchase: a subdomain returns those of its main hosting
 
     Args:
         hosting_id (int):

@@ -25,7 +25,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/invoices/{invoice_id}/download".format(
+        "url": "/api/v3/invoices/{invoice_id}/xml".format(
             invoice_id=quote(str(invoice_id), safe=""),
         ),
         "params": params,
@@ -67,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -93,6 +98,8 @@ def sync_detailed(
     """Download invoice XML
 
      Download the XML file of an Invoice
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         invoice_id (int):
@@ -128,6 +135,8 @@ def sync(
 
      Download the XML file of an Invoice
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         invoice_id (int):
         prefer_xml (bool | Unset):
@@ -156,6 +165,8 @@ async def asyncio_detailed(
     """Download invoice XML
 
      Download the XML file of an Invoice
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         invoice_id (int):
@@ -188,6 +199,8 @@ async def asyncio(
     """Download invoice XML
 
      Download the XML file of an Invoice
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         invoice_id (int):

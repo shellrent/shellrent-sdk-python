@@ -4,8 +4,13 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
+from ..models.hosting_cronjob_create_request_http_request_method import (
+    HostingCronjobCreateRequestHttpRequestMethod,
+)
+from ..models.hosting_cronjob_create_request_request_protocol import (
+    HostingCronjobCreateRequestRequestProtocol,
+)
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="HostingCronjobCreateRequest")
@@ -13,24 +18,39 @@ T = TypeVar("T", bound="HostingCronjobCreateRequest")
 
 @_attrs_define
 class HostingCronjobCreateRequest:
-    request_protocol: str | Unset = UNSET
+    request_protocol: HostingCronjobCreateRequestRequestProtocol
     """ http or https """
-    request_url: str | Unset = UNSET
-    """ URL without protocol """
-    http_request_method: str | Unset = "GET"
+    request_url: str
+    """ URL to call, without protocol (e.g. `www.example.com/cron.php`): a leading http:// or https:// is removed
+    and request_protocol is used """
+    http_request_method: HostingCronjobCreateRequestHttpRequestMethod | Unset = (
+        HostingCronjobCreateRequestHttpRequestMethod.GET
+    )
+    """ HTTP method of the call """
     plan_month: None | str | Unset = UNSET
+    """ Month in which the cronjob runs, from 1 (January) to 12 (December). Omit it, or send null or an empty
+    string, to run it every month """
     plan_monthday: None | str | Unset = UNSET
+    """ Days of the month, as a comma-separated list of values from 1 to 31 (e.g. `1,15`). Omit it, or send null or
+    an empty string, to run it every day """
     plan_weekday: None | str | Unset = UNSET
+    """ Day of the week, from 1 (Monday) to 7 (Sunday). Omit it, or send null or an empty string, to run it every
+    day of the week """
     plan_hour: None | str | Unset = UNSET
+    """ Hours, as a comma-separated list of values from 0 to 23 (e.g. `0,12`). Omit it, or send null or an empty
+    string, to run it every hour """
     plan_minute: None | str | Unset = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    """ Minutes, as a comma-separated list of values from 0 to 59 (e.g. `0,30`). Omit it, or send null or an empty
+    string, to run it every minute """
 
     def to_dict(self) -> dict[str, Any]:
-        request_protocol = self.request_protocol
+        request_protocol = self.request_protocol.value
 
         request_url = self.request_url
 
-        http_request_method = self.http_request_method
+        http_request_method: str | Unset = UNSET
+        if not isinstance(self.http_request_method, Unset):
+            http_request_method = self.http_request_method.value
 
         plan_month: None | str | Unset
         if isinstance(self.plan_month, Unset):
@@ -63,12 +83,13 @@ class HostingCronjobCreateRequest:
             plan_minute = self.plan_minute
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
-        field_dict.update({})
-        if request_protocol is not UNSET:
-            field_dict["request_protocol"] = request_protocol
-        if request_url is not UNSET:
-            field_dict["request_url"] = request_url
+
+        field_dict.update(
+            {
+                "request_protocol": request_protocol,
+                "request_url": request_url,
+            }
+        )
         if http_request_method is not UNSET:
             field_dict["http_request_method"] = http_request_method
         if plan_month is not UNSET:
@@ -87,11 +108,16 @@ class HostingCronjobCreateRequest:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        request_protocol = d.pop("request_protocol", UNSET)
+        request_protocol = HostingCronjobCreateRequestRequestProtocol(d.pop("request_protocol"))
 
-        request_url = d.pop("request_url", UNSET)
+        request_url = d.pop("request_url")
 
-        http_request_method = d.pop("http_request_method", UNSET)
+        _http_request_method = d.pop("http_request_method", UNSET)
+        http_request_method: HostingCronjobCreateRequestHttpRequestMethod | Unset
+        if isinstance(_http_request_method, Unset):
+            http_request_method = UNSET
+        else:
+            http_request_method = HostingCronjobCreateRequestHttpRequestMethod(_http_request_method)
 
         def _parse_plan_month(data: object) -> None | str | Unset:
             if data is None:
@@ -149,21 +175,4 @@ class HostingCronjobCreateRequest:
             plan_minute=plan_minute,
         )
 
-        hosting_cronjob_create_request.additional_properties = d
         return hosting_cronjob_create_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

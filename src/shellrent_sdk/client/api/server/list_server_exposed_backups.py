@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -80,9 +85,11 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | ServerBackupListResponse]:
-    """List exposed server backups
+    """List exposable server backups
 
-     List server backups
+     Lists the backups of the server that can be exposed with `POST
+    /api/v3/servers/{server_id}/backups/exhibitions`: the restorable backups visible to the customer,
+    one-off backups included. It does not tell which backup is exposed now
 
     Args:
         server_id (int):
@@ -111,9 +118,11 @@ def sync(
     *,
     client: AuthenticatedClient,
 ) -> ApiError | ServerBackupListResponse | None:
-    """List exposed server backups
+    """List exposable server backups
 
-     List server backups
+     Lists the backups of the server that can be exposed with `POST
+    /api/v3/servers/{server_id}/backups/exhibitions`: the restorable backups visible to the customer,
+    one-off backups included. It does not tell which backup is exposed now
 
     Args:
         server_id (int):
@@ -137,9 +146,11 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | ServerBackupListResponse]:
-    """List exposed server backups
+    """List exposable server backups
 
-     List server backups
+     Lists the backups of the server that can be exposed with `POST
+    /api/v3/servers/{server_id}/backups/exhibitions`: the restorable backups visible to the customer,
+    one-off backups included. It does not tell which backup is exposed now
 
     Args:
         server_id (int):
@@ -166,9 +177,11 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
 ) -> ApiError | ServerBackupListResponse | None:
-    """List exposed server backups
+    """List exposable server backups
 
-     List server backups
+     Lists the backups of the server that can be exposed with `POST
+    /api/v3/servers/{server_id}/backups/exhibitions`: the restorable backups visible to the customer,
+    one-off backups included. It does not tell which backup is exposed now
 
     Args:
         server_id (int):

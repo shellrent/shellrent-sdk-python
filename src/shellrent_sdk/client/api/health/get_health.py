@@ -38,6 +38,11 @@ def _parse_response(
 
         return response_403
 
+    if response.status_code == 429:
+        response_429 = ApiError.from_dict(response.json())
+
+        return response_429
+
     if response.status_code == 500:
         response_500 = ApiError.from_dict(response.json())
 
@@ -64,9 +69,9 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | HealthStatusResponse]:
-    """Verifica lo stato del servizio
+    """Check the service status
 
-     Restituisce lo stato corrente dell'API.
+     Returns the current status of the API.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -89,9 +94,9 @@ def sync(
     *,
     client: AuthenticatedClient,
 ) -> ApiError | HealthStatusResponse | None:
-    """Verifica lo stato del servizio
+    """Check the service status
 
-     Restituisce lo stato corrente dell'API.
+     Returns the current status of the API.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -110,9 +115,9 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | HealthStatusResponse]:
-    """Verifica lo stato del servizio
+    """Check the service status
 
-     Restituisce lo stato corrente dell'API.
+     Returns the current status of the API.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -133,9 +138,9 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
 ) -> ApiError | HealthStatusResponse | None:
-    """Verifica lo stato del servizio
+    """Check the service status
 
-     Restituisce lo stato corrente dell'API.
+     Returns the current status of the API.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

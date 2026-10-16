@@ -15,13 +15,23 @@ T = TypeVar("T", bound="OrderRow")
 
 @_attrs_define
 class OrderRow:
+    """Row of an order: a service of a purchase, with its price"""
+
     order_row_id: int
     order_id: int
+    """ Id of the order (`GET /api/v3/orders/{order_id}`) """
     service: int | None
+    """ Id of the service ordered (`service_id` of `Service`) """
     purchase: int | None
+    """ Id of the purchase (`GET /api/v3/purchases/{purchase_id}`) """
     recurrence: int | None
+    """ Id of the recurrence, the billing period of the row (`recurrence_id` of `Recurrence`) """
     price: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     base_price: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

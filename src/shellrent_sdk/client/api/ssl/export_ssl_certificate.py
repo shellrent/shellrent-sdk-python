@@ -7,23 +7,30 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
+from ...models.ssl_certificate_export_request import SslCertificateExportRequest
 from ...models.ssl_certificate_export_response import SslCertificateExportResponse
 from ...types import Response
 
 
 def _get_kwargs(
     ssl_certificate_id: int,
-    format_: str,
+    *,
+    body: SslCertificateExportRequest,
 ) -> dict[str, Any]:
+    headers: dict[str, Any] = {}
 
     _kwargs: dict[str, Any] = {
-        "method": "get",
-        "url": "/api/v3/ssl-certificates/{ssl_certificate_id}/export_format/{format_}".format(
+        "method": "post",
+        "url": "/api/v3/ssl-certificates/{ssl_certificate_id}/exports".format(
             ssl_certificate_id=quote(str(ssl_certificate_id), safe=""),
-            format_=quote(str(format_), safe=""),
         ),
     }
 
+    _kwargs["json"] = body.to_dict()
+
+    headers["Content-Type"] = "application/json"
+
+    _kwargs["headers"] = headers
     return _kwargs
 
 
@@ -55,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -79,17 +96,19 @@ def _build_response(
 
 def sync_detailed(
     ssl_certificate_id: int,
-    format_: str,
     *,
     client: AuthenticatedClient,
+    body: SslCertificateExportRequest,
 ) -> Response[ApiError | SslCertificateExportResponse]:
     """Export SSL certificate keys
 
-     Export SSL certificate keys
+     Exports the certificate and its keys in the requested format, as a base64 encoded file. The format
+    and, when needed, the passphrases travel in the request body. The formats that include the private
+    key (PK, PK_CERT_CA, MULTI_ZIP) also require the ssl:secrets scope, otherwise the response is 403.
 
     Args:
         ssl_certificate_id (int):
-        format_ (str):
+        body (SslCertificateExportRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -101,7 +120,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         ssl_certificate_id=ssl_certificate_id,
-        format_=format_,
+        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -113,17 +132,19 @@ def sync_detailed(
 
 def sync(
     ssl_certificate_id: int,
-    format_: str,
     *,
     client: AuthenticatedClient,
+    body: SslCertificateExportRequest,
 ) -> ApiError | SslCertificateExportResponse | None:
     """Export SSL certificate keys
 
-     Export SSL certificate keys
+     Exports the certificate and its keys in the requested format, as a base64 encoded file. The format
+    and, when needed, the passphrases travel in the request body. The formats that include the private
+    key (PK, PK_CERT_CA, MULTI_ZIP) also require the ssl:secrets scope, otherwise the response is 403.
 
     Args:
         ssl_certificate_id (int):
-        format_ (str):
+        body (SslCertificateExportRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -135,24 +156,26 @@ def sync(
 
     return sync_detailed(
         ssl_certificate_id=ssl_certificate_id,
-        format_=format_,
         client=client,
+        body=body,
     ).parsed
 
 
 async def asyncio_detailed(
     ssl_certificate_id: int,
-    format_: str,
     *,
     client: AuthenticatedClient,
+    body: SslCertificateExportRequest,
 ) -> Response[ApiError | SslCertificateExportResponse]:
     """Export SSL certificate keys
 
-     Export SSL certificate keys
+     Exports the certificate and its keys in the requested format, as a base64 encoded file. The format
+    and, when needed, the passphrases travel in the request body. The formats that include the private
+    key (PK, PK_CERT_CA, MULTI_ZIP) also require the ssl:secrets scope, otherwise the response is 403.
 
     Args:
         ssl_certificate_id (int):
-        format_ (str):
+        body (SslCertificateExportRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -164,7 +187,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         ssl_certificate_id=ssl_certificate_id,
-        format_=format_,
+        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -174,17 +197,19 @@ async def asyncio_detailed(
 
 async def asyncio(
     ssl_certificate_id: int,
-    format_: str,
     *,
     client: AuthenticatedClient,
+    body: SslCertificateExportRequest,
 ) -> ApiError | SslCertificateExportResponse | None:
     """Export SSL certificate keys
 
-     Export SSL certificate keys
+     Exports the certificate and its keys in the requested format, as a base64 encoded file. The format
+    and, when needed, the passphrases travel in the request body. The formats that include the private
+    key (PK, PK_CERT_CA, MULTI_ZIP) also require the ssl:secrets scope, otherwise the response is 403.
 
     Args:
         ssl_certificate_id (int):
-        format_ (str):
+        body (SslCertificateExportRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -197,7 +222,7 @@ async def asyncio(
     return (
         await asyncio_detailed(
             ssl_certificate_id=ssl_certificate_id,
-            format_=format_,
             client=client,
+            body=body,
         )
     ).parsed

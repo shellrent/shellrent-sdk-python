@@ -75,6 +75,14 @@ def test_unwrap_returns_the_body_of_another_client() -> None:
     assert assert_type(other_unwrap(response), OtherStatus) is status
 
 
+def test_unwrap_returns_none_for_204_no_content() -> None:
+    response: OtherResponse[None | OtherApiError] = OtherResponse(
+        HTTPStatus.NO_CONTENT, b"", {}, None
+    )
+
+    assert other_unwrap(response) is None
+
+
 def test_api_exception_without_message() -> None:
     response: OtherResponse[OtherStatus | OtherApiError] = OtherResponse(
         HTTPStatus.CONFLICT, b"{}", {}, OtherApiError(error=409, message=None)

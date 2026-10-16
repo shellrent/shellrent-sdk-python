@@ -11,9 +11,14 @@ T = TypeVar("T", bound="DnsRecordTlsaData")
 
 @_attrs_define
 class DnsRecordTlsaData:
+    """Parameters of a TLSA record; the certificate association data is in `destination` of the record"""
+
     usage: None | str
+    """ Certificate usage: `0` (PKIX-TA), `1` (PKIX-EE), `2` (DANE-TA) or `3` (DANE-EE) """
     selector: None | str
+    """ Selector: `0` for the full certificate, `1` for its public key (SubjectPublicKeyInfo) """
     matching_type: None | str
+    """ Matching type: `0` for the data without hashing, `1` for SHA-256, `2` for SHA-512 """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

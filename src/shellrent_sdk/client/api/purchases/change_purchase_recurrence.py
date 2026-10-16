@@ -62,15 +62,20 @@ def _parse_response(
 
         return response_404
 
-    if response.status_code == 422:
-        response_422 = ApiError.from_dict(response.json())
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
 
-        return response_422
+        return response_409
 
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -98,6 +103,8 @@ def sync_detailed(
     """Change recurrence
 
      Change the recurrence on purchase
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):
@@ -133,6 +140,8 @@ def sync(
 
      Change the recurrence on purchase
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         purchase_id (int):
         body (PurchaseRecurrenceChangeRequest):
@@ -161,6 +170,8 @@ async def asyncio_detailed(
     """Change recurrence
 
      Change the recurrence on purchase
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):
@@ -193,6 +204,8 @@ async def asyncio(
     """Change recurrence
 
      Change the recurrence on purchase
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Args:
         purchase_id (int):

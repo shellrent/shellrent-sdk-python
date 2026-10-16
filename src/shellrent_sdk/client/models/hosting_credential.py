@@ -11,12 +11,20 @@ T = TypeVar("T", bound="HostingCredential")
 
 @_attrs_define
 class HostingCredential:
+    """Active FTP or database account of the hosting, with its password"""
+
     credential_id: int
     type_: str
+    """ Type of the account: `FTP` (main FTP account), `FTP_SECONDARY` (additional FTP account), `DATABASE_MYSQL` or
+    `DATABASE_MSSQL` (database account) """
     username: str
     password: str
+    """ Password of the account, in clear text, as in the control panel: a temporary random one while the account is
+    suspended """
     root_path: None | str
+    """ Root directory of an `FTP_SECONDARY` account; null for the other accounts """
     is_active: bool
+    """ Whether the account is active """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

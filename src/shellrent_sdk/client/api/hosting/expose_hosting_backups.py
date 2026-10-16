@@ -21,7 +21,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/hostings/{hosting_id}/backups/exhibit".format(
+        "url": "/api/v3/hostings/{hosting_id}/backups/exhibitions".format(
             hosting_id=quote(str(hosting_id), safe=""),
         ),
     }
@@ -37,10 +37,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | TaskResponse | None:
-    if response.status_code == 200:
-        response_200 = TaskResponse.from_dict(response.json())
+    if response.status_code == 202:
+        response_202 = TaskResponse.from_dict(response.json())
 
-        return response_200
+        return response_202
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -62,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,11 +102,13 @@ def sync_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Expose hosting backups
 
-     Expose backups for hosting
+     Exposes a web backup, a database backup or both, chosen among those of the backup list by
+    `backup_id` and `category`. The exposure is asynchronous and is returned as a Task.
 
     Args:
         hosting_id (int):
-        body (HostingBackupExposeRequest):
+        body (HostingBackupExposeRequest): Backups to expose: they are copied, without restoring
+            them, into the FTP space of the hosting
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,11 +138,13 @@ def sync(
 ) -> ApiError | TaskResponse | None:
     """Expose hosting backups
 
-     Expose backups for hosting
+     Exposes a web backup, a database backup or both, chosen among those of the backup list by
+    `backup_id` and `category`. The exposure is asynchronous and is returned as a Task.
 
     Args:
         hosting_id (int):
-        body (HostingBackupExposeRequest):
+        body (HostingBackupExposeRequest): Backups to expose: they are copied, without restoring
+            them, into the FTP space of the hosting
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -155,11 +169,13 @@ async def asyncio_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Expose hosting backups
 
-     Expose backups for hosting
+     Exposes a web backup, a database backup or both, chosen among those of the backup list by
+    `backup_id` and `category`. The exposure is asynchronous and is returned as a Task.
 
     Args:
         hosting_id (int):
-        body (HostingBackupExposeRequest):
+        body (HostingBackupExposeRequest): Backups to expose: they are copied, without restoring
+            them, into the FTP space of the hosting
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,11 +203,13 @@ async def asyncio(
 ) -> ApiError | TaskResponse | None:
     """Expose hosting backups
 
-     Expose backups for hosting
+     Exposes a web backup, a database backup or both, chosen among those of the backup list by
+    `backup_id` and `category`. The exposure is asynchronous and is returned as a Task.
 
     Args:
         hosting_id (int):
-        body (HostingBackupExposeRequest):
+        body (HostingBackupExposeRequest): Backups to expose: they are copied, without restoring
+            them, into the FTP space of the hosting
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

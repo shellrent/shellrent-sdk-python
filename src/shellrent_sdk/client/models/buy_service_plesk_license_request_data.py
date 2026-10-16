@@ -17,19 +17,18 @@ T = TypeVar("T", bound="BuyServicePleskLicenseRequestData")
 class BuyServicePleskLicenseRequestData:
     """Details about where to install the license"""
 
-    installation_type: BuyServicePleskLicenseRequestDataInstallationType | Unset = UNSET
+    installation_type: BuyServicePleskLicenseRequestDataInstallationType
     """ Choose to install the license on an active server or on external IP address """
     purchase_server: int | Unset = UNSET
-    """ ID of the server where the license will be installed to. Required only if "installation_type" has value
+    """ Id of the purchase of the server where the license will be installed (`purchase_id` of `GET
+    /api/v3/servers/{server_id}`), not the id of the server. Required only if "installation_type" has value
     "internal_installation_type" """
     ip_address: str | Unset = UNSET
     """ IP address of the external host where the license will be installed to. Required only if "installation_type"
     has value "external_installation_type" """
 
     def to_dict(self) -> dict[str, Any]:
-        installation_type: str | Unset = UNSET
-        if not isinstance(self.installation_type, Unset):
-            installation_type = self.installation_type.value
+        installation_type = self.installation_type.value
 
         purchase_server = self.purchase_server
 
@@ -37,9 +36,11 @@ class BuyServicePleskLicenseRequestData:
 
         field_dict: dict[str, Any] = {}
 
-        field_dict.update({})
-        if installation_type is not UNSET:
-            field_dict["installation_type"] = installation_type
+        field_dict.update(
+            {
+                "installation_type": installation_type,
+            }
+        )
         if purchase_server is not UNSET:
             field_dict["purchase_server"] = purchase_server
         if ip_address is not UNSET:
@@ -50,14 +51,9 @@ class BuyServicePleskLicenseRequestData:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        _installation_type = d.pop("installation_type", UNSET)
-        installation_type: BuyServicePleskLicenseRequestDataInstallationType | Unset
-        if isinstance(_installation_type, Unset):
-            installation_type = UNSET
-        else:
-            installation_type = BuyServicePleskLicenseRequestDataInstallationType(
-                _installation_type
-            )
+        installation_type = BuyServicePleskLicenseRequestDataInstallationType(
+            d.pop("installation_type")
+        )
 
         purchase_server = d.pop("purchase_server", UNSET)
 

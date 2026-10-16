@@ -12,31 +12,62 @@ T = TypeVar("T", bound="SslCertificate")
 
 @_attrs_define
 class SslCertificate:
+    """SSL or code signing certificate of the account, with its validation data and its administrative contact"""
+
     ssl_certificate_id: int
     purchase_id: int
+    """ Id of the purchase of the certificate (`GET /api/v3/purchases/{purchase_id}`) """
     domain_name: None | str
     cn_type: None | str
+    """ Type of the common name: `NORMAL` (a single name) or `WILDCARD` (a wildcard name, for the subdomains) """
     validation_type: None | str
+    """ Validation level: `DV` (domain validation), `OV` (organization validation) or `EV` (extended validation) """
     san_max: int
+    """ Maximum number of additional names (SAN, Subject Alternative Names) the certificate can include """
     can_reissue: bool
+    """ Whether the certificate includes reissues; `GET /api/v3/ssl-certificates/{ssl_certificate_id}/can-reissue`
+    tells whether one can start now """
     validation_method: None | str
+    """ How the domain is validated: `APPROVER_EMAIL` (by email to `approver_email`) or `DNS` (with a CNAME record
+    that we add to the zone of the domain, see `csr_md5_hash`) """
     valid_to: datetime.datetime | None
+    """ Expiry of the certificate, at the end of the day (Italian time) """
     csr_md5_hash: None | str
+    """ MD5 hash of the CSR for the DNS validation, in uppercase hexadecimal: the name of the CNAME record is `_`
+    followed by this hash; null without a DNS validation """
     csr_sha256_hash: None | str
+    """ SHA-256 hash of the CSR for the DNS validation, in uppercase hexadecimal split in two by a dot: the
+    destination of the CNAME record starts with it; null without a DNS validation """
     certificate_status: None | str
+    """ Status of the certificate at the certification authority, for example `Issued`, `Expired`, `Rejected` or
+    `Revoked` """
     approver_email: None | str
+    """ Address that receives the request to approve the validation of the domain, with the `APPROVER_EMAIL` method
+    (see `GET /api/v3/ssl-certificates/approver-emails`) """
     admin_first_name: None | str
+    """ First name of the administrative contact of the certificate """
     admin_last_name: None | str
+    """ Last name of the administrative contact """
     admin_organization: None | str
+    """ Organization of the administrative contact """
     admin_role: None | str
+    """ Role of the administrative contact: `Business Owner`, `Website Owner`, `President` or `Company Director` """
     admin_email: None | str
+    """ Email of the administrative contact """
     admin_phone_cc: None | str
+    """ International dialling code of the phone of the administrative contact, for example `39` """
     admin_phone_number: None | str
+    """ Phone number of the administrative contact, without the dialling code """
     admin_address: None | str
+    """ Address of the administrative contact """
     admin_city: None | str
+    """ City of the administrative contact """
     admin_state: None | str
+    """ State or province of the administrative contact """
     admin_postal_code: None | str
+    """ Postal code of the administrative contact """
     admin_country: None | str
+    """ Country of the administrative contact, as ISO 3166-1 alpha-2 code (for example `IT`) """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

@@ -21,7 +21,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "post",
-        "url": "/api/v3/servers/{server_id}/snapshots/automatic-snapshot".format(
+        "url": "/api/v3/servers/{server_id}/snapshot-schedule".format(
             server_id=quote(str(server_id), safe=""),
         ),
     }
@@ -37,10 +37,10 @@ def _get_kwargs(
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | ServerAutomaticSnapshotResponse | None:
-    if response.status_code == 200:
-        response_200 = ServerAutomaticSnapshotResponse.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = ServerAutomaticSnapshotResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -62,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,11 +102,13 @@ def sync_detailed(
 ) -> Response[ApiError | ServerAutomaticSnapshotResponse]:
     """Create automatic snapshot settings
 
-     Create automatic snapshot settings
+     Configures the automatic snapshot of the server. A server has at most one automatic snapshot: if one
+    is already configured the response is 409 and the configuration is changed with PATCH. Automatic
+    snapshots must be included in the service plan, otherwise the response is 403.
 
     Args:
         server_id (int):
-        body (ServerAutomaticSnapshotRequest):
+        body (ServerAutomaticSnapshotRequest): Schedule of the automatic snapshots of a server
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,11 +138,13 @@ def sync(
 ) -> ApiError | ServerAutomaticSnapshotResponse | None:
     """Create automatic snapshot settings
 
-     Create automatic snapshot settings
+     Configures the automatic snapshot of the server. A server has at most one automatic snapshot: if one
+    is already configured the response is 409 and the configuration is changed with PATCH. Automatic
+    snapshots must be included in the service plan, otherwise the response is 403.
 
     Args:
         server_id (int):
-        body (ServerAutomaticSnapshotRequest):
+        body (ServerAutomaticSnapshotRequest): Schedule of the automatic snapshots of a server
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -155,11 +169,13 @@ async def asyncio_detailed(
 ) -> Response[ApiError | ServerAutomaticSnapshotResponse]:
     """Create automatic snapshot settings
 
-     Create automatic snapshot settings
+     Configures the automatic snapshot of the server. A server has at most one automatic snapshot: if one
+    is already configured the response is 409 and the configuration is changed with PATCH. Automatic
+    snapshots must be included in the service plan, otherwise the response is 403.
 
     Args:
         server_id (int):
-        body (ServerAutomaticSnapshotRequest):
+        body (ServerAutomaticSnapshotRequest): Schedule of the automatic snapshots of a server
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,11 +203,13 @@ async def asyncio(
 ) -> ApiError | ServerAutomaticSnapshotResponse | None:
     """Create automatic snapshot settings
 
-     Create automatic snapshot settings
+     Configures the automatic snapshot of the server. A server has at most one automatic snapshot: if one
+    is already configured the response is 409 and the configuration is changed with PATCH. Automatic
+    snapshots must be included in the service plan, otherwise the response is 403.
 
     Args:
         server_id (int):
-        body (ServerAutomaticSnapshotRequest):
+        body (ServerAutomaticSnapshotRequest): Schedule of the automatic snapshots of a server
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

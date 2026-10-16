@@ -10,9 +10,7 @@ from ...models.api_error import ApiError
 from ...models.object_storage_bucket_firewall_entry_create_request import (
     ObjectStorageBucketFirewallEntryCreateRequest,
 )
-from ...models.object_storage_bucket_firewall_entry_response import (
-    ObjectStorageBucketFirewallEntryResponse,
-)
+from ...models.task_response import TaskResponse
 from ...types import Response
 
 
@@ -42,11 +40,11 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | ObjectStorageBucketFirewallEntryResponse | None:
-    if response.status_code == 200:
-        response_200 = ObjectStorageBucketFirewallEntryResponse.from_dict(response.json())
+) -> ApiError | TaskResponse | None:
+    if response.status_code == 202:
+        response_202 = TaskResponse.from_dict(response.json())
 
-        return response_200
+        return response_202
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -68,10 +66,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -81,7 +89,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | ObjectStorageBucketFirewallEntryResponse]:
+) -> Response[ApiError | TaskResponse]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -96,22 +104,26 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     body: ObjectStorageBucketFirewallEntryCreateRequest,
-) -> Response[ApiError | ObjectStorageBucketFirewallEntryResponse]:
+) -> Response[ApiError | TaskResponse]:
     """Create object storage bucket firewall entry
 
-     Create object storage bucket firewall entry
+     Starts adding an IP address or a subnet (CIDR) to the firewall of the bucket, returned as a Task:
+    the entry appears among the firewall entries when the operation is completed. Firewall operations on
+    the buckets of an object storage run one at a time: while one is running, the request is rejected
+    with 409.
 
     Args:
         object_storage_id (int):
         bucket_id (int):
-        body (ObjectStorageBucketFirewallEntryCreateRequest):
+        body (ObjectStorageBucketFirewallEntryCreateRequest): Address or subnet to allow in the
+            firewall of a bucket
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | ObjectStorageBucketFirewallEntryResponse]
+        Response[ApiError | TaskResponse]
     """
 
     kwargs = _get_kwargs(
@@ -133,22 +145,26 @@ def sync(
     *,
     client: AuthenticatedClient,
     body: ObjectStorageBucketFirewallEntryCreateRequest,
-) -> ApiError | ObjectStorageBucketFirewallEntryResponse | None:
+) -> ApiError | TaskResponse | None:
     """Create object storage bucket firewall entry
 
-     Create object storage bucket firewall entry
+     Starts adding an IP address or a subnet (CIDR) to the firewall of the bucket, returned as a Task:
+    the entry appears among the firewall entries when the operation is completed. Firewall operations on
+    the buckets of an object storage run one at a time: while one is running, the request is rejected
+    with 409.
 
     Args:
         object_storage_id (int):
         bucket_id (int):
-        body (ObjectStorageBucketFirewallEntryCreateRequest):
+        body (ObjectStorageBucketFirewallEntryCreateRequest): Address or subnet to allow in the
+            firewall of a bucket
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | ObjectStorageBucketFirewallEntryResponse
+        ApiError | TaskResponse
     """
 
     return sync_detailed(
@@ -165,22 +181,26 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     body: ObjectStorageBucketFirewallEntryCreateRequest,
-) -> Response[ApiError | ObjectStorageBucketFirewallEntryResponse]:
+) -> Response[ApiError | TaskResponse]:
     """Create object storage bucket firewall entry
 
-     Create object storage bucket firewall entry
+     Starts adding an IP address or a subnet (CIDR) to the firewall of the bucket, returned as a Task:
+    the entry appears among the firewall entries when the operation is completed. Firewall operations on
+    the buckets of an object storage run one at a time: while one is running, the request is rejected
+    with 409.
 
     Args:
         object_storage_id (int):
         bucket_id (int):
-        body (ObjectStorageBucketFirewallEntryCreateRequest):
+        body (ObjectStorageBucketFirewallEntryCreateRequest): Address or subnet to allow in the
+            firewall of a bucket
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | ObjectStorageBucketFirewallEntryResponse]
+        Response[ApiError | TaskResponse]
     """
 
     kwargs = _get_kwargs(
@@ -200,22 +220,26 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     body: ObjectStorageBucketFirewallEntryCreateRequest,
-) -> ApiError | ObjectStorageBucketFirewallEntryResponse | None:
+) -> ApiError | TaskResponse | None:
     """Create object storage bucket firewall entry
 
-     Create object storage bucket firewall entry
+     Starts adding an IP address or a subnet (CIDR) to the firewall of the bucket, returned as a Task:
+    the entry appears among the firewall entries when the operation is completed. Firewall operations on
+    the buckets of an object storage run one at a time: while one is running, the request is rejected
+    with 409.
 
     Args:
         object_storage_id (int):
         bucket_id (int):
-        body (ObjectStorageBucketFirewallEntryCreateRequest):
+        body (ObjectStorageBucketFirewallEntryCreateRequest): Address or subnet to allow in the
+            firewall of a bucket
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | ObjectStorageBucketFirewallEntryResponse
+        ApiError | TaskResponse
     """
 
     return (

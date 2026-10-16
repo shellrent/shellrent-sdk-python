@@ -11,8 +11,12 @@ T = TypeVar("T", bound="PurchaseCanChangeRenewStatus")
 
 @_attrs_define
 class PurchaseCanChangeRenewStatus:
+    """Whether the renew status of the purchase can be changed (`PATCH /api/v3/purchases/{purchase_id}/renew-status`)"""
+
     purchase_id: int
+    """ Id of the purchase (`GET /api/v3/purchases/{purchase_id}`) """
     can_change_renew_status: bool
+    """ Whether the renew status can be set to the one in the `status` query parameter """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

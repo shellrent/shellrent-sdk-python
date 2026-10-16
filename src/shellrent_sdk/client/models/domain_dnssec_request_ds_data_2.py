@@ -18,9 +18,13 @@ class DomainDnssecRequestDsData2:
     """DS DATA second record"""
 
     key_tag: int
+    """ Key tag of the DNSKEY the record refers to """
     algorithm: int
+    """ DNSSEC algorithm of the key, for example `8` (RSA/SHA-256) or `13` (ECDSAP256SHA256) """
     digest_type: DomainDnssecRequestDsData2DigestType
+    """ Algorithm of the digest: `1` (SHA-1), `2` (SHA-256) or `4` (SHA-384) """
     digest: str
+    """ Digest of the DNSKEY, in hexadecimal """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

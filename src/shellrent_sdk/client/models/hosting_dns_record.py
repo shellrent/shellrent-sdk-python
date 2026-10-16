@@ -11,21 +11,39 @@ T = TypeVar("T", bound="HostingDnsRecord")
 
 @_attrs_define
 class HostingDnsRecord:
+    """Default DNS record of the hosting, from its web server or its mail server"""
+
     dns_record_id: int
     type_: str
+    """ Type of the record, for example `A`, `CNAME`, `MX`, `TXT` or `SRV` """
     host: str
+    """ Name of the record relative to the domain: `@` for the domain itself, otherwise for example `www` or `mail`
+    """
     destination: str
+    """ Value of the record: the IP address of `A` records, the target host of `CNAME`, `MX` and `SRV` records, the
+    text of `TXT` records """
     priority: int | None
+    """ Priority of `MX` and `SRV` records """
     weight: int | None
+    """ Weight of `SRV` records """
     port: int | None
+    """ Port of `SRV` records """
     service: None | str
+    """ Service of `SRV` records (for example `_autodiscover`) and port of `TLSA` records """
     protocol: None | str
+    """ Protocol of `SRV` and `TLSA` records: `_tcp`, `_udp` or `_tls` """
     caa_flag: int | None
+    """ Flag of `CAA` records """
     caa_tag: None | str
+    """ Tag of `CAA` records: `issue`, `issuewild`, `iodef-http` or `iodef-mail` """
     caa_can_sign_http_exchanges: bool | None
-    tlsa_usage: None | str
-    tlsa_selector: None | str
-    tlsa_matching_type: None | str
+    """ Whether the `CAA` record allows certificates for signed HTTP exchanges (`cansignhttpexchanges=yes`) """
+    tlsa_usage: int | None
+    """ Certificate usage of `TLSA` records: 0 PKIX-TA, 1 PKIX-EE, 2 DANE-TA, 3 DANE-EE """
+    tlsa_selector: int | None
+    """ Selector of `TLSA` records: 0 for the full certificate, 1 for the public key """
+    tlsa_matching_type: int | None
+    """ Matching type of `TLSA` records: 0 for the exact data, 1 for SHA-256, 2 for SHA-512 """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -61,13 +79,13 @@ class HostingDnsRecord:
         caa_can_sign_http_exchanges: bool | None
         caa_can_sign_http_exchanges = self.caa_can_sign_http_exchanges
 
-        tlsa_usage: None | str
+        tlsa_usage: int | None
         tlsa_usage = self.tlsa_usage
 
-        tlsa_selector: None | str
+        tlsa_selector: int | None
         tlsa_selector = self.tlsa_selector
 
-        tlsa_matching_type: None | str
+        tlsa_matching_type: int | None
         tlsa_matching_type = self.tlsa_matching_type
 
         field_dict: dict[str, Any] = {}
@@ -163,24 +181,24 @@ class HostingDnsRecord:
             d.pop("caa_can_sign_http_exchanges")
         )
 
-        def _parse_tlsa_usage(data: object) -> None | str:
+        def _parse_tlsa_usage(data: object) -> int | None:
             if data is None:
                 return data
-            return cast(None | str, data)
+            return cast(int | None, data)
 
         tlsa_usage = _parse_tlsa_usage(d.pop("tlsa_usage"))
 
-        def _parse_tlsa_selector(data: object) -> None | str:
+        def _parse_tlsa_selector(data: object) -> int | None:
             if data is None:
                 return data
-            return cast(None | str, data)
+            return cast(int | None, data)
 
         tlsa_selector = _parse_tlsa_selector(d.pop("tlsa_selector"))
 
-        def _parse_tlsa_matching_type(data: object) -> None | str:
+        def _parse_tlsa_matching_type(data: object) -> int | None:
             if data is None:
                 return data
-            return cast(None | str, data)
+            return cast(int | None, data)
 
         tlsa_matching_type = _parse_tlsa_matching_type(d.pop("tlsa_matching_type"))
 

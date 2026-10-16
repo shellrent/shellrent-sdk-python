@@ -12,20 +12,41 @@ T = TypeVar("T", bound="CloudStorageUser")
 
 @_attrs_define
 class CloudStorageUser:
+    """User of a cloud storage, with its quotas and the space used"""
+
     cloud_storage_user_id: int
     cloud_storage_id: int
+    """ Id of the cloud storage (`GET /api/v3/cloud-storages/{cloud_storage_id}`) """
     purchase_id: int | None
+    """ Id of the purchase of the user (`GET /api/v3/purchases/{purchase_id}`): the cloud storage purchase, or the
+    own purchase of an `ADDITIONAL` user """
     type_: None | str
+    """ Type of the user: `PRIMARY` (main user), `ADDITIONAL` (additional user, with its own purchase), or
+    `DISASTER_RECOVERY`, `TEMPLATE_VM` and `SELF_CLOUD` for the users managed by those services """
     username: None | str
     password: None | str
+    """ Password of the user; null without the cloudstorage:secrets scope """
     path: None | str
+    """ Home path of the user on the storage """
     soft_quota_gb: float | None
+    """ Soft quota of the user, in GB (1 GB = 1024 MB): it can be exceeded, up to the hard quota, for a grace period
+    """
     hard_quota_gb: float | None
+    """ Hard quota of the user, in GB (1 GB = 1024 MB): the limit that the used space cannot exceed """
     used_space_bytes: int | None
+    """ Space used by the user at the last sync of the cloud storage, in bytes; null before the first sync """
     allocated_space_bytes: int | None
+    """ Space allocated to the user, that is its hard quota at the last sync of the cloud storage, in bytes; null
+    before the first sync """
     grace_period_seconds: int | None
+    """ Grace period left to go back under the soft quota, in seconds, saved the last time the user was found over
+    quota; `0` if never. Only `PRIMARY` users are checked: `0` for the `ADDITIONAL` ones, null for the users of the
+    services """
     last_alert: datetime.datetime | None
+    """ Date of the last email that warned the customer that the user is over its soft quota, sent at most once a
+    week and only for `PRIMARY` users; null if it was not over quota at the last check """
     active: bool | None
+    """ Whether the user is active: deleted users are not returned """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

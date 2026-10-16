@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import TYPE_CHECKING, Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -18,9 +17,10 @@ T = TypeVar("T", bound="BuyServicePecDomainRequest")
 @_attrs_define
 class BuyServicePecDomainRequest:
     data: BuyServicePecDomainRequestData
+    """ Domain to activate for PEC (certified email, "Posta Elettronica Certificata") and data of its owner; the
+    `transferin_*` documents only for a transfer """
     account_id: int | Unset = UNSET
     """ ID of the account of the user that will be the owner of the purchase (available to Resellers only) """
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         data = self.data.to_dict()
@@ -28,7 +28,7 @@ class BuyServicePecDomainRequest:
         account_id = self.account_id
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update(
             {
                 "data": data,
@@ -55,21 +55,4 @@ class BuyServicePecDomainRequest:
             account_id=account_id,
         )
 
-        buy_service_pec_domain_request.additional_properties = d
         return buy_service_pec_domain_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

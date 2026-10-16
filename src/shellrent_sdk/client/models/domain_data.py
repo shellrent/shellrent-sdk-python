@@ -12,20 +12,41 @@ T = TypeVar("T", bound="DomainData")
 
 @_attrs_define
 class DomainData:
+    """Data of the domain at the registry"""
+
     registry_status: None | str
+    """ Status of the domain as the registry reports it, for example `ok`, `clientTransferProhibited` or
+    `pendingDelete` """
     incoming_authcode: None | str
+    """ Authcode given for the incoming transfer of the domain; null without the `domains:secrets` scope """
     outgoing_authcode: None | str
+    """ Authcode to transfer the domain to another registrar; null without the `domains:secrets` scope """
     registry_nameservers: None | str
+    """ Nameservers of the domain at the registry, as a text in the format of the registry (usually hostnames
+    separated by commas) """
     registry_expiry: datetime.datetime | None
+    """ Expiry of the domain at the registry """
     registry_created: datetime.datetime | None
+    """ Registration of the domain at the registry """
     registry_updated: datetime.datetime | None
+    """ Last update of the domain at the registry """
     registry_deletion: datetime.datetime | None
+    """ Deletion of the domain at the registry, when the registry reports one """
     date_deactivation: datetime.datetime | None
+    """ When these data were deactivated because the registrar no longer has the domain (for example after an
+    outgoing transfer); null while they are active """
     identity_validation_status: None | str
+    """ Status of the validation of the identity of the registrant: `VERIFIED`, `NOT_VERIFIED`, `PENDING` or
+    `FAILED` """
     is_on_hold: bool
-    transfer_wrong_authcode: bool
-    transfer_locked: bool
+    """ Whether the domain is on hold at the registry (status `clientHold`) """
+    transfer_wrong_authcode: bool | None
+    """ Whether the incoming transfer failed because of a wrong authcode; null when not known """
+    transfer_locked: bool | None
+    """ Whether the incoming transfer failed because the domain is locked at the current registrar; null when not
+    known """
     date_created: datetime.datetime
+    """ When these data were recorded: a new version is recorded each time the data at the registry change """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -76,8 +97,10 @@ class DomainData:
 
         is_on_hold = self.is_on_hold
 
+        transfer_wrong_authcode: bool | None
         transfer_wrong_authcode = self.transfer_wrong_authcode
 
+        transfer_locked: bool | None
         transfer_locked = self.transfer_locked
 
         date_created = self.date_created.isoformat()
@@ -223,9 +246,19 @@ class DomainData:
 
         is_on_hold = d.pop("is_on_hold")
 
-        transfer_wrong_authcode = d.pop("transfer_wrong_authcode")
+        def _parse_transfer_wrong_authcode(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
 
-        transfer_locked = d.pop("transfer_locked")
+        transfer_wrong_authcode = _parse_transfer_wrong_authcode(d.pop("transfer_wrong_authcode"))
+
+        def _parse_transfer_locked(data: object) -> bool | None:
+            if data is None:
+                return data
+            return cast(bool | None, data)
+
+        transfer_locked = _parse_transfer_locked(d.pop("transfer_locked"))
 
         date_created = datetime.datetime.fromisoformat(d.pop("date_created"))
 

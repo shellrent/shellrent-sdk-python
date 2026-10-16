@@ -18,7 +18,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": "/api/v3/servers/{server_id}/ip_addresses/{ip_address_id}/rdns".format(
+        "url": "/api/v3/servers/{server_id}/ip-addresses/{ip_address_id}/rdns".format(
             server_id=quote(str(server_id), safe=""),
             ip_address_id=quote(str(ip_address_id), safe=""),
         ),
@@ -55,10 +55,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)

@@ -12,15 +12,27 @@ T = TypeVar("T", bound="HostingSslCertificate")
 
 @_attrs_define
 class HostingSslCertificate:
+    """SSL certificate installed on the website or on the mail of the hosting"""
+
     hosting_ssl_certificate_id: int
     hosting_id: int
+    """ Id of the hosting (`GET /api/v3/hostings/{hosting_id}`) """
     ssl_certificate_id: int | None
+    """ Id of the purchased SSL certificate (`GET /api/v3/ssl-certificates/{ssl_certificate_id}`); null for the
+    other certificates """
     lets_encrypt_id: int | None
+    """ Id of the Let's Encrypt certificate; null for the other certificates """
     external_certificate_id: int | None
+    """ Id of the external certificate, whose keys were uploaded by the customer; null for the other certificates
+    """
     cn_type: None | str
+    """ Type of the certificate: `NORMAL`, or `WILDCARD` for a wildcard certificate """
     installation_date: datetime.datetime | None
+    """ When the certificate was installed; null until the installation completes """
     https_rewrite: bool | None
+    """ Whether the visits over HTTP are redirected to HTTPS (301) """
     destination_type: None | str
+    """ Where the certificate is installed: `web` for the website, `mail` for the mail servers """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

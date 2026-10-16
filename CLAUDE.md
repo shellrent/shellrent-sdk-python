@@ -42,8 +42,11 @@ da `spec/openapi.yaml`; a mano solo autenticazione, creazione del client, CLI, t
   chiave della CA non è conservata: per rifarli crea una nuova CA e aggiorna `CA_HASH_NAME`.
 - `tests/integration` chiama l'API reale solo con `SHELLRENT_CLIENT_ID` e `SHELLRENT_CLIENT_SECRET` (e
   opzionalmente `SHELLRENT_API_URL`); `test_errors.py` richiede lo scope `purchases:read`.
-- La CI esegue ruff, mypy e pytest su Python 3.11-3.14, gli stessi controlli su 3.11 con le dipendenze minime
-  (`uv sync --resolution lowest-direct`) e `bin/generate`, fallendo se il codice rigenerato è diverso.
+- La CI esegue ruff, mypy e i test unitari su Python 3.11-3.14, gli stessi controlli su 3.11 con le dipendenze
+  minime (`uv sync --resolution lowest-direct`) e `bin/generate`, fallendo se il codice rigenerato è diverso.
+- I test di integrazione girano una sola volta (Python 3.14) nel job `Integration tests (not blocking)`: l'API
+  può bloccare alcuni IP dei runner GitHub (Azure) per la reputazione, quindi un fallimento lascia il workflow
+  verde con un warning nel riepilogo della run. Se falliscono spesso, verificali a mano con le credenziali.
 
 ## Vincoli
 

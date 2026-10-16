@@ -67,6 +67,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -92,7 +97,9 @@ def sync_detailed(
 ) -> Response[ApiError | SslCertificateKeyResponse]:
     """Change SSL certificate CSR
 
-     Change SSL certificate CSR
+     Sets a custom CSR for the certificate, after verifying it with the certificate supplier, and returns
+    the CSR of the certificate; sending the current CSR changes nothing. The certificate is not
+    reissued: see `POST /api/v3/ssl-certificates/{ssl_certificate_id}/reissues`
 
     Args:
         ssl_certificate_id (int):
@@ -126,7 +133,9 @@ def sync(
 ) -> ApiError | SslCertificateKeyResponse | None:
     """Change SSL certificate CSR
 
-     Change SSL certificate CSR
+     Sets a custom CSR for the certificate, after verifying it with the certificate supplier, and returns
+    the CSR of the certificate; sending the current CSR changes nothing. The certificate is not
+    reissued: see `POST /api/v3/ssl-certificates/{ssl_certificate_id}/reissues`
 
     Args:
         ssl_certificate_id (int):
@@ -155,7 +164,9 @@ async def asyncio_detailed(
 ) -> Response[ApiError | SslCertificateKeyResponse]:
     """Change SSL certificate CSR
 
-     Change SSL certificate CSR
+     Sets a custom CSR for the certificate, after verifying it with the certificate supplier, and returns
+    the CSR of the certificate; sending the current CSR changes nothing. The certificate is not
+    reissued: see `POST /api/v3/ssl-certificates/{ssl_certificate_id}/reissues`
 
     Args:
         ssl_certificate_id (int):
@@ -187,7 +198,9 @@ async def asyncio(
 ) -> ApiError | SslCertificateKeyResponse | None:
     """Change SSL certificate CSR
 
-     Change SSL certificate CSR
+     Sets a custom CSR for the certificate, after verifying it with the certificate supplier, and returns
+    the CSR of the certificate; sending the current CSR changes nothing. The certificate is not
+    reissued: see `POST /api/v3/ssl-certificates/{ssl_certificate_id}/reissues`
 
     Args:
         ssl_certificate_id (int):

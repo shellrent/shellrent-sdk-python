@@ -95,7 +95,9 @@ def test_http_errors_exit_1_with_the_body_on_stdout(
 def test_sends_data_given_as_text(api: FakeApi, capsys: pytest.CaptureFixture[str]) -> None:
     api.responses += [token_response(), health_response()]
 
-    status, _, _ = run(capsys, "api", "POST", "/api/v3/orders/pay", "--data", '{"order_ids": [1]}')
+    status, _, _ = run(
+        capsys, "api", "POST", "/api/v3/payments/prepaid-credit", "--data", '{"order_ids": [1]}'
+    )
 
     assert status == 0
     request = api.requests[1]
@@ -111,7 +113,9 @@ def test_sends_data_from_a_file(
     data = tmp_path / "body.json"
     data.write_text('{"order_ids": [2]}')
 
-    status, _, _ = run(capsys, "api", "POST", "/api/v3/orders/pay", "--data", f"@{data}")
+    status, _, _ = run(
+        capsys, "api", "POST", "/api/v3/payments/prepaid-credit", "--data", f"@{data}"
+    )
 
     assert status == 0
     assert body(api.requests[1]) == {"order_ids": [2]}
@@ -123,7 +127,7 @@ def test_sends_data_from_stdin(
     api.responses += [token_response(), health_response()]
     monkeypatch.setattr("sys.stdin", io.TextIOWrapper(io.BytesIO(b'{"order_ids": [3]}')))
 
-    status, _, _ = run(capsys, "api", "POST", "/api/v3/orders/pay", "-d", "-")
+    status, _, _ = run(capsys, "api", "POST", "/api/v3/payments/prepaid-credit", "-d", "-")
 
     assert status == 0
     assert body(api.requests[1]) == {"order_ids": [3]}

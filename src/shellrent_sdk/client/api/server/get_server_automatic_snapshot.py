@@ -17,7 +17,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/servers/{server_id}/snapshots/automatic-snapshot".format(
+        "url": "/api/v3/servers/{server_id}/snapshot-schedule".format(
             server_id=quote(str(server_id), safe=""),
         ),
     }
@@ -58,6 +58,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -82,7 +87,9 @@ def sync_detailed(
 ) -> Response[ApiError | ServerAutomaticSnapshotResponse]:
     """Get automatic snapshot settings
 
-     Get automatic snapshot settings
+     Returns the automatic snapshot of the server (404 if none is configured). Automatic snapshots must
+    be included in the service plan (for a private cloud VM, in the plan of the private cloud),
+    otherwise the response is 403.
 
     Args:
         server_id (int):
@@ -113,7 +120,9 @@ def sync(
 ) -> ApiError | ServerAutomaticSnapshotResponse | None:
     """Get automatic snapshot settings
 
-     Get automatic snapshot settings
+     Returns the automatic snapshot of the server (404 if none is configured). Automatic snapshots must
+    be included in the service plan (for a private cloud VM, in the plan of the private cloud),
+    otherwise the response is 403.
 
     Args:
         server_id (int):
@@ -139,7 +148,9 @@ async def asyncio_detailed(
 ) -> Response[ApiError | ServerAutomaticSnapshotResponse]:
     """Get automatic snapshot settings
 
-     Get automatic snapshot settings
+     Returns the automatic snapshot of the server (404 if none is configured). Automatic snapshots must
+    be included in the service plan (for a private cloud VM, in the plan of the private cloud),
+    otherwise the response is 403.
 
     Args:
         server_id (int):
@@ -168,7 +179,9 @@ async def asyncio(
 ) -> ApiError | ServerAutomaticSnapshotResponse | None:
     """Get automatic snapshot settings
 
-     Get automatic snapshot settings
+     Returns the automatic snapshot of the server (404 if none is configured). Automatic snapshots must
+    be included in the service plan (for a private cloud VM, in the plan of the private cloud),
+    otherwise the response is 403.
 
     Args:
         server_id (int):

@@ -1,16 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.domain_availability import DomainAvailability
-    from ..models.domain_availability_response_meta_type_0 import (
-        DomainAvailabilityResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="DomainAvailabilityResponse")
@@ -18,17 +15,19 @@ T = TypeVar("T", bound="DomainAvailabilityResponse")
 
 @_attrs_define
 class DomainAvailabilityResponse:
-    error: int
+    """Successful response with one `DomainAvailability`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: DomainAvailability
-    meta: DomainAvailabilityResponseMetaType0 | None
+    """ Availability of a domain name (whois): how it can be bought and, for premium domains, our prices """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.domain_availability_response_meta_type_0 import (
-            DomainAvailabilityResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -36,11 +35,7 @@ class DomainAvailabilityResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, DomainAvailabilityResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -58,12 +53,11 @@ class DomainAvailabilityResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.domain_availability import DomainAvailability
-        from ..models.domain_availability_response_meta_type_0 import (
-            DomainAvailabilityResponseMetaType0,
-        )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -74,20 +68,7 @@ class DomainAvailabilityResponse:
 
         data = DomainAvailability.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> DomainAvailabilityResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = DomainAvailabilityResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(DomainAvailabilityResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         domain_availability_response = cls(
             error=error,

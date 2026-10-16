@@ -1,12 +1,11 @@
 from http import HTTPStatus
-from typing import Any
+from typing import Any, cast
 
 import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.empty_response import EmptyResponse
 from ...types import Response
 
 
@@ -14,7 +13,7 @@ def _get_kwargs() -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "delete",
-        "url": "/api/v3/one-clicks/autorenew",
+        "url": "/api/v3/one-clicks/auto-renewal",
     }
 
     return _kwargs
@@ -22,11 +21,10 @@ def _get_kwargs() -> dict[str, Any]:
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> ApiError | EmptyResponse | None:
-    if response.status_code == 200:
-        response_200 = EmptyResponse.from_dict(response.json())
-
-        return response_200
+) -> Any | ApiError | None:
+    if response.status_code == 204:
+        response_204 = cast(Any, None)
+        return response_204
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -48,10 +46,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -61,7 +69,7 @@ def _parse_response(
 
 def _build_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -73,17 +81,19 @@ def _build_response(
 def sync_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     """Revoke One-Click autorenew
 
      Revoke automatic renewal service with One-Click Payment
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | EmptyResponse]
+        Response[Any | ApiError]
     """
 
     kwargs = _get_kwargs()
@@ -98,17 +108,19 @@ def sync_detailed(
 def sync(
     *,
     client: AuthenticatedClient,
-) -> ApiError | EmptyResponse | None:
+) -> Any | ApiError | None:
     """Revoke One-Click autorenew
 
      Revoke automatic renewal service with One-Click Payment
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | EmptyResponse
+        Any | ApiError
     """
 
     return sync_detailed(
@@ -119,17 +131,19 @@ def sync(
 async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
-) -> Response[ApiError | EmptyResponse]:
+) -> Response[Any | ApiError]:
     """Revoke One-Click autorenew
 
      Revoke automatic renewal service with One-Click Payment
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[ApiError | EmptyResponse]
+        Response[Any | ApiError]
     """
 
     kwargs = _get_kwargs()
@@ -142,17 +156,19 @@ async def asyncio_detailed(
 async def asyncio(
     *,
     client: AuthenticatedClient,
-) -> ApiError | EmptyResponse | None:
+) -> Any | ApiError | None:
     """Revoke One-Click autorenew
 
      Revoke automatic renewal service with One-Click Payment
+
+    Not available to sub-accounts: the response is 403 (error 1601).
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        ApiError | EmptyResponse
+        Any | ApiError
     """
 
     return (

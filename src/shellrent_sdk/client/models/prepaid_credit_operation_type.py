@@ -11,8 +11,13 @@ T = TypeVar("T", bound="PrepaidCreditOperationType")
 
 @_attrs_define
 class PrepaidCreditOperationType:
+    """Type of an operation on the prepaid credit"""
+
     type_code: str
+    """ One of `TOP_UP`, `REDEMPTION` (payment with the credit), `REDEMPTION_CANCELLATION`, `PAYMENT_CANCELLATION`,
+    `REFUND`, `CREDIT_CANCELLATION`, `RESET_CREDIT` or `RESELLER_SHOP_REFUND` """
     type_description: str
+    """ Name of the type, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

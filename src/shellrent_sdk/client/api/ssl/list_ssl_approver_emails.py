@@ -1,6 +1,5 @@
 from http import HTTPStatus
 from typing import Any
-from urllib.parse import quote
 
 import httpx
 
@@ -8,18 +7,24 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
 from ...models.ssl_certificate_approver_emails_response import SslCertificateApproverEmailsResponse
-from ...types import Response
+from ...types import UNSET, Response
 
 
 def _get_kwargs(
+    *,
     domain_name: str,
 ) -> dict[str, Any]:
 
+    params: dict[str, Any] = {}
+
+    params["domain_name"] = domain_name
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
+
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/ssl-certificates/approver-emails/{domain_name}".format(
-            domain_name=quote(str(domain_name), safe=""),
-        ),
+        "url": "/api/v3/ssl-certificates/approver-emails",
+        "params": params,
     }
 
     return _kwargs
@@ -58,6 +63,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -76,9 +86,9 @@ def _build_response(
 
 
 def sync_detailed(
-    domain_name: str,
     *,
     client: AuthenticatedClient,
+    domain_name: str,
 ) -> Response[ApiError | SslCertificateApproverEmailsResponse]:
     """Get approver emails list
 
@@ -107,9 +117,9 @@ def sync_detailed(
 
 
 def sync(
-    domain_name: str,
     *,
     client: AuthenticatedClient,
+    domain_name: str,
 ) -> ApiError | SslCertificateApproverEmailsResponse | None:
     """Get approver emails list
 
@@ -127,15 +137,15 @@ def sync(
     """
 
     return sync_detailed(
-        domain_name=domain_name,
         client=client,
+        domain_name=domain_name,
     ).parsed
 
 
 async def asyncio_detailed(
-    domain_name: str,
     *,
     client: AuthenticatedClient,
+    domain_name: str,
 ) -> Response[ApiError | SslCertificateApproverEmailsResponse]:
     """Get approver emails list
 
@@ -162,9 +172,9 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    domain_name: str,
     *,
     client: AuthenticatedClient,
+    domain_name: str,
 ) -> ApiError | SslCertificateApproverEmailsResponse | None:
     """Get approver emails list
 
@@ -183,7 +193,7 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
-            domain_name=domain_name,
             client=client,
+            domain_name=domain_name,
         )
     ).parsed

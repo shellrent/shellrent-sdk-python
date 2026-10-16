@@ -16,8 +16,11 @@ T = TypeVar("T", bound="DomainDnssecRequestKeyData256Item")
 @_attrs_define
 class DomainDnssecRequestKeyData256Item:
     protocol: int
+    """ Protocol of the key, `3` for DNSSEC """
     algorithm: DomainDnssecRequestKeyData256ItemAlgorithm
+    """ DNSSEC algorithm of the key: `8` (RSA/SHA-256) or `13` (ECDSAP256SHA256) """
     public_key: str
+    """ Public key, in base64 """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

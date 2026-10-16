@@ -1,28 +1,57 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
+
+if TYPE_CHECKING:
+    from ..models.hosting_php_setting import HostingPhpSetting
+
 
 T = TypeVar("T", bound="Hosting")
 
 
 @_attrs_define
 class Hosting:
+    """Hosting of the account: a main hosting, bought with a purchase, or one of its subdomains"""
+
     hosting_id: int
     purchase_id: int | None
+    """ Id of the purchase of the hosting (`GET /api/v3/purchases/{purchase_id}`); null for a subdomain, which
+    belongs to the purchase of its main hosting """
     parent_hosting_id: int | None
+    """ Id of the main hosting of a subdomain (`GET /api/v3/hostings/{hosting_id}`); null for a main hosting """
     is_primary: bool
+    """ Whether it is a main hosting; false for a subdomain (`POST /api/v3/hostings/{hosting_id}/subdomains`) """
     host_name: None | str
+    """ Host name, in Unicode: the hostname of a main hosting (usually its domain), the level name of a subdomain
+    (for example `blog`) """
     host_name_idna: None | str
+    """ `host_name` in punycode """
     full_name: None | str
+    """ Full hostname, in Unicode: for a subdomain, the level name followed by the hostname of the main hosting """
     full_name_idna: None | str
+    """ `full_name` in punycode """
     domain_full_name: None | str
+    """ Hostname on the domain of the purchase, in Unicode: the domain for a main hosting, the subdomain of the
+    domain for a subdomain """
     domain_full_name_idna: None | str
+    """ `domain_full_name` in punycode """
     php_version: None | str
+    """ PHP version of the hosting, for example `8.3` (`PATCH /api/v3/hostings/{hosting_id}/php-version`); null or
+    empty when not set """
+    http_version: str
+    """ HTTP version of the hosting: 1 for HTTP/1.1, 2 for HTTP/2 (`PATCH /api/v3/hostings/{hosting_id}/http-
+    version`) """
+    file_protection_enabled: bool
+    """ Whether the file protection is enabled (`PATCH /api/v3/hostings/{hosting_id}/file-protection`) """
+    php_settings: list[HostingPhpSetting]
+    """ PHP directives changed on the hosting (`PATCH /api/v3/hostings/{hosting_id}/php-settings`): the others have
+    the default value of the web server """
     is_active: bool
+    """ Whether the hosting is active: always true, since deleted subdomains are not returned """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -57,6 +86,15 @@ class Hosting:
         php_version: None | str
         php_version = self.php_version
 
+        http_version = self.http_version
+
+        file_protection_enabled = self.file_protection_enabled
+
+        php_settings = []
+        for php_settings_item_data in self.php_settings:
+            php_settings_item = php_settings_item_data.to_dict()
+            php_settings.append(php_settings_item)
+
         is_active = self.is_active
 
         field_dict: dict[str, Any] = {}
@@ -74,6 +112,9 @@ class Hosting:
                 "domain_full_name": domain_full_name,
                 "domain_full_name_idna": domain_full_name_idna,
                 "php_version": php_version,
+                "http_version": http_version,
+                "file_protection_enabled": file_protection_enabled,
+                "php_settings": php_settings,
                 "is_active": is_active,
             }
         )
@@ -82,6 +123,8 @@ class Hosting:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
+        from ..models.hosting_php_setting import HostingPhpSetting
+
         d = dict(src_dict)
         hosting_id = d.pop("hosting_id")
 
@@ -150,6 +193,17 @@ class Hosting:
 
         php_version = _parse_php_version(d.pop("php_version"))
 
+        http_version = d.pop("http_version")
+
+        file_protection_enabled = d.pop("file_protection_enabled")
+
+        php_settings = []
+        _php_settings = d.pop("php_settings")
+        for php_settings_item_data in _php_settings:
+            php_settings_item = HostingPhpSetting.from_dict(php_settings_item_data)
+
+            php_settings.append(php_settings_item)
+
         is_active = d.pop("is_active")
 
         hosting = cls(
@@ -164,6 +218,9 @@ class Hosting:
             domain_full_name=domain_full_name,
             domain_full_name_idna=domain_full_name_idna,
             php_version=php_version,
+            http_version=http_version,
+            file_protection_enabled=file_protection_enabled,
+            php_settings=php_settings,
             is_active=is_active,
         )
 

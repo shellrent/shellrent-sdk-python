@@ -11,9 +11,14 @@ T = TypeVar("T", bound="SimplePaginationMeta")
 
 @_attrs_define
 class SimplePaginationMeta:
+    """Pagination of a list without the totals: `next` says whether there is another page"""
+
     count: int
+    """ Number of items in this page: 0 beyond the last page """
     page: int
+    """ Number of this page, starting from 1 """
     per_page: int
+    """ Maximum number of items in a page """
     next_: bool
     """ Tells if there is another page after this one """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)

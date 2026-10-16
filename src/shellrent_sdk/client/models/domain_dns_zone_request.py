@@ -4,21 +4,24 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
+
+from ..models.domain_dns_zone_request_zone_ttl import DomainDnsZoneRequestZoneTtl
 
 T = TypeVar("T", bound="DomainDnsZoneRequest")
 
 
 @_attrs_define
 class DomainDnsZoneRequest:
-    zone_ttl: int
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    zone_ttl: DomainDnsZoneRequestZoneTtl
+    """ TTL of the zone, in seconds, which is also the TTL of every record: one of the values of the control panel,
+    from 1 to 24 hours. Only the zones on our nameservers (standard and external types) have one: with Cloudflare
+    the response is 409 """
 
     def to_dict(self) -> dict[str, Any]:
-        zone_ttl = self.zone_ttl
+        zone_ttl = self.zone_ttl.value
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update(
             {
                 "zone_ttl": zone_ttl,
@@ -30,27 +33,10 @@ class DomainDnsZoneRequest:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         d = dict(src_dict)
-        zone_ttl = d.pop("zone_ttl")
+        zone_ttl = DomainDnsZoneRequestZoneTtl(d.pop("zone_ttl"))
 
         domain_dns_zone_request = cls(
             zone_ttl=zone_ttl,
         )
 
-        domain_dns_zone_request.additional_properties = d
         return domain_dns_zone_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

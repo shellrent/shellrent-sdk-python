@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.microsoft_365 import Microsoft365
-    from ..models.microsoft_365_response_meta_type_0 import Microsoft365ResponseMetaType0
 
 
 T = TypeVar("T", bound="Microsoft365Response")
@@ -16,15 +15,19 @@ T = TypeVar("T", bound="Microsoft365Response")
 
 @_attrs_define
 class Microsoft365Response:
-    error: int
+    """Successful response with one `Microsoft365`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: Microsoft365
-    meta: Microsoft365ResponseMetaType0 | None
+    """ Microsoft 365 subscription of the account, with its status at the supplier and its tenant """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.microsoft_365_response_meta_type_0 import Microsoft365ResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -32,11 +35,7 @@ class Microsoft365Response:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, Microsoft365ResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -54,12 +53,11 @@ class Microsoft365Response:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.microsoft_365 import Microsoft365
-        from ..models.microsoft_365_response_meta_type_0 import (
-            Microsoft365ResponseMetaType0,
-        )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -70,20 +68,7 @@ class Microsoft365Response:
 
         data = Microsoft365.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> Microsoft365ResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = Microsoft365ResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(Microsoft365ResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         microsoft_365_response = cls(
             error=error,

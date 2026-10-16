@@ -11,9 +11,14 @@ T = TypeVar("T", bound="SslCertificateExport")
 
 @_attrs_define
 class SslCertificateExport:
+    """File with the certificate or its keys in the requested format, encoded in base64"""
+
     format_: str
+    """ Code of the exported format, as in the request; `MULTI_ZIP` when the file is a ZIP archive """
     filename: str
+    """ Name to give to the file, for example `certificate.pem` """
     content_base64: str
+    """ Content of the file, encoded in base64 """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

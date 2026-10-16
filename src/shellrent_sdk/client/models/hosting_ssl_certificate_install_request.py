@@ -4,8 +4,13 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
+from ..models.hosting_ssl_certificate_install_request_cn_type import (
+    HostingSslCertificateInstallRequestCnType,
+)
+from ..models.hosting_ssl_certificate_install_request_destination_type import (
+    HostingSslCertificateInstallRequestDestinationType,
+)
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="HostingSslCertificateInstallRequest")
@@ -13,10 +18,21 @@ T = TypeVar("T", bound="HostingSslCertificateInstallRequest")
 
 @_attrs_define
 class HostingSslCertificateInstallRequest:
+    """SSL certificate to install on the hosting; with no body, a Let's Encrypt certificate for the website"""
+
     ssl_certificate_id: int | None | Unset = UNSET
-    destination_type: str | Unset = "web"
-    cn_type: str | Unset = "NORMAL"
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    """ Id of a purchased SSL certificate to install (`GET /api/v3/ssl-certificates/{ssl_certificate_id}`); omit it,
+    or send null, to install a Let's Encrypt certificate, issued if the hosting has none """
+    destination_type: HostingSslCertificateInstallRequestDestinationType | Unset = (
+        HostingSslCertificateInstallRequestDestinationType.WEB
+    )
+    """ Where to install the certificate: `web` for the website, `mail` for the mail servers, `all` for both. `mail`
+    and `all` require `cn_type` `WILDCARD`; on a subdomain only `web` is allowed """
+    cn_type: HostingSslCertificateInstallRequestCnType | Unset = (
+        HostingSslCertificateInstallRequestCnType.NORMAL
+    )
+    """ Type of the certificate: `NORMAL`, or `WILDCARD` for a wildcard certificate. Without `ssl_certificate_id` it
+    chooses the Let's Encrypt certificate to install """
 
     def to_dict(self) -> dict[str, Any]:
         ssl_certificate_id: int | None | Unset
@@ -25,12 +41,16 @@ class HostingSslCertificateInstallRequest:
         else:
             ssl_certificate_id = self.ssl_certificate_id
 
-        destination_type = self.destination_type
+        destination_type: str | Unset = UNSET
+        if not isinstance(self.destination_type, Unset):
+            destination_type = self.destination_type.value
 
-        cn_type = self.cn_type
+        cn_type: str | Unset = UNSET
+        if not isinstance(self.cn_type, Unset):
+            cn_type = self.cn_type.value
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update({})
         if ssl_certificate_id is not UNSET:
             field_dict["ssl_certificate_id"] = ssl_certificate_id
@@ -54,9 +74,19 @@ class HostingSslCertificateInstallRequest:
 
         ssl_certificate_id = _parse_ssl_certificate_id(d.pop("ssl_certificate_id", UNSET))
 
-        destination_type = d.pop("destination_type", UNSET)
+        _destination_type = d.pop("destination_type", UNSET)
+        destination_type: HostingSslCertificateInstallRequestDestinationType | Unset
+        if isinstance(_destination_type, Unset):
+            destination_type = UNSET
+        else:
+            destination_type = HostingSslCertificateInstallRequestDestinationType(_destination_type)
 
-        cn_type = d.pop("cn_type", UNSET)
+        _cn_type = d.pop("cn_type", UNSET)
+        cn_type: HostingSslCertificateInstallRequestCnType | Unset
+        if isinstance(_cn_type, Unset):
+            cn_type = UNSET
+        else:
+            cn_type = HostingSslCertificateInstallRequestCnType(_cn_type)
 
         hosting_ssl_certificate_install_request = cls(
             ssl_certificate_id=ssl_certificate_id,
@@ -64,21 +94,4 @@ class HostingSslCertificateInstallRequest:
             cn_type=cn_type,
         )
 
-        hosting_ssl_certificate_install_request.additional_properties = d
         return hosting_ssl_certificate_install_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

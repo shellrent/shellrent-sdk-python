@@ -62,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,7 +102,9 @@ def sync_detailed(
 ) -> Response[ApiError | HostingResponse]:
     """Update HTTP version
 
-     Change HTTP version for hosting
+     Change HTTP version for hosting. Returns the updated hosting, with `http_version`. Not available
+    (403) on a dedicated web server, on a non-Linux hosting or without multi-PHP; 409 while the purchase
+    is suspended or the hosting is under maintenance
 
     Args:
         hosting_id (int):
@@ -126,7 +138,9 @@ def sync(
 ) -> ApiError | HostingResponse | None:
     """Update HTTP version
 
-     Change HTTP version for hosting
+     Change HTTP version for hosting. Returns the updated hosting, with `http_version`. Not available
+    (403) on a dedicated web server, on a non-Linux hosting or without multi-PHP; 409 while the purchase
+    is suspended or the hosting is under maintenance
 
     Args:
         hosting_id (int):
@@ -155,7 +169,9 @@ async def asyncio_detailed(
 ) -> Response[ApiError | HostingResponse]:
     """Update HTTP version
 
-     Change HTTP version for hosting
+     Change HTTP version for hosting. Returns the updated hosting, with `http_version`. Not available
+    (403) on a dedicated web server, on a non-Linux hosting or without multi-PHP; 409 while the purchase
+    is suspended or the hosting is under maintenance
 
     Args:
         hosting_id (int):
@@ -187,7 +203,9 @@ async def asyncio(
 ) -> ApiError | HostingResponse | None:
     """Update HTTP version
 
-     Change HTTP version for hosting
+     Change HTTP version for hosting. Returns the updated hosting, with `http_version`. Not available
+    (403) on a dedicated web server, on a non-Linux hosting or without multi-PHP; 409 while the purchase
+    is suspended or the hosting is under maintenance
 
     Args:
         hosting_id (int):

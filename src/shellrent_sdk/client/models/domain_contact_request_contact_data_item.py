@@ -12,7 +12,10 @@ T = TypeVar("T", bound="DomainContactRequestContactDataItem")
 @_attrs_define
 class DomainContactRequestContactDataItem:
     data_field: str
+    """ Code of the field, as in `contact_data` of the contact (for example `EMAIL`) """
     data_value: str
+    """ New value of the field; for `PHONE_PREFIX` and `FAX_PREFIX`, the id of the country of the prefix, one of the
+    `enum` of the field in `contact_data` of `GET /api/v3/tlds/{tld_id}`; for `BIRTHDAY`, a date `YYYY-MM-DD` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

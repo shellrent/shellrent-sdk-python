@@ -1,16 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.ssl_certificate_export import SslCertificateExport
-    from ..models.ssl_certificate_export_response_meta_type_0 import (
-        SslCertificateExportResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="SslCertificateExportResponse")
@@ -18,17 +15,19 @@ T = TypeVar("T", bound="SslCertificateExportResponse")
 
 @_attrs_define
 class SslCertificateExportResponse:
-    error: int
+    """Successful response with one `SslCertificateExport`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: SslCertificateExport
-    meta: None | SslCertificateExportResponseMetaType0
+    """ File with the certificate or its keys in the requested format, encoded in base64 """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.ssl_certificate_export_response_meta_type_0 import (
-            SslCertificateExportResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -36,11 +35,7 @@ class SslCertificateExportResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, SslCertificateExportResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -58,12 +53,11 @@ class SslCertificateExportResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.ssl_certificate_export import SslCertificateExport
-        from ..models.ssl_certificate_export_response_meta_type_0 import (
-            SslCertificateExportResponseMetaType0,
-        )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -74,20 +68,7 @@ class SslCertificateExportResponse:
 
         data = SslCertificateExport.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | SslCertificateExportResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = SslCertificateExportResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | SslCertificateExportResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         ssl_certificate_export_response = cls(
             error=error,

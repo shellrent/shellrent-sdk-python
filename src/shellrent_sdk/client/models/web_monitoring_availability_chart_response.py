@@ -1,16 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.web_monitoring_availability_chart import WebMonitoringAvailabilityChart
-    from ..models.web_monitoring_availability_chart_response_meta_type_0 import (
-        WebMonitoringAvailabilityChartResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="WebMonitoringAvailabilityChartResponse")
@@ -18,17 +15,19 @@ T = TypeVar("T", bound="WebMonitoringAvailabilityChartResponse")
 
 @_attrs_define
 class WebMonitoringAvailabilityChartResponse:
-    error: int
+    """Successful response with one `WebMonitoringAvailabilityChart`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: WebMonitoringAvailabilityChart
-    meta: None | WebMonitoringAvailabilityChartResponseMetaType0
+    """ Availability of the monitored site in the last hour """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.web_monitoring_availability_chart_response_meta_type_0 import (
-            WebMonitoringAvailabilityChartResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -36,11 +35,7 @@ class WebMonitoringAvailabilityChartResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, WebMonitoringAvailabilityChartResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,12 +55,11 @@ class WebMonitoringAvailabilityChartResponse:
         from ..models.web_monitoring_availability_chart import (
             WebMonitoringAvailabilityChart,
         )
-        from ..models.web_monitoring_availability_chart_response_meta_type_0 import (
-            WebMonitoringAvailabilityChartResponseMetaType0,
-        )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -76,20 +70,7 @@ class WebMonitoringAvailabilityChartResponse:
 
         data = WebMonitoringAvailabilityChart.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | WebMonitoringAvailabilityChartResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = WebMonitoringAvailabilityChartResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | WebMonitoringAvailabilityChartResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         web_monitoring_availability_chart_response = cls(
             error=error,

@@ -189,7 +189,8 @@ As with httpx, the requests follow the proxy and certificate settings of the env
 `sync()` and `asyncio()` return the error responses documented in the specification as `ApiError`,
 the error envelope, so you would check the type of every result. `unwrap()` does that for you: it
 takes the result of `sync_detailed()` or `asyncio_detailed()`, returns the parsed body of a 2xx
-response and raises `ApiException` for the documented errors.
+response (`None` for 204 No Content, such as most deletions) and raises `ApiException` for the
+documented errors.
 
 ```python
 import httpx
@@ -238,12 +239,12 @@ shellrent api GET /api/v3/purchases | jq '.data[] | {purchase_id, name: .purchas
 shellrent api GET '/api/v3/purchases?page=2&per_page=50' | jq -r '.data[].purchase_id'
 
 # JSON body: as text, from a file with @, from stdin with -
-shellrent api POST /api/v3/orders/pay --data '{"order_ids": [123], "use_prepaid_credit": true}'
-shellrent api POST /api/v3/orders/pay --data @order.json
-jq -n '{order_ids: [123], use_prepaid_credit: true}' | shellrent api POST /api/v3/orders/pay --data -
+shellrent api POST /api/v3/payments/prepaid-credit --data '{"order_ids": [123]}'
+shellrent api POST /api/v3/payments/prepaid-credit --data @order.json
+jq -n '{order_ids: [123]}' | shellrent api POST /api/v3/payments/prepaid-credit --data -
 
 # Files are written as they are
-shellrent api GET /api/v3/invoices/456/download/pdf > invoice.pdf
+shellrent api GET /api/v3/invoices/456/pdf > invoice.pdf
 
 # An access token for other tools
 curl -H "Authorization: Bearer $(shellrent token)" https://api.shellrent.com/api/v3/purchases

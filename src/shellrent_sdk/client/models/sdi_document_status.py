@@ -11,8 +11,12 @@ T = TypeVar("T", bound="SdiDocumentStatus")
 
 @_attrs_define
 class SdiDocumentStatus:
+    """Status of an electronic document on SDI (`Sistema di Interscambio`), the Italian e-invoicing exchange system"""
+
     status_code: str
+    """ One of `TO_SIGN`, `TO_SEND`, `SENT`, `DELIVERED`, `NOT_DELIVERED` or `DISCARDED` (rejected by SDI) """
     status_name: str
+    """ Name of the status, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

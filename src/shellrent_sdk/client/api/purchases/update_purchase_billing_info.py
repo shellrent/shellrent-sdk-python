@@ -62,15 +62,15 @@ def _parse_response(
 
         return response_404
 
-    if response.status_code == 422:
-        response_422 = ApiError.from_dict(response.json())
-
-        return response_422
-
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -99,9 +99,12 @@ def sync_detailed(
 
      Changes the billing info on purchase (ODA, CIG, CUP, ...)
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         purchase_id (int):
-        body (PurchaseBillingInfoChangeRequest):
+        body (PurchaseBillingInfoChangeRequest): Billing data of the purchase to change: at least
+            one of `oda`, `cig` and `cup`; the ones omitted stay unchanged
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -133,9 +136,12 @@ def sync(
 
      Changes the billing info on purchase (ODA, CIG, CUP, ...)
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         purchase_id (int):
-        body (PurchaseBillingInfoChangeRequest):
+        body (PurchaseBillingInfoChangeRequest): Billing data of the purchase to change: at least
+            one of `oda`, `cig` and `cup`; the ones omitted stay unchanged
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -162,9 +168,12 @@ async def asyncio_detailed(
 
      Changes the billing info on purchase (ODA, CIG, CUP, ...)
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         purchase_id (int):
-        body (PurchaseBillingInfoChangeRequest):
+        body (PurchaseBillingInfoChangeRequest): Billing data of the purchase to change: at least
+            one of `oda`, `cig` and `cup`; the ones omitted stay unchanged
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -194,9 +203,12 @@ async def asyncio(
 
      Changes the billing info on purchase (ODA, CIG, CUP, ...)
 
+    Not available to sub-accounts: the response is 403 (error 1601).
+
     Args:
         purchase_id (int):
-        body (PurchaseBillingInfoChangeRequest):
+        body (PurchaseBillingInfoChangeRequest): Billing data of the purchase to change: at least
+            one of `oda`, `cig` and `cup`; the ones omitted stay unchanged
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

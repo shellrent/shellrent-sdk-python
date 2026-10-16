@@ -13,15 +13,23 @@ T = TypeVar("T", bound="JwkKey")
 
 @_attrs_define
 class JwkKey:
+    """Public key that verifies the signature of the access tokens (JSON Web Key, RFC 7517)"""
+
     kid: str
+    """ Id of the key: the `kid` in the header of the tokens it signs """
     kty: str
+    """ Key type: `RSA` """
     alg: str
+    """ Signature algorithm: `RS256` """
     use: str
+    """ Use of the key: `sig`, signature """
     n: str
-    """ Modulo base64url """
+    """ RSA modulus, base64url-encoded """
     e: str
-    """ Esponente base64url """
+    """ RSA public exponent, base64url-encoded """
     status: None | str | Unset = UNSET
+    """ `active`: signs the new tokens; `trusted`: no longer signs, but verifies the tokens already issued;
+    `retired`: verifies the tokens already issued until they expire, then leaves the set """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

@@ -11,7 +11,11 @@ T = TypeVar("T", bound="Microsoft365PartnerLink")
 
 @_attrs_define
 class Microsoft365PartnerLink:
+    """Link to approve the Microsoft partner relationship, needed to transfer a tenant"""
+
     partner_link: str
+    """ URL where the partner relationship of the tenant is approved at Microsoft, before buying a subscription with
+    `tenant_choice` `transfer` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

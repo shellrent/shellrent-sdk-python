@@ -12,13 +12,22 @@ T = TypeVar("T", bound="ObjectStorageIamUserS3Key")
 
 @_attrs_define
 class ObjectStorageIamUserS3Key:
+    """S3 key of an IAM user of an object storage"""
+
     s3_key_id: int
     object_storage_id: int
+    """ Id of the object storage (`GET /api/v3/object-storages/{object_storage_id}`) """
     iam_user_id: int
+    """ Id of the IAM user (`GET /api/v3/object-storages/{object_storage_id}/iam-users/{iam_user_id}`) """
     access_key: None | str
+    """ Access key ID, to use with `secret_key` in the S3 clients """
     secret_key: None | str
+    """ Secret of the S3 key; returned when the key is created and, afterwards, only with the objectstorage:secrets
+    scope (null otherwise) """
     status: None | str
+    """ Status of the key in the IAM service of the storage, for example `Active` """
     active: bool | None
+    """ Whether the key is active: deleted keys are not returned; its state on the storage is in `status` """
     date_created: datetime.datetime | None
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 

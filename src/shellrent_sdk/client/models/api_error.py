@@ -7,7 +7,6 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
-    from ..models.api_error_data_type_0 import ApiErrorDataType0
     from ..models.api_error_meta_type_0 import ApiErrorMetaType0
 
 
@@ -16,28 +15,37 @@ T = TypeVar("T", bound="ApiError")
 
 @_attrs_define
 class ApiError:
+    """Error response: the code in `error`, the description in `message`, the errors for each field in `meta` for
+    validation errors
+
+    """
+
     error: int
-    """ Codice d'errore maggiore di zero """
+    """ Error code: 1000 validation failed (details in `meta.errors`), 1001 bad request, 1100 access token missing,
+    invalid, expired or revoked (HTTP 401: request a new token and retry once), 1101 insufficient scope (HTTP 403:
+    the token lacks a scope listed in the `WWW-Authenticate` header), 1102 the access token audience is not valid
+    for this API (HTTP 403), 1200 not found, 1201 not implemented, 1202 method not allowed, 1300 rate limited, 1400
+    conflict with a business rule or with the state of the resource, 1500 server error, 1601 forbidden (for example
+    a feature not included in the plan, an operation not available to sub-accounts, the internal API without
+    administrator privileges, or a request from an IP address not allowed for the account), 1700 payment declined by
+    the payment provider (HTTP 402: the orders are still to be paid), 1 other errors. Do not retry 403 responses
+    with a new token: the result does not change. """
     message: str
-    data: ApiErrorDataType0 | None
-    """ Null nelle risposte d'errore """
+    """ Description of the error, for the developers of the client """
+    data: Any
+    """ Always null in error responses """
     meta: ApiErrorMetaType0 | None
-    """ Null nelle risposte d'errore """
+    """ Null, except in validation errors (HTTP 400 with error 1000), where it contains `errors` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.api_error_data_type_0 import ApiErrorDataType0
         from ..models.api_error_meta_type_0 import ApiErrorMetaType0
 
         error = self.error
 
         message = self.message
 
-        data: dict[str, Any] | None
-        if isinstance(self.data, ApiErrorDataType0):
-            data = self.data.to_dict()
-        else:
-            data = self.data
+        data = self.data
 
         meta: dict[str, Any] | None
         if isinstance(self.meta, ApiErrorMetaType0):
@@ -60,7 +68,6 @@ class ApiError:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.api_error_data_type_0 import ApiErrorDataType0
         from ..models.api_error_meta_type_0 import ApiErrorMetaType0
 
         d = dict(src_dict)
@@ -68,20 +75,7 @@ class ApiError:
 
         message = d.pop("message")
 
-        def _parse_data(data: object) -> ApiErrorDataType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                data_type_0 = ApiErrorDataType0.from_dict(data)
-
-                return data_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(ApiErrorDataType0 | None, data)
-
-        data = _parse_data(d.pop("data"))
+        data = d.pop("data")
 
         def _parse_meta(data: object) -> ApiErrorMetaType0 | None:
             if data is None:

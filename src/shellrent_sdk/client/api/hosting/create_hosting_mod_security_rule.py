@@ -42,6 +42,11 @@ def _parse_response(
 
         return response_200
 
+    if response.status_code == 201:
+        response_201 = HostingModSecurityRuleResponse.from_dict(response.json())
+
+        return response_201
+
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
 
@@ -66,6 +71,11 @@ def _parse_response(
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,11 +102,13 @@ def sync_detailed(
 ) -> Response[ApiError | HostingModSecurityRuleResponse]:
     """Create ModSecurity rule
 
-     Add a ModSecurity rule by rule number
+     Disables the ModSecurity rule `rule_number` on the hosting, so that ModSecurity no longer applies
+    it, and returns the rule with `included` true. Responds 200 instead of 201 when the hosting already
+    had the rule, found by a scan or added before
 
     Args:
         hosting_id (int):
-        body (HostingModSecurityRuleCreateRequest):
+        body (HostingModSecurityRuleCreateRequest): ModSecurity rule to disable on the hosting
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,11 +138,13 @@ def sync(
 ) -> ApiError | HostingModSecurityRuleResponse | None:
     """Create ModSecurity rule
 
-     Add a ModSecurity rule by rule number
+     Disables the ModSecurity rule `rule_number` on the hosting, so that ModSecurity no longer applies
+    it, and returns the rule with `included` true. Responds 200 instead of 201 when the hosting already
+    had the rule, found by a scan or added before
 
     Args:
         hosting_id (int):
-        body (HostingModSecurityRuleCreateRequest):
+        body (HostingModSecurityRuleCreateRequest): ModSecurity rule to disable on the hosting
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -155,11 +169,13 @@ async def asyncio_detailed(
 ) -> Response[ApiError | HostingModSecurityRuleResponse]:
     """Create ModSecurity rule
 
-     Add a ModSecurity rule by rule number
+     Disables the ModSecurity rule `rule_number` on the hosting, so that ModSecurity no longer applies
+    it, and returns the rule with `included` true. Responds 200 instead of 201 when the hosting already
+    had the rule, found by a scan or added before
 
     Args:
         hosting_id (int):
-        body (HostingModSecurityRuleCreateRequest):
+        body (HostingModSecurityRuleCreateRequest): ModSecurity rule to disable on the hosting
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,11 +203,13 @@ async def asyncio(
 ) -> ApiError | HostingModSecurityRuleResponse | None:
     """Create ModSecurity rule
 
-     Add a ModSecurity rule by rule number
+     Disables the ModSecurity rule `rule_number` on the hosting, so that ModSecurity no longer applies
+    it, and returns the rule with `included` true. Responds 200 instead of 201 when the hosting already
+    had the rule, found by a scan or added before
 
     Args:
         hosting_id (int):
-        body (HostingModSecurityRuleCreateRequest):
+        body (HostingModSecurityRuleCreateRequest): ModSecurity rule to disable on the hosting
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

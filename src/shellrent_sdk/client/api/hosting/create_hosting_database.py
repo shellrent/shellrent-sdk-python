@@ -7,17 +7,13 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.api_error import ApiError
-from ...models.hosting_database_create_request import HostingDatabaseCreateRequest
 from ...models.hosting_database_response import HostingDatabaseResponse
 from ...types import Response
 
 
 def _get_kwargs(
     hosting_id: int,
-    *,
-    body: HostingDatabaseCreateRequest,
 ) -> dict[str, Any]:
-    headers: dict[str, Any] = {}
 
     _kwargs: dict[str, Any] = {
         "method": "post",
@@ -26,21 +22,16 @@ def _get_kwargs(
         ),
     }
 
-    _kwargs["json"] = body.to_dict()
-
-    headers["Content-Type"] = "application/json"
-
-    _kwargs["headers"] = headers
     return _kwargs
 
 
 def _parse_response(
     *, client: AuthenticatedClient | Client, response: httpx.Response
 ) -> ApiError | HostingDatabaseResponse | None:
-    if response.status_code == 200:
-        response_200 = HostingDatabaseResponse.from_dict(response.json())
+    if response.status_code == 201:
+        response_201 = HostingDatabaseResponse.from_dict(response.json())
 
-        return response_200
+        return response_201
 
     if response.status_code == 400:
         response_400 = ApiError.from_dict(response.json())
@@ -62,10 +53,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -88,15 +89,15 @@ def sync_detailed(
     hosting_id: int,
     *,
     client: AuthenticatedClient,
-    body: HostingDatabaseCreateRequest,
 ) -> Response[ApiError | HostingDatabaseResponse]:
     """Create hosting database
 
-     Create hosting database
+     Create a database of the hosting. The request has no body: as in the control panel, the name is
+    `<username of the database account>_<n>`, with the first free n. If the database server already uses
+    that name for another account, it adds a suffix: the response has the actual name
 
     Args:
         hosting_id (int):
-        body (HostingDatabaseCreateRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -108,7 +109,6 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         hosting_id=hosting_id,
-        body=body,
     )
 
     response = client.get_httpx_client().request(
@@ -122,15 +122,15 @@ def sync(
     hosting_id: int,
     *,
     client: AuthenticatedClient,
-    body: HostingDatabaseCreateRequest,
 ) -> ApiError | HostingDatabaseResponse | None:
     """Create hosting database
 
-     Create hosting database
+     Create a database of the hosting. The request has no body: as in the control panel, the name is
+    `<username of the database account>_<n>`, with the first free n. If the database server already uses
+    that name for another account, it adds a suffix: the response has the actual name
 
     Args:
         hosting_id (int):
-        body (HostingDatabaseCreateRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -143,7 +143,6 @@ def sync(
     return sync_detailed(
         hosting_id=hosting_id,
         client=client,
-        body=body,
     ).parsed
 
 
@@ -151,15 +150,15 @@ async def asyncio_detailed(
     hosting_id: int,
     *,
     client: AuthenticatedClient,
-    body: HostingDatabaseCreateRequest,
 ) -> Response[ApiError | HostingDatabaseResponse]:
     """Create hosting database
 
-     Create hosting database
+     Create a database of the hosting. The request has no body: as in the control panel, the name is
+    `<username of the database account>_<n>`, with the first free n. If the database server already uses
+    that name for another account, it adds a suffix: the response has the actual name
 
     Args:
         hosting_id (int):
-        body (HostingDatabaseCreateRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -171,7 +170,6 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         hosting_id=hosting_id,
-        body=body,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -183,15 +181,15 @@ async def asyncio(
     hosting_id: int,
     *,
     client: AuthenticatedClient,
-    body: HostingDatabaseCreateRequest,
 ) -> ApiError | HostingDatabaseResponse | None:
     """Create hosting database
 
-     Create hosting database
+     Create a database of the hosting. The request has no body: as in the control panel, the name is
+    `<username of the database account>_<n>`, with the first free n. If the database server already uses
+    that name for another account, it adds a suffix: the response has the actual name
 
     Args:
         hosting_id (int):
-        body (HostingDatabaseCreateRequest):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -205,6 +203,5 @@ async def asyncio(
         await asyncio_detailed(
             hosting_id=hosting_id,
             client=client,
-            body=body,
         )
     ).parsed

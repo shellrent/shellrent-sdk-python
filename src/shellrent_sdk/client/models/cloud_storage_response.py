@@ -1,14 +1,13 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.cloud_storage import CloudStorage
-    from ..models.cloud_storage_response_meta_type_0 import CloudStorageResponseMetaType0
 
 
 T = TypeVar("T", bound="CloudStorageResponse")
@@ -16,15 +15,19 @@ T = TypeVar("T", bound="CloudStorageResponse")
 
 @_attrs_define
 class CloudStorageResponse:
-    error: int
+    """Successful response with one `CloudStorage`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: CloudStorage
-    meta: CloudStorageResponseMetaType0 | None
+    """ Cloud storage of the account, with its hosts and the space used """
+    meta: Any
+    """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.cloud_storage_response_meta_type_0 import CloudStorageResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -32,11 +35,7 @@ class CloudStorageResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, CloudStorageResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -54,12 +53,11 @@ class CloudStorageResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.cloud_storage import CloudStorage
-        from ..models.cloud_storage_response_meta_type_0 import (
-            CloudStorageResponseMetaType0,
-        )
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:
@@ -70,20 +68,7 @@ class CloudStorageResponse:
 
         data = CloudStorage.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> CloudStorageResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = CloudStorageResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(CloudStorageResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         cloud_storage_response = cls(
             error=error,

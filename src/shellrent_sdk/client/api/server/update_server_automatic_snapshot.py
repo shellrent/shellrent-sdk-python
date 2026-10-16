@@ -21,7 +21,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "patch",
-        "url": "/api/v3/servers/{server_id}/snapshots/automatic-snapshot".format(
+        "url": "/api/v3/servers/{server_id}/snapshot-schedule".format(
             server_id=quote(str(server_id), safe=""),
         ),
     }
@@ -62,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,11 +102,12 @@ def sync_detailed(
 ) -> Response[ApiError | ServerAutomaticSnapshotResponse]:
     """Update automatic snapshot settings
 
-     Update automatic snapshot settings
+     Replaces the configuration of the automatic snapshot of the server (404 if none is configured).
+    Automatic snapshots must be included in the service plan, otherwise the response is 403.
 
     Args:
         server_id (int):
-        body (ServerAutomaticSnapshotRequest):
+        body (ServerAutomaticSnapshotRequest): Schedule of the automatic snapshots of a server
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -126,11 +137,12 @@ def sync(
 ) -> ApiError | ServerAutomaticSnapshotResponse | None:
     """Update automatic snapshot settings
 
-     Update automatic snapshot settings
+     Replaces the configuration of the automatic snapshot of the server (404 if none is configured).
+    Automatic snapshots must be included in the service plan, otherwise the response is 403.
 
     Args:
         server_id (int):
-        body (ServerAutomaticSnapshotRequest):
+        body (ServerAutomaticSnapshotRequest): Schedule of the automatic snapshots of a server
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -155,11 +167,12 @@ async def asyncio_detailed(
 ) -> Response[ApiError | ServerAutomaticSnapshotResponse]:
     """Update automatic snapshot settings
 
-     Update automatic snapshot settings
+     Replaces the configuration of the automatic snapshot of the server (404 if none is configured).
+    Automatic snapshots must be included in the service plan, otherwise the response is 403.
 
     Args:
         server_id (int):
-        body (ServerAutomaticSnapshotRequest):
+        body (ServerAutomaticSnapshotRequest): Schedule of the automatic snapshots of a server
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -187,11 +200,12 @@ async def asyncio(
 ) -> ApiError | ServerAutomaticSnapshotResponse | None:
     """Update automatic snapshot settings
 
-     Update automatic snapshot settings
+     Replaces the configuration of the automatic snapshot of the server (404 if none is configured).
+    Automatic snapshots must be included in the service plan, otherwise the response is 403.
 
     Args:
         server_id (int):
-        body (ServerAutomaticSnapshotRequest):
+        body (ServerAutomaticSnapshotRequest): Schedule of the automatic snapshots of a server
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -15,7 +15,7 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> dict[str, Any]:
 
     params: dict[str, Any] = {}
@@ -28,7 +28,7 @@ def _get_kwargs(
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/microsoft365-tenants",
+        "url": "/api/v3/microsoft-365-tenants",
         "params": params,
     }
 
@@ -68,6 +68,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -89,7 +94,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> Response[ApiError | Microsoft365TenantPaginatedListResponse]:
     """List Microsoft 365 tenants
 
@@ -97,7 +102,7 @@ def sync_detailed(
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -123,7 +128,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> ApiError | Microsoft365TenantPaginatedListResponse | None:
     """List Microsoft 365 tenants
 
@@ -131,7 +136,7 @@ def sync(
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -152,7 +157,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> Response[ApiError | Microsoft365TenantPaginatedListResponse]:
     """List Microsoft 365 tenants
 
@@ -160,7 +165,7 @@ async def asyncio_detailed(
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -184,7 +189,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     page: int | Unset = 1,
-    per_page: int | Unset = 15,
+    per_page: int | Unset = 20,
 ) -> ApiError | Microsoft365TenantPaginatedListResponse | None:
     """List Microsoft 365 tenants
 
@@ -192,7 +197,7 @@ async def asyncio(
 
     Args:
         page (int | Unset):  Default: 1.
-        per_page (int | Unset):  Default: 15.
+        per_page (int | Unset):  Default: 20.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Self, TypeVar, cast
+from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
@@ -16,10 +16,16 @@ T = TypeVar("T", bound="Microsoft365PaginatedListResponse")
 
 @_attrs_define
 class Microsoft365PaginatedListResponse:
-    error: int
+    """Successful response with a page of `Microsoft365`"""
+
+    error: Literal[0]
+    """ Always 0 in a successful response """
     message: None | str
+    """ Always null in a successful response """
     data: list[Microsoft365]
+    """ Items of the page: an empty list beyond the last page """
     meta: PaginationMeta
+    """ Pagination of a list, with the totals """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -54,7 +60,9 @@ class Microsoft365PaginatedListResponse:
         from ..models.pagination_meta import PaginationMeta
 
         d = dict(src_dict)
-        error = d.pop("error")
+        error = cast(Literal[0], d.pop("error"))
+        if error != 0:
+            raise ValueError(f"error must match const 0, got '{error}'")
 
         def _parse_message(data: object) -> None | str:
             if data is None:

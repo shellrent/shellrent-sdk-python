@@ -4,7 +4,6 @@ from collections.abc import Mapping
 from typing import Any, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
-from attrs import field as _attrs_field
 
 from ..types import UNSET, Unset
 
@@ -13,9 +12,12 @@ T = TypeVar("T", bound="HostingEmailWblistRequest")
 
 @_attrs_define
 class HostingEmailWblistRequest:
+    """Sender to add to the allow list or the block list of the antispam: a whole domain or an address"""
+
     domain: None | str | Unset = UNSET
+    """ Sender domain; send either `domain` or `mailbox` """
     mailbox: None | str | Unset = UNSET
-    additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
+    """ Sender address; send either `domain` or `mailbox` """
 
     def to_dict(self) -> dict[str, Any]:
         domain: None | str | Unset
@@ -31,7 +33,7 @@ class HostingEmailWblistRequest:
             mailbox = self.mailbox
 
         field_dict: dict[str, Any] = {}
-        field_dict.update(self.additional_properties)
+
         field_dict.update({})
         if domain is not UNSET:
             field_dict["domain"] = domain
@@ -67,21 +69,4 @@ class HostingEmailWblistRequest:
             mailbox=mailbox,
         )
 
-        hosting_email_wblist_request.additional_properties = d
         return hosting_email_wblist_request
-
-    @property
-    def additional_keys(self) -> list[str]:
-        return list(self.additional_properties.keys())
-
-    def __getitem__(self, key: str) -> Any:
-        return self.additional_properties[key]
-
-    def __setitem__(self, key: str, value: Any) -> None:
-        self.additional_properties[key] = value
-
-    def __delitem__(self, key: str) -> None:
-        del self.additional_properties[key]
-
-    def __contains__(self, key: str) -> bool:
-        return key in self.additional_properties

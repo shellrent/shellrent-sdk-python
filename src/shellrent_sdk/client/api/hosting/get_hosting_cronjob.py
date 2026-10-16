@@ -13,14 +13,14 @@ from ...types import Response
 
 def _get_kwargs(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
 ) -> dict[str, Any]:
 
     _kwargs: dict[str, Any] = {
         "method": "get",
-        "url": "/api/v3/hostings/{hosting_id}/cronjobs/{cronjob_id}".format(
+        "url": "/api/v3/hostings/{hosting_id}/cron-jobs/{cron_job_id}".format(
             hosting_id=quote(str(hosting_id), safe=""),
-            cronjob_id=quote(str(cronjob_id), safe=""),
+            cron_job_id=quote(str(cron_job_id), safe=""),
         ),
     }
 
@@ -60,6 +60,11 @@ def _parse_response(
 
         return response_429
 
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
+
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
     else:
@@ -79,7 +84,7 @@ def _build_response(
 
 def sync_detailed(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | HostingCronjobResponse]:
@@ -89,7 +94,7 @@ def sync_detailed(
 
     Args:
         hosting_id (int):
-        cronjob_id (int):
+        cron_job_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -101,7 +106,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         hosting_id=hosting_id,
-        cronjob_id=cronjob_id,
+        cron_job_id=cron_job_id,
     )
 
     response = client.get_httpx_client().request(
@@ -113,7 +118,7 @@ def sync_detailed(
 
 def sync(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
     *,
     client: AuthenticatedClient,
 ) -> ApiError | HostingCronjobResponse | None:
@@ -123,7 +128,7 @@ def sync(
 
     Args:
         hosting_id (int):
-        cronjob_id (int):
+        cron_job_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -135,14 +140,14 @@ def sync(
 
     return sync_detailed(
         hosting_id=hosting_id,
-        cronjob_id=cronjob_id,
+        cron_job_id=cron_job_id,
         client=client,
     ).parsed
 
 
 async def asyncio_detailed(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
     *,
     client: AuthenticatedClient,
 ) -> Response[ApiError | HostingCronjobResponse]:
@@ -152,7 +157,7 @@ async def asyncio_detailed(
 
     Args:
         hosting_id (int):
-        cronjob_id (int):
+        cron_job_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -164,7 +169,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         hosting_id=hosting_id,
-        cronjob_id=cronjob_id,
+        cron_job_id=cron_job_id,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -174,7 +179,7 @@ async def asyncio_detailed(
 
 async def asyncio(
     hosting_id: int,
-    cronjob_id: int,
+    cron_job_id: int,
     *,
     client: AuthenticatedClient,
 ) -> ApiError | HostingCronjobResponse | None:
@@ -184,7 +189,7 @@ async def asyncio(
 
     Args:
         hosting_id (int):
-        cronjob_id (int):
+        cron_job_id (int):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -197,7 +202,7 @@ async def asyncio(
     return (
         await asyncio_detailed(
             hosting_id=hosting_id,
-            cronjob_id=cronjob_id,
+            cron_job_id=cron_job_id,
             client=client,
         )
     ).parsed

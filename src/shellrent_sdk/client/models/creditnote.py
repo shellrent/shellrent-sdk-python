@@ -20,20 +20,41 @@ T = TypeVar("T", bound="Creditnote")
 
 @_attrs_define
 class Creditnote:
+    """Credit note of the account, with its total and electronic invoicing data"""
+
     creditnote_id: int
-    invoice_id: int
+    invoice_id: int | None
+    """ Id of the invoice the credit note refers to (`GET /api/v3/invoices/{invoice_id}`); null when it refers to
+    none """
     billing: AccountBilling
+    """ Billing profile: the holder the documents are made out to, with its tax and electronic invoicing data """
     sdi_document_status: None | SdiDocumentStatus
+    """ Status of the credit note on SDI, the Italian e-invoicing exchange system; null for the credit notes not
+    sent through SDI, issued before electronic invoicing """
     sdi_document_type: SdiDocumentType
+    """ Type of an electronic document on SDI, the Italian e-invoicing exchange system (`TipoDocumento`) """
     tax_regime: None | TaxRegime
+    """ Tax regime set on the credit note; null when it uses the one of the billing profile (`billing.tax_regime`)
+    """
     date_emitted: datetime.date
-    creditnote_year: str
+    """ Date of issue of the credit note """
+    creditnote_year: int | None
+    """ Year of the numbering of the credit note """
     creditnote_number: str
+    """ Complete number of the credit note: the year followed by the number on 6 digits, for example `2025000123`
+    """
     creditnote_caption: None | str
-    sdi_identifier: str
-    sdi_filename: str
+    """ Legal note of the tax regime printed on the credit note, in Italian, such as the law under which VAT is not
+    applied; null when the regime has none """
+    sdi_identifier: None | str
+    """ Identifier assigned by SDI to the credit note; null when it has not been sent to SDI """
+    sdi_filename: None | str
+    """ Name of the file sent to SDI; null when not sent, and for the credit notes issued before November 2024 """
     total_amount: Amount
+    """ Amount in euros: the taxable amount and, when computed with a tax regime, the VAT rate, the VAT and the
+    total, which are null otherwise """
     rows_count: int
+    """ Number of rows of the credit note (`GET /api/v3/credit-notes/{credit_note_id}/rows`) """
     date_created: datetime.datetime
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -43,6 +64,7 @@ class Creditnote:
 
         creditnote_id = self.creditnote_id
 
+        invoice_id: int | None
         invoice_id = self.invoice_id
 
         billing = self.billing.to_dict()
@@ -63,6 +85,7 @@ class Creditnote:
 
         date_emitted = self.date_emitted.isoformat()
 
+        creditnote_year: int | None
         creditnote_year = self.creditnote_year
 
         creditnote_number = self.creditnote_number
@@ -70,8 +93,10 @@ class Creditnote:
         creditnote_caption: None | str
         creditnote_caption = self.creditnote_caption
 
+        sdi_identifier: None | str
         sdi_identifier = self.sdi_identifier
 
+        sdi_filename: None | str
         sdi_filename = self.sdi_filename
 
         total_amount = self.total_amount.to_dict()
@@ -115,7 +140,12 @@ class Creditnote:
         d = dict(src_dict)
         creditnote_id = d.pop("creditnote_id")
 
-        invoice_id = d.pop("invoice_id")
+        def _parse_invoice_id(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        invoice_id = _parse_invoice_id(d.pop("invoice_id"))
 
         billing = AccountBilling.from_dict(d.pop("billing"))
 
@@ -153,7 +183,12 @@ class Creditnote:
 
         date_emitted = datetime.date.fromisoformat(d.pop("date_emitted"))
 
-        creditnote_year = d.pop("creditnote_year")
+        def _parse_creditnote_year(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        creditnote_year = _parse_creditnote_year(d.pop("creditnote_year"))
 
         creditnote_number = d.pop("creditnote_number")
 
@@ -164,9 +199,19 @@ class Creditnote:
 
         creditnote_caption = _parse_creditnote_caption(d.pop("creditnote_caption"))
 
-        sdi_identifier = d.pop("sdi_identifier")
+        def _parse_sdi_identifier(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
 
-        sdi_filename = d.pop("sdi_filename")
+        sdi_identifier = _parse_sdi_identifier(d.pop("sdi_identifier"))
+
+        def _parse_sdi_filename(data: object) -> None | str:
+            if data is None:
+                return data
+            return cast(None | str, data)
+
+        sdi_filename = _parse_sdi_filename(d.pop("sdi_filename"))
 
         total_amount = Amount.from_dict(d.pop("total_amount"))
 

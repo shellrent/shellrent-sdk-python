@@ -12,27 +12,48 @@ T = TypeVar("T", bound="ServerBackup")
 
 @_attrs_define
 class ServerBackup:
+    """Backup of a server that the customer can see"""
+
     server_backup_id: int
     backup_recurrent_id: int | None
+    """ Id of the run of the recurrent backup that made the backup; null for a one-off backup """
     backup_server_id_parent: int | None
-    server_id: int
+    """ Id of the backup this one is based on, for incremental backups; null otherwise """
+    server_id: int | None
+    """ Id of the backed up server (`GET /api/v3/servers/{server_id}`) """
     cluster_id_server_residence: int | None
+    """ Id of the cluster where the server resides """
     cluster_id_backup_residence: int | None
+    """ Id of the cluster where the backup is kept """
     backup_type_id: int | None
+    """ Id of the backup type """
     backup_mode: None | str
+    """ Strategy of the backup type: `FULL`, `INC` (incremental) or `DIFF` (differential) """
     backup_frequency_id: int | None
+    """ Id of the frequency of the backup type """
     backup_type_code: None | str
+    """ Code of the backup type, for example `CLOUD_DAILY`, `CLOUD_WEEKLY` or `CLOUD_UNA_TANTUM` (one-off) """
     backup_frequency_code: None | str
+    """ Frequency of the backup type: `D` daily, `W` weekly, `HM` twice a month, `M` monthly, `HY` every six months,
+    `Y` yearly, `C` one-off, `R` private cloud replication """
     backup_date: datetime.datetime | None
+    """ Date the backup was taken """
     backup_size: int | None
+    """ Size of the backup, in MB """
     backup_duration: None | str
+    """ Duration of the backup, as text in the `H:MM:SS` form, preceded by the days for longer backups (for example
+    `1 day, 2:03:04`) """
     exit_status: int | None
+    """ Exit status of the backup: `0` if it succeeded """
     error_type: None | str
+    """ Error of the backup, as a code or a message (for example `DOWNLOAD_DISK_FAILED`); `N.A.` when it succeeded
+    """
     date_created: datetime.datetime | None
-    backup_path: None | str
     checksum: None | str
-    backup_path_parent: None | str
+    """ Checksum of the backup, sent by the backup scripts; null if not sent """
     backup_user_visibility: bool | None
+    """ Whether the customer can see the backup: only the most recent successful backups of each type are visible,
+    as many as the retention of the type, and only those are returned """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -44,6 +65,7 @@ class ServerBackup:
         backup_server_id_parent: int | None
         backup_server_id_parent = self.backup_server_id_parent
 
+        server_id: int | None
         server_id = self.server_id
 
         cluster_id_server_residence: int | None
@@ -91,14 +113,8 @@ class ServerBackup:
         else:
             date_created = self.date_created
 
-        backup_path: None | str
-        backup_path = self.backup_path
-
         checksum: None | str
         checksum = self.checksum
-
-        backup_path_parent: None | str
-        backup_path_parent = self.backup_path_parent
 
         backup_user_visibility: bool | None
         backup_user_visibility = self.backup_user_visibility
@@ -124,9 +140,7 @@ class ServerBackup:
                 "exit_status": exit_status,
                 "error_type": error_type,
                 "date_created": date_created,
-                "backup_path": backup_path,
                 "checksum": checksum,
-                "backup_path_parent": backup_path_parent,
                 "backup_user_visibility": backup_user_visibility,
             }
         )
@@ -152,7 +166,12 @@ class ServerBackup:
 
         backup_server_id_parent = _parse_backup_server_id_parent(d.pop("backup_server_id_parent"))
 
-        server_id = d.pop("server_id")
+        def _parse_server_id(data: object) -> int | None:
+            if data is None:
+                return data
+            return cast(int | None, data)
+
+        server_id = _parse_server_id(d.pop("server_id"))
 
         def _parse_cluster_id_server_residence(data: object) -> int | None:
             if data is None:
@@ -265,26 +284,12 @@ class ServerBackup:
 
         date_created = _parse_date_created(d.pop("date_created"))
 
-        def _parse_backup_path(data: object) -> None | str:
-            if data is None:
-                return data
-            return cast(None | str, data)
-
-        backup_path = _parse_backup_path(d.pop("backup_path"))
-
         def _parse_checksum(data: object) -> None | str:
             if data is None:
                 return data
             return cast(None | str, data)
 
         checksum = _parse_checksum(d.pop("checksum"))
-
-        def _parse_backup_path_parent(data: object) -> None | str:
-            if data is None:
-                return data
-            return cast(None | str, data)
-
-        backup_path_parent = _parse_backup_path_parent(d.pop("backup_path_parent"))
 
         def _parse_backup_user_visibility(data: object) -> bool | None:
             if data is None:
@@ -311,9 +316,7 @@ class ServerBackup:
             exit_status=exit_status,
             error_type=error_type,
             date_created=date_created,
-            backup_path=backup_path,
             checksum=checksum,
-            backup_path_parent=backup_path_parent,
             backup_user_visibility=backup_user_visibility,
         )
 

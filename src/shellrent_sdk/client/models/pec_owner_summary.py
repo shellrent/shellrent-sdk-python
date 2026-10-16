@@ -11,16 +11,35 @@ T = TypeVar("T", bound="PecOwnerSummary")
 
 @_attrs_define
 class PecOwnerSummary:
+    """Owner (titolare) of a PEC mailbox or domain: the person and, for organizations, the data of the organization; all
+    the fields are null when there is no owner
+
+    """
+
     pec_owner_id: int | None
+    """ Id of the owner, as `owner_id` of the owner change requests """
     owner_legal_entity_type: None | str
+    """ Legal form of the owner: `PRIVATO` (private individual), `LIBERO_PROFESSIONISTA` (self-employed
+    professional), `DITTA_INDIVIDUALE` or the old `AZIENDA_DITTA_INDIVIDUALE` (sole proprietorship), `AZIENDA`
+    (company), `PUBBLICA_AMMINISTRAZIONE` (public administration) or `NO_PROFIT` (non-profit organization) """
     admin_first_name: None | str
+    """ First name of the owner or, for organizations, of the person who acts for them """
     admin_last_name: None | str
+    """ Last name of the owner or, for organizations, of the person who acts for them """
     admin_email: None | str
+    """ Email of the owner or, for organizations, of the person who acts for them """
     admin_fiscal_code: None | str
+    """ Codice fiscale (Italian tax code) of the owner or, for organizations, of the person who acts for them """
     admin_vat_number: None | str
+    """ VAT number (partita IVA) of the owner; not used for `PRIVATO` """
     company_name: None | str
+    """ Business name of the organization, for `DITTA_INDIVIDUALE`, `AZIENDA`, `PUBBLICA_AMMINISTRAZIONE` and
+    `NO_PROFIT` """
     company_email: None | str
+    """ Email of the organization, for `AZIENDA`, `PUBBLICA_AMMINISTRAZIONE` and `NO_PROFIT` """
     company_fiscal_code: None | str
+    """ Codice fiscale (Italian tax code) of the organization, for `AZIENDA`, `PUBBLICA_AMMINISTRAZIONE` and
+    `NO_PROFIT` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

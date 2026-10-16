@@ -11,10 +11,18 @@ T = TypeVar("T", bound="TaxRegime")
 
 @_attrs_define
 class TaxRegime:
+    """Tax regime: how VAT applies to the documents"""
+
     regime_code: str
+    """ One of `ORDINARY`, `SPLIT_PAYMENT`, `EU_VIES`, `EU_EXPORTER` (habitual exporter), `EXTRA_EU`, `VATICAN`,
+    `SANMARINO` or `ART_26` """
     regime_name: str
+    """ Name of the regime, in Italian, for example `Ordinario` """
     code_edocument: None | str
+    """ Nature code of the operation on the electronic invoice (`Natura`) when VAT is not applied, for example
+    `N2.1`; null for the regimes with VAT """
     tax_rate: float
+    """ VAT rate as a fraction, for example `0.22` for 22% """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

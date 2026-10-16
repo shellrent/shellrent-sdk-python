@@ -11,8 +11,13 @@ T = TypeVar("T", bound="LegalEntityGroup")
 
 @_attrs_define
 class LegalEntityGroup:
+    """Group of legal forms, such as private individuals or Italian companies"""
+
     group_code: str
+    """ Code of the group, currently `PRIVATE`, `ITALIAN_INDIVIDUAL_COMPANY`, `ITALIAN_LIMITED_COMPANY`,
+    `ITALIAN_COOPERATIVE_COMPANY`, `ITALIAN_PUBLIC_ADMINISTRATION`, `FOREIGN_COMPANY` or `OTHER` """
     group_name: str
+    """ Name of the group, in Italian """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

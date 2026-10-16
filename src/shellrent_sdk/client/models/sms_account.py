@@ -15,7 +15,10 @@ T = TypeVar("T", bound="SmsAccount")
 
 @_attrs_define
 class SmsAccount:
+    """SMS credit of the account, with the estimated number of SMS it is enough for"""
+
     credit: AmountSimple
+    """ Amount in euros, without the VAT details of `Amount` """
     sms_standard: int
     """ Estimated number of SMS messages available with "STANDARD" quality if sent to Italy """
     sms_premium: int

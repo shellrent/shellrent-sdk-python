@@ -62,10 +62,20 @@ def _parse_response(
 
         return response_404
 
+    if response.status_code == 409:
+        response_409 = ApiError.from_dict(response.json())
+
+        return response_409
+
     if response.status_code == 429:
         response_429 = ApiError.from_dict(response.json())
 
         return response_429
+
+    if response.status_code == 500:
+        response_500 = ApiError.from_dict(response.json())
+
+        return response_500
 
     if client.raise_on_unexpected_status:
         raise errors.UnexpectedStatus(response.status_code, response.content)
@@ -92,7 +102,9 @@ def sync_detailed(
 ) -> Response[ApiError | DnsZoneResponse]:
     """Change DNS Zone data
 
-     Change DNS Zone data
+     Changes the TTL of the DNS zone of the domain and returns the zone. Only the zones on our
+    nameservers (standard and external types) have a TTL, which is also the TTL of all their records:
+    with the Cloudflare nameservers the response is 409. 404 when the domain has no DNS zone
 
     Args:
         domain_id (int):
@@ -126,7 +138,9 @@ def sync(
 ) -> ApiError | DnsZoneResponse | None:
     """Change DNS Zone data
 
-     Change DNS Zone data
+     Changes the TTL of the DNS zone of the domain and returns the zone. Only the zones on our
+    nameservers (standard and external types) have a TTL, which is also the TTL of all their records:
+    with the Cloudflare nameservers the response is 409. 404 when the domain has no DNS zone
 
     Args:
         domain_id (int):
@@ -155,7 +169,9 @@ async def asyncio_detailed(
 ) -> Response[ApiError | DnsZoneResponse]:
     """Change DNS Zone data
 
-     Change DNS Zone data
+     Changes the TTL of the DNS zone of the domain and returns the zone. Only the zones on our
+    nameservers (standard and external types) have a TTL, which is also the TTL of all their records:
+    with the Cloudflare nameservers the response is 409. 404 when the domain has no DNS zone
 
     Args:
         domain_id (int):
@@ -187,7 +203,9 @@ async def asyncio(
 ) -> ApiError | DnsZoneResponse | None:
     """Change DNS Zone data
 
-     Change DNS Zone data
+     Changes the TTL of the DNS zone of the domain and returns the zone. Only the zones on our
+    nameservers (standard and external types) have a TTL, which is also the TTL of all their records:
+    with the Cloudflare nameservers the response is 409. 404 when the domain has no DNS zone
 
     Args:
         domain_id (int):

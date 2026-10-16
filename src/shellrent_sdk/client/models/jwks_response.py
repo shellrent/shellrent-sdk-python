@@ -15,7 +15,10 @@ T = TypeVar("T", bound="JwksResponse")
 
 @_attrs_define
 class JwksResponse:
+    """Public keys of the API (JSON Web Key Set)"""
+
     keys: list[JwkKey]
+    """ Keys that verify the tokens, each with its status """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

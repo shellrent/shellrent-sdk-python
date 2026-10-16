@@ -11,12 +11,23 @@ T = TypeVar("T", bound="SslCertificateExportFormat")
 
 @_attrs_define
 class SslCertificateExportFormat:
+    """Format in which a certificate and its keys can be exported (`POST /api/v3/ssl-
+    certificates/{ssl_certificate_id}/exports`)
+
+    """
+
     format_: str
+    """ Code of the format, for `format` of the export: one of `PK`, `CERT`, `CERT_PEM`, `CA`, `CA_PEM`, `CERT_CA`,
+    `CERT_CA_PEM`, `PK_CERT_CA`, `MULTI_ZIP`, `HASH_SHA256` or `HASH_SHA512` """
     name: str
     description: None | str
     filename: str
+    """ Name of the exported file, for example `certificate.pem` """
     available: bool
+    """ Whether the certificate can be exported in this format; otherwise the export is rejected with 409 """
     requires_passphrase: bool
+    """ Whether the format takes `passphrase` of the export request, which protects the file: true for `PK` and
+    `PK_CERT_CA` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

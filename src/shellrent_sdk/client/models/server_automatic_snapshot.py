@@ -11,12 +11,20 @@ T = TypeVar("T", bound="ServerAutomaticSnapshot")
 
 @_attrs_define
 class ServerAutomaticSnapshot:
+    """Schedule of the automatic snapshots of a server"""
+
     snapshot_id: int
+    """ Id of the schedule (not of a snapshot) """
     server_id: int
+    """ Id of the server (`GET /api/v3/servers/{server_id}`) """
     name: str
+    """ Name of the snapshots that the schedule creates """
     days_of_week: list[int]
+    """ Days of the week of the snapshots, from 1 (Monday) to 7 (Sunday) """
     hour_of_day: str
+    """ Time of the snapshots, in 24-hour `HH:MM` format """
     is_active: bool
+    """ Whether the schedule is active """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
