@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.server_network_interface import ServerNetworkInterface
-    from ..models.server_network_interface_list_response_meta_type_0 import (
-        ServerNetworkInterfaceListResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="ServerNetworkInterfaceListResponse")
@@ -26,15 +23,11 @@ class ServerNetworkInterfaceListResponse:
     """ Always null in a successful response """
     data: list[ServerNetworkInterface]
     """ Items returned by the operation """
-    meta: None | ServerNetworkInterfaceListResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.server_network_interface_list_response_meta_type_0 import (
-            ServerNetworkInterfaceListResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -45,11 +38,7 @@ class ServerNetworkInterfaceListResponse:
             data_item = data_item_data.to_dict()
             data.append(data_item)
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, ServerNetworkInterfaceListResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -67,9 +56,6 @@ class ServerNetworkInterfaceListResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.server_network_interface import ServerNetworkInterface
-        from ..models.server_network_interface_list_response_meta_type_0 import (
-            ServerNetworkInterfaceListResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -90,20 +76,7 @@ class ServerNetworkInterfaceListResponse:
 
             data.append(data_item)
 
-        def _parse_meta(data: object) -> None | ServerNetworkInterfaceListResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = ServerNetworkInterfaceListResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | ServerNetworkInterfaceListResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         server_network_interface_list_response = cls(
             error=error,

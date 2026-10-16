@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.object_storage_s3_key import ObjectStorageS3Key
-    from ..models.object_storage_s3_key_response_meta_type_0 import (
-        ObjectStorageS3KeyResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="ObjectStorageS3KeyResponse")
@@ -27,15 +24,11 @@ class ObjectStorageS3KeyResponse:
     data: ObjectStorageS3Key
     """ Main S3 key of an object storage: the key of the root user of its account at the storage, with the secret
     """
-    meta: None | ObjectStorageS3KeyResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.object_storage_s3_key_response_meta_type_0 import (
-            ObjectStorageS3KeyResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -43,11 +36,7 @@ class ObjectStorageS3KeyResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, ObjectStorageS3KeyResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -65,9 +54,6 @@ class ObjectStorageS3KeyResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.object_storage_s3_key import ObjectStorageS3Key
-        from ..models.object_storage_s3_key_response_meta_type_0 import (
-            ObjectStorageS3KeyResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -83,20 +69,7 @@ class ObjectStorageS3KeyResponse:
 
         data = ObjectStorageS3Key.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | ObjectStorageS3KeyResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = ObjectStorageS3KeyResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | ObjectStorageS3KeyResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         object_storage_s3_key_response = cls(
             error=error,

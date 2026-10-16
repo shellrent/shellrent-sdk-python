@@ -8,7 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.tld import Tld
-    from ..models.tld_response_meta_type_0 import TldResponseMetaType0
 
 
 T = TypeVar("T", bound="TldResponse")
@@ -24,13 +23,11 @@ class TldResponse:
     """ Always null in a successful response """
     data: Tld
     """ TLD (domain extension), with the rules for the names and for the contacts of its domains """
-    meta: None | TldResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.tld_response_meta_type_0 import TldResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -38,11 +35,7 @@ class TldResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, TldResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,7 +53,6 @@ class TldResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.tld import Tld
-        from ..models.tld_response_meta_type_0 import TldResponseMetaType0
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -76,20 +68,7 @@ class TldResponse:
 
         data = Tld.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | TldResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = TldResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | TldResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         tld_response = cls(
             error=error,

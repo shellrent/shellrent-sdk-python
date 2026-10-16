@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.hosting_mod_security_rule import HostingModSecurityRule
-    from ..models.hosting_mod_security_rule_list_response_meta_type_0 import (
-        HostingModSecurityRuleListResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="HostingModSecurityRuleListResponse")
@@ -26,15 +23,11 @@ class HostingModSecurityRuleListResponse:
     """ Always null in a successful response """
     data: list[HostingModSecurityRule]
     """ Items returned by the operation """
-    meta: HostingModSecurityRuleListResponseMetaType0 | None
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.hosting_mod_security_rule_list_response_meta_type_0 import (
-            HostingModSecurityRuleListResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -45,11 +38,7 @@ class HostingModSecurityRuleListResponse:
             data_item = data_item_data.to_dict()
             data.append(data_item)
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, HostingModSecurityRuleListResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -67,9 +56,6 @@ class HostingModSecurityRuleListResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.hosting_mod_security_rule import HostingModSecurityRule
-        from ..models.hosting_mod_security_rule_list_response_meta_type_0 import (
-            HostingModSecurityRuleListResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -90,20 +76,7 @@ class HostingModSecurityRuleListResponse:
 
             data.append(data_item)
 
-        def _parse_meta(data: object) -> HostingModSecurityRuleListResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = HostingModSecurityRuleListResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(HostingModSecurityRuleListResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         hosting_mod_security_rule_list_response = cls(
             error=error,

@@ -8,7 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.ssl_certificate import SslCertificate
-    from ..models.ssl_certificate_response_meta_type_0 import SslCertificateResponseMetaType0
 
 
 T = TypeVar("T", bound="SslCertificateResponse")
@@ -24,13 +23,11 @@ class SslCertificateResponse:
     """ Always null in a successful response """
     data: SslCertificate
     """ SSL or code signing certificate of the account, with its validation data and its administrative contact """
-    meta: None | SslCertificateResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.ssl_certificate_response_meta_type_0 import SslCertificateResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -38,11 +35,7 @@ class SslCertificateResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, SslCertificateResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,9 +53,6 @@ class SslCertificateResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.ssl_certificate import SslCertificate
-        from ..models.ssl_certificate_response_meta_type_0 import (
-            SslCertificateResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -78,20 +68,7 @@ class SslCertificateResponse:
 
         data = SslCertificate.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | SslCertificateResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = SslCertificateResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | SslCertificateResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         ssl_certificate_response = cls(
             error=error,

@@ -8,7 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.hosting_backup import HostingBackup
-    from ..models.hosting_backup_response_meta_type_0 import HostingBackupResponseMetaType0
 
 
 T = TypeVar("T", bound="HostingBackupResponse")
@@ -25,13 +24,11 @@ class HostingBackupResponse:
     data: HostingBackup
     """ Backup that contains the hosting: a backup of a web, database or mail server, with the database or the
     mailbox of the hosting that it saved """
-    meta: HostingBackupResponseMetaType0 | None
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.hosting_backup_response_meta_type_0 import HostingBackupResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -39,11 +36,7 @@ class HostingBackupResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, HostingBackupResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,9 +54,6 @@ class HostingBackupResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.hosting_backup import HostingBackup
-        from ..models.hosting_backup_response_meta_type_0 import (
-            HostingBackupResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -79,20 +69,7 @@ class HostingBackupResponse:
 
         data = HostingBackup.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> HostingBackupResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = HostingBackupResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(HostingBackupResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         hosting_backup_response = cls(
             error=error,

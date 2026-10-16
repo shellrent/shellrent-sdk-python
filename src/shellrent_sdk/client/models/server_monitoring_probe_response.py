@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.server_monitoring_probe import ServerMonitoringProbe
-    from ..models.server_monitoring_probe_response_meta_type_0 import (
-        ServerMonitoringProbeResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="ServerMonitoringProbeResponse")
@@ -27,15 +24,11 @@ class ServerMonitoringProbeResponse:
     data: ServerMonitoringProbe
     """ Probe of a server monitoring: a check of the monitored host, with its state and its notification contacts
     """
-    meta: None | ServerMonitoringProbeResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.server_monitoring_probe_response_meta_type_0 import (
-            ServerMonitoringProbeResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -43,11 +36,7 @@ class ServerMonitoringProbeResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, ServerMonitoringProbeResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -65,9 +54,6 @@ class ServerMonitoringProbeResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.server_monitoring_probe import ServerMonitoringProbe
-        from ..models.server_monitoring_probe_response_meta_type_0 import (
-            ServerMonitoringProbeResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -83,20 +69,7 @@ class ServerMonitoringProbeResponse:
 
         data = ServerMonitoringProbe.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | ServerMonitoringProbeResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = ServerMonitoringProbeResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | ServerMonitoringProbeResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         server_monitoring_probe_response = cls(
             error=error,

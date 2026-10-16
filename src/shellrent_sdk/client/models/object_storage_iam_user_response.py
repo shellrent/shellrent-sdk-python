@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.object_storage_iam_user import ObjectStorageIamUser
-    from ..models.object_storage_iam_user_response_meta_type_0 import (
-        ObjectStorageIamUserResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="ObjectStorageIamUserResponse")
@@ -26,15 +23,11 @@ class ObjectStorageIamUserResponse:
     """ Always null in a successful response """
     data: ObjectStorageIamUser
     """ IAM user of an object storage: a user of the storage with its own S3 keys """
-    meta: None | ObjectStorageIamUserResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.object_storage_iam_user_response_meta_type_0 import (
-            ObjectStorageIamUserResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -42,11 +35,7 @@ class ObjectStorageIamUserResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, ObjectStorageIamUserResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -64,9 +53,6 @@ class ObjectStorageIamUserResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.object_storage_iam_user import ObjectStorageIamUser
-        from ..models.object_storage_iam_user_response_meta_type_0 import (
-            ObjectStorageIamUserResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -82,20 +68,7 @@ class ObjectStorageIamUserResponse:
 
         data = ObjectStorageIamUser.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | ObjectStorageIamUserResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = ObjectStorageIamUserResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | ObjectStorageIamUserResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         object_storage_iam_user_response = cls(
             error=error,

@@ -25,12 +25,31 @@ jobs:
       - run: uv run --no-sync ruff format --check
       - run: uv run --no-sync ruff check
       - run: uv run --no-sync mypy
-      - run: uv run --no-sync pytest
+      - run: uv run --no-sync pytest tests/unit
+
+  # The real API may block some IP addresses of the GitHub runners (Azure) for their reputation:
+  # the integration tests run once, in a job that does not fail the workflow.
+  integration:
+    name: Integration tests (not blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+        with:
+          python-version: '3.14'
+      - run: uv sync --locked
+      - id: pytest
+        run: uv run --no-sync pytest tests/integration
+        continue-on-error: true
         env:
           # The integration tests are skipped unless these secrets are set.
           SHELLRENT_CLIENT_ID: ${{ secrets.SHELLRENT_CLIENT_ID }}
           SHELLRENT_CLIENT_SECRET: ${{ secrets.SHELLRENT_CLIENT_SECRET }}
           SHELLRENT_API_URL: ${{ vars.SHELLRENT_API_URL }}
+      - if: steps.pytest.outcome == 'failure'
+        run: >-
+          echo "::warning title=Integration tests::The integration tests failed, perhaps because
+          the API blocks the IP address of the runner: see the log of the pytest step."
 
   lowest-dependencies:
     name: Checks (Python 3.11, lowest dependencies)
@@ -45,7 +64,7 @@ jobs:
       - run: uv run --no-sync ruff format --check
       - run: uv run --no-sync ruff check
       - run: uv run --no-sync mypy
-      - run: uv run --no-sync pytest
+      - run: uv run --no-sync pytest tests/unit
 
   generated-code:
     name: Generated code is up to date

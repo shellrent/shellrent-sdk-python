@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.web_monitoring_notices import WebMonitoringNotices
-    from ..models.web_monitoring_notices_response_meta_type_0 import (
-        WebMonitoringNoticesResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="WebMonitoringNoticesResponse")
@@ -26,15 +23,11 @@ class WebMonitoringNoticesResponse:
     """ Always null in a successful response """
     data: WebMonitoringNotices
     """ Notice settings of a web monitoring """
-    meta: None | WebMonitoringNoticesResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.web_monitoring_notices_response_meta_type_0 import (
-            WebMonitoringNoticesResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -42,11 +35,7 @@ class WebMonitoringNoticesResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, WebMonitoringNoticesResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -64,9 +53,6 @@ class WebMonitoringNoticesResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.web_monitoring_notices import WebMonitoringNotices
-        from ..models.web_monitoring_notices_response_meta_type_0 import (
-            WebMonitoringNoticesResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -82,20 +68,7 @@ class WebMonitoringNoticesResponse:
 
         data = WebMonitoringNotices.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | WebMonitoringNoticesResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = WebMonitoringNoticesResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | WebMonitoringNoticesResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         web_monitoring_notices_response = cls(
             error=error,

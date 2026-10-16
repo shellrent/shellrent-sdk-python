@@ -8,7 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.task import Task
-    from ..models.task_response_meta_type_0 import TaskResponseMetaType0
 
 
 T = TypeVar("T", bound="TaskResponse")
@@ -25,13 +24,11 @@ class TaskResponse:
     data: Task
     """ Operation on a purchase that goes on in the background, with its status and progress (`GET
     /api/v3/tasks/{task_id}`) """
-    meta: None | TaskResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.task_response_meta_type_0 import TaskResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -39,11 +36,7 @@ class TaskResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, TaskResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -61,7 +54,6 @@ class TaskResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.task import Task
-        from ..models.task_response_meta_type_0 import TaskResponseMetaType0
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -77,20 +69,7 @@ class TaskResponse:
 
         data = Task.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | TaskResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = TaskResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | TaskResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         task_response = cls(
             error=error,

@@ -22840,9 +22840,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ApiUploadResponse:
       description: Successful response with one `ApiUpload`
@@ -22866,9 +22864,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     CloudStorageAccessPaginatedListResponse:
       description: Successful response with a page of `CloudStorageAccess`
@@ -22918,9 +22914,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     CloudStoragePaginatedListResponse:
       description: Successful response with a page of `CloudStorage`
@@ -22970,9 +22964,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     CloudStorageUserListResponse:
       description: Successful response with a list of `CloudStorageUser`
@@ -22998,9 +22990,7 @@ components:
             $ref: '#/components/schemas/CloudStorageUser'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     CloudStorageUserResponse:
       description: Successful response with one `CloudStorageUser`
@@ -23024,9 +23014,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     CreditnotePaginatedListResponse:
       description: Successful response with a page of `Creditnote`
@@ -23076,9 +23064,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     CreditnoteRowListResponse:
       description: Successful response with a list of `CreditnoteRow`
@@ -23104,9 +23090,7 @@ components:
             $ref: '#/components/schemas/CreditnoteRow'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     CreditnoteRowResponse:
       description: Successful response with one `CreditnoteRow`
@@ -23130,9 +23114,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DnsRecordPaginatedListResponse:
       description: Successful response with a page of `DnsRecord`
@@ -23182,9 +23164,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DnsZoneResponse:
       description: Successful response with one `DnsZone`
@@ -23208,9 +23188,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainAvailabilityResponse:
       description: Successful response with one `DomainAvailability`
@@ -23234,9 +23212,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainCanChangeNameserversResponse:
       description: Successful response with one `DomainCanChangeNameservers`
@@ -23260,9 +23236,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainContactListResponse:
       description: Successful response with a list of `DomainContact`
@@ -23288,9 +23262,7 @@ components:
             $ref: '#/components/schemas/DomainContact'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainContactResponse:
       description: Successful response with one `DomainContact`
@@ -23314,9 +23286,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainDetailResponse:
       description: Successful response with one `DomainDetail`
@@ -23340,9 +23310,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainDnssecCanActivateResponse:
       description: Successful response with one `DomainDnssecCanActivate`
@@ -23366,9 +23334,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainDnssecCanDeactivateResponse:
       description: Successful response with one `DomainDnssecCanDeactivate`
@@ -23392,9 +23358,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainDnssecResponse:
       description: Successful response with one `DomainDnssec`
@@ -23418,9 +23382,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     DomainPaginatedListResponse:
       description: Successful response with a page of `Domain`
@@ -23467,14 +23429,10 @@ components:
             - 'null'
         data:
           description: 'Always null: the operation returns no data'
-          type:
-            - object
-            - 'null'
+          const: null
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HealthStatusResponse:
       description: Successful response with one `HealthStatus`
@@ -23498,9 +23456,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingAntivirusNullableResponse:
       description: Successful response with one `HostingAntivirus`, or null
@@ -23528,9 +23484,7 @@ components:
             - type: 'null'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingAntivirusRemovalScanPaginatedListResponse:
       description: Successful response with a page of `HostingAntivirusRemovalScan`
@@ -23580,9 +23534,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingAntivirusScanPaginatedListResponse:
       description: Successful response with a page of `HostingAntivirusScan`
@@ -23632,9 +23584,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingBackupListResponse:
       description: Successful response with a list of `HostingBackup`
@@ -23660,9 +23610,7 @@ components:
             $ref: '#/components/schemas/HostingBackup'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingBackupResponse:
       description: Successful response with one `HostingBackup`
@@ -23686,9 +23634,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingCredentialListResponse:
       description: Successful response with a list of `HostingCredential`
@@ -23714,9 +23660,7 @@ components:
             $ref: '#/components/schemas/HostingCredential'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingCronjobPaginatedListResponse:
       description: Successful response with a page of `HostingCronjob`
@@ -23766,9 +23710,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingDatabaseListResponse:
       description: Successful response with a list of `HostingDatabase`
@@ -23794,9 +23736,7 @@ components:
             $ref: '#/components/schemas/HostingDatabase'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingDatabaseResponse:
       description: Successful response with one `HostingDatabase`
@@ -23820,9 +23760,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingDnsRecordListResponse:
       description: Successful response with a list of `HostingDnsRecord`
@@ -23848,9 +23786,7 @@ components:
             $ref: '#/components/schemas/HostingDnsRecord'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingEmailAliasListResponse:
       description: Successful response with a list of `HostingEmailAlias`
@@ -23876,9 +23812,7 @@ components:
             $ref: '#/components/schemas/HostingEmailAlias'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingEmailAliasResponse:
       description: Successful response with one `HostingEmailAlias`
@@ -23902,9 +23836,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingEmailAllowListPaginatedListResponse:
       description: Successful response with a page of `HostingEmailAllowList`
@@ -23954,9 +23886,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingEmailBlockListPaginatedListResponse:
       description: Successful response with a page of `HostingEmailBlockList`
@@ -24006,9 +23936,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingEmailCatchAllResponse:
       description: Successful response with one `HostingEmailCatchAll`
@@ -24032,9 +23960,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingModSecurityResponse:
       description: Successful response with one `HostingModSecurity`
@@ -24058,9 +23984,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingModSecurityRuleListResponse:
       description: Successful response with a list of `HostingModSecurityRule`
@@ -24086,9 +24010,7 @@ components:
             $ref: '#/components/schemas/HostingModSecurityRule'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingModSecurityRuleResponse:
       description: Successful response with one `HostingModSecurityRule`
@@ -24112,9 +24034,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingModSecurityScanPaginatedListResponse:
       description: Successful response with a page of `HostingModSecurityScan`
@@ -24164,9 +24084,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingPaginatedListResponse:
       description: Successful response with a page of `Hosting`
@@ -24218,9 +24136,7 @@ components:
             $ref: '#/components/schemas/HostingPhpVersion'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingResponse:
       description: Successful response with one `Hosting`
@@ -24244,9 +24160,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingSslCertificateListResponse:
       description: Successful response with a list of `HostingSslCertificate`
@@ -24272,9 +24186,7 @@ components:
             $ref: '#/components/schemas/HostingSslCertificate'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     HostingSslCertificateResponse:
       description: Successful response with one `HostingSslCertificate`
@@ -24298,9 +24210,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     InvoicePaginatedListResponse:
       description: Successful response with a page of `Invoice`
@@ -24350,9 +24260,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     InvoiceRowListResponse:
       description: Successful response with a list of `InvoiceRow`
@@ -24378,9 +24286,7 @@ components:
             $ref: '#/components/schemas/InvoiceRow'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     InvoiceRowResponse:
       description: Successful response with one `InvoiceRow`
@@ -24404,9 +24310,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     IpAddressListResponse:
       description: Successful response with a list of `IpAddress`
@@ -24432,9 +24336,7 @@ components:
             $ref: '#/components/schemas/IpAddress'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     IpAddressPaginatedListResponse:
       description: Successful response with a page of `IpAddress`
@@ -24484,9 +24386,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     LicensePaginatedListResponse:
       description: Successful response with a page of `License`
@@ -24536,9 +24436,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     Microsoft365DomainAvailableResponse:
       description: Successful response with one `Microsoft365DomainAvailable`
@@ -24562,9 +24460,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     Microsoft365PaginatedListResponse:
       description: Successful response with a page of `Microsoft365`
@@ -24614,9 +24510,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     Microsoft365Response:
       description: Successful response with one `Microsoft365`
@@ -24640,9 +24534,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     Microsoft365TenantPaginatedListResponse:
       description: Successful response with a page of `Microsoft365Tenant`
@@ -24692,9 +24584,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ObjectStorageBucketChartResponse:
       description: Successful response with one `ObjectStorageBucketChart`
@@ -24718,9 +24608,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ObjectStorageBucketFirewallEntryPaginatedListResponse:
       description: Successful response with a page of `ObjectStorageBucketFirewallEntry`
@@ -24770,9 +24658,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ObjectStorageBucketPaginatedListResponse:
       description: Successful response with a page of `ObjectStorageBucket`
@@ -24822,9 +24708,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ObjectStorageIamUserPaginatedListResponse:
       description: Successful response with a page of `ObjectStorageIamUser`
@@ -24874,9 +24758,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ObjectStorageIamUserS3KeyListResponse:
       description: Successful response with a list of `ObjectStorageIamUserS3Key`
@@ -24902,9 +24784,7 @@ components:
             $ref: '#/components/schemas/ObjectStorageIamUserS3Key'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ObjectStorageIamUserS3KeyResponse:
       description: Successful response with one `ObjectStorageIamUserS3Key`
@@ -24928,9 +24808,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ObjectStoragePaginatedListResponse:
       description: Successful response with a page of `ObjectStorage`
@@ -24980,9 +24858,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ObjectStorageS3KeyResponse:
       description: Successful response with one `ObjectStorageS3Key`
@@ -25006,9 +24882,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     OneClickAutorenewResponse:
       description: Successful response with one `OneClickAutorenew`
@@ -25032,9 +24906,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     OneClickPaginatedListResponse:
       description: Successful response with a page of `OneClick`
@@ -25084,9 +24956,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     OrderCanCancelResponse:
       description: Successful response with one `OrderCanCancel`
@@ -25110,9 +24980,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     OrderCanPayResponse:
       description: Successful response with one `OrderCanPay`
@@ -25136,9 +25004,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     OrderListResponse:
       description: Successful response with a list of `Order`
@@ -25164,9 +25030,7 @@ components:
             $ref: '#/components/schemas/Order'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     OrderPaginatedListResponse:
       description: Successful response with a page of `Order`
@@ -25216,9 +25080,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     OrderRowListResponse:
       description: Successful response with a list of `OrderRow`
@@ -25244,9 +25106,7 @@ components:
             $ref: '#/components/schemas/OrderRow'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     OrderRowResponse:
       description: Successful response with one `OrderRow`
@@ -25270,9 +25130,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PaymentPaginatedListResponse:
       description: Successful response with a page of `Payment`
@@ -25322,9 +25180,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PecDomainPaginatedListResponse:
       description: Successful response with a page of `PecDomain`
@@ -25374,9 +25230,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PecOwnerChangePaginatedListResponse:
       description: Successful response with a page of `PecOwnerChange`
@@ -25426,9 +25280,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PecPaginatedListResponse:
       description: Successful response with a page of `Pec`
@@ -25478,9 +25330,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PrepaidCreditOperationPaginatedListResponse:
       description: Successful response with a page of `PrepaidCreditOperation`
@@ -25530,9 +25380,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PrepaidCreditResponse:
       description: Successful response with one `PrepaidCredit`
@@ -25556,9 +25404,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PrepaidCreditTopupPaginatedListResponse:
       description: Successful response with a page of `PrepaidCreditTopup`
@@ -25608,9 +25454,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PrivateCloudResponse:
       description: Successful response with one `PrivateCloud`
@@ -25634,9 +25478,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PurchaseCanAddAdditionalResponse:
       description: Successful response with one `PurchaseCanAddAdditional`
@@ -25660,9 +25502,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PurchaseCanCancelResponse:
       description: Successful response with one `PurchaseCanCancel`
@@ -25686,9 +25526,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PurchaseCanChangeRecurrenceResponse:
       description: Successful response with one `PurchaseCanChangeRecurrence`
@@ -25712,9 +25550,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PurchaseCanChangeRenewStatusResponse:
       description: Successful response with one `PurchaseCanChangeRenewStatus`
@@ -25738,9 +25574,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PurchaseCanChangeServiceResponse:
       description: Successful response with one `PurchaseCanChangeService`
@@ -25764,9 +25598,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PurchaseCanRenewResponse:
       description: Successful response with one `PurchaseCanRenew`
@@ -25790,9 +25622,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     PurchasePaginatedListResponse:
       description: Successful response with a page of `Purchase`
@@ -25842,9 +25672,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerAutomaticSnapshotResponse:
       description: Successful response with one `ServerAutomaticSnapshot`
@@ -25868,9 +25696,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerBackupListResponse:
       description: Successful response with a list of `ServerBackup`
@@ -25896,9 +25722,7 @@ components:
             $ref: '#/components/schemas/ServerBackup'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerBackupResponse:
       description: Successful response with one `ServerBackup`
@@ -25922,9 +25746,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerCanActionResponse:
       description: Successful response with one `ServerCanAction`
@@ -25948,9 +25770,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerCredentialResponse:
       description: Successful response with one `ServerCredential`
@@ -25974,9 +25794,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerMonitoringPaginatedListResponse:
       description: Successful response with a page of `ServerMonitoring`
@@ -26026,9 +25844,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerMonitoringProbeListResponse:
       description: Successful response with a list of `ServerMonitoringProbe`
@@ -26054,9 +25870,7 @@ components:
             $ref: '#/components/schemas/ServerMonitoringProbe'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerMonitoringProbeResponse:
       description: Successful response with one `ServerMonitoringProbe`
@@ -26080,9 +25894,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerMonitoringResponse:
       description: Successful response with one `ServerMonitoring`
@@ -26106,9 +25918,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerNetworkInterfaceListResponse:
       description: Successful response with a list of `ServerNetworkInterface`
@@ -26134,9 +25944,7 @@ components:
             $ref: '#/components/schemas/ServerNetworkInterface'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerNetworkInterfaceResponse:
       description: Successful response with one `ServerNetworkInterface`
@@ -26160,9 +25968,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerPaginatedListResponse:
       description: Successful response with a page of `Server`
@@ -26212,9 +26018,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServerSnapshotPaginatedListResponse:
       description: Successful response with a page of `ServerSnapshot`
@@ -26264,9 +26068,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     ServicePaginatedListResponse:
       description: Successful response with a page of `Service`
@@ -26342,9 +26144,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SmsCanCancelResponse:
       description: Successful response with one `SmsCanCancel`
@@ -26368,9 +26168,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SmsCanDeleteResponse:
       description: Successful response with one `SmsCanDelete`
@@ -26394,9 +26192,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SmsMessagePaginatedListResponse:
       description: Successful response with a page of `SmsMessage`
@@ -26446,9 +26242,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SmsPaginatedListResponse:
       description: Successful response with a page of `Sms`
@@ -26550,9 +26344,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SmsPricePaginatedListResponse:
       description: Successful response with a page of `SmsPrice`
@@ -26602,9 +26394,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SmsResponse:
       description: Successful response with one `Sms`
@@ -26628,9 +26418,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SslCertificateApproverEmailsResponse:
       description: Successful response with one `SslCertificateApproverEmails`
@@ -26654,9 +26442,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SslCertificateCanReissueResponse:
       description: Successful response with one `SslCertificateCanReissue`
@@ -26680,9 +26466,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SslCertificateExportFormatListResponse:
       description: Successful response with a list of `SslCertificateExportFormat`
@@ -26708,9 +26492,7 @@ components:
             $ref: '#/components/schemas/SslCertificateExportFormat'
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SslCertificateExportResponse:
       description: Successful response with one `SslCertificateExport`
@@ -26734,9 +26516,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SslCertificateKeyResponse:
       description: Successful response with one `SslCertificateKey`
@@ -26760,9 +26540,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SslCertificateKeysResponse:
       description: Successful response with one `SslCertificateKeys`
@@ -26786,9 +26564,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     SslCertificatePaginatedListResponse:
       description: Successful response with a page of `SslCertificate`
@@ -26838,9 +26614,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     TaskPaginatedListResponse:
       description: Successful response with a page of `Task`
@@ -26890,9 +26664,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     TldPaginatedListResponse:
       description: Successful response with a page of `Tld`
@@ -26942,9 +26714,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     WebMonitoringAvailabilityChartResponse:
       description: Successful response with one `WebMonitoringAvailabilityChart`
@@ -26968,9 +26738,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     WebMonitoringDownloadSpeedChartResponse:
       description: Successful response with one `WebMonitoringDownloadSpeedChart`
@@ -26994,9 +26762,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     WebMonitoringNoticesResponse:
       description: Successful response with one `WebMonitoringNotices`
@@ -27020,9 +26786,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     WebMonitoringPaginatedListResponse:
       description: Successful response with a page of `WebMonitoring`
@@ -27072,9 +26836,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
     WebMonitoringResponseTimeChartResponse:
       description: Successful response with one `WebMonitoringResponseTimeChart`
@@ -27098,9 +26860,7 @@ components:
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
-          type:
-            - object
-            - 'null'
+          const: null
       type: object
   responses:
     BadRequest:

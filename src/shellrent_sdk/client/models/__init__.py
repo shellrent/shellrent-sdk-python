@@ -4,7 +4,6 @@ from .account import Account
 from .account_billing import AccountBilling
 from .account_paginated_list_response import AccountPaginatedListResponse
 from .account_response import AccountResponse
-from .account_response_meta_type_0 import AccountResponseMetaType0
 from .amount import Amount
 from .amount_simple import AmountSimple
 from .api_error import ApiError
@@ -12,7 +11,6 @@ from .api_error_meta_type_0 import ApiErrorMetaType0
 from .api_error_meta_type_0_errors import ApiErrorMetaType0Errors
 from .api_upload import ApiUpload
 from .api_upload_response import ApiUploadResponse
-from .api_upload_response_meta_type_0 import ApiUploadResponseMetaType0
 from .billing_data import BillingData
 from .buy_prepaid_credit_topup_request import BuyPrepaidCreditTopupRequest
 from .buy_prepaid_credit_topup_request_amount import BuyPrepaidCreditTopupRequestAmount
@@ -79,15 +77,11 @@ from .cloud_storage_access import CloudStorageAccess
 from .cloud_storage_access_create_request import CloudStorageAccessCreateRequest
 from .cloud_storage_access_paginated_list_response import CloudStorageAccessPaginatedListResponse
 from .cloud_storage_access_response import CloudStorageAccessResponse
-from .cloud_storage_access_response_meta_type_0 import CloudStorageAccessResponseMetaType0
 from .cloud_storage_paginated_list_response import CloudStoragePaginatedListResponse
 from .cloud_storage_response import CloudStorageResponse
-from .cloud_storage_response_meta_type_0 import CloudStorageResponseMetaType0
 from .cloud_storage_user import CloudStorageUser
 from .cloud_storage_user_list_response import CloudStorageUserListResponse
-from .cloud_storage_user_list_response_meta_type_0 import CloudStorageUserListResponseMetaType0
 from .cloud_storage_user_response import CloudStorageUserResponse
-from .cloud_storage_user_response_meta_type_0 import CloudStorageUserResponseMetaType0
 from .cloud_storage_user_size_update_request import CloudStorageUserSizeUpdateRequest
 from .complete_task_data_body import CompleteTaskDataBody
 from .complete_task_data_body_data import CompleteTaskDataBodyData
@@ -95,45 +89,33 @@ from .country import Country
 from .creditnote import Creditnote
 from .creditnote_paginated_list_response import CreditnotePaginatedListResponse
 from .creditnote_response import CreditnoteResponse
-from .creditnote_response_meta_type_0 import CreditnoteResponseMetaType0
 from .creditnote_row import CreditnoteRow
 from .creditnote_row_list_response import CreditnoteRowListResponse
-from .creditnote_row_list_response_meta_type_0 import CreditnoteRowListResponseMetaType0
 from .creditnote_row_response import CreditnoteRowResponse
-from .creditnote_row_response_meta_type_0 import CreditnoteRowResponseMetaType0
 from .dns_record import DnsRecord
 from .dns_record_caa_data import DnsRecordCaaData
 from .dns_record_paginated_list_response import DnsRecordPaginatedListResponse
 from .dns_record_response import DnsRecordResponse
-from .dns_record_response_meta_type_0 import DnsRecordResponseMetaType0
 from .dns_record_tlsa_data import DnsRecordTlsaData
 from .dns_type import DnsType
 from .dns_zone import DnsZone
 from .dns_zone_response import DnsZoneResponse
-from .dns_zone_response_meta_type_0 import DnsZoneResponseMetaType0
 from .dnssec_ds_data import DnssecDsData
 from .dnssec_key_data import DnssecKeyData
 from .domain import Domain
 from .domain_availability import DomainAvailability
 from .domain_availability_response import DomainAvailabilityResponse
-from .domain_availability_response_meta_type_0 import DomainAvailabilityResponseMetaType0
 from .domain_can_change_nameservers import DomainCanChangeNameservers
 from .domain_can_change_nameservers_response import DomainCanChangeNameserversResponse
-from .domain_can_change_nameservers_response_meta_type_0 import (
-    DomainCanChangeNameserversResponseMetaType0,
-)
 from .domain_contact import DomainContact
 from .domain_contact_data import DomainContactData
 from .domain_contact_list_response import DomainContactListResponse
-from .domain_contact_list_response_meta_type_0 import DomainContactListResponseMetaType0
 from .domain_contact_request import DomainContactRequest
 from .domain_contact_request_contact_data_item import DomainContactRequestContactDataItem
 from .domain_contact_response import DomainContactResponse
-from .domain_contact_response_meta_type_0 import DomainContactResponseMetaType0
 from .domain_data import DomainData
 from .domain_detail import DomainDetail
 from .domain_detail_response import DomainDetailResponse
-from .domain_detail_response_meta_type_0 import DomainDetailResponseMetaType0
 from .domain_dns_nameservers_change_request import DomainDnsNameserversChangeRequest
 from .domain_dns_nameservers_cloudflare_request import DomainDnsNameserversCloudflareRequest
 from .domain_dns_record_change_request import DomainDnsRecordChangeRequest
@@ -148,14 +130,8 @@ from .domain_dns_zone_request_zone_ttl import DomainDnsZoneRequestZoneTtl
 from .domain_dnssec import DomainDnssec
 from .domain_dnssec_can_activate import DomainDnssecCanActivate
 from .domain_dnssec_can_activate_response import DomainDnssecCanActivateResponse
-from .domain_dnssec_can_activate_response_meta_type_0 import (
-    DomainDnssecCanActivateResponseMetaType0,
-)
 from .domain_dnssec_can_deactivate import DomainDnssecCanDeactivate
 from .domain_dnssec_can_deactivate_response import DomainDnssecCanDeactivateResponse
-from .domain_dnssec_can_deactivate_response_meta_type_0 import (
-    DomainDnssecCanDeactivateResponseMetaType0,
-)
 from .domain_dnssec_request import DomainDnssecRequest
 from .domain_dnssec_request_ds_data_1 import DomainDnssecRequestDsData1
 from .domain_dnssec_request_ds_data_1_digest_type import DomainDnssecRequestDsData1DigestType
@@ -170,46 +146,32 @@ from .domain_dnssec_request_key_data_257_item_algorithm import (
     DomainDnssecRequestKeyData257ItemAlgorithm,
 )
 from .domain_dnssec_response import DomainDnssecResponse
-from .domain_dnssec_response_meta_type_0 import DomainDnssecResponseMetaType0
 from .domain_name import DomainName
 from .domain_nameserver import DomainNameserver
 from .domain_paginated_list_response import DomainPaginatedListResponse
 from .domain_premium_prices import DomainPremiumPrices
 from .empty_response import EmptyResponse
-from .empty_response_data_type_0 import EmptyResponseDataType0
-from .empty_response_meta_type_0 import EmptyResponseMetaType0
 from .health_status import HealthStatus
 from .health_status_response import HealthStatusResponse
-from .health_status_response_meta_type_0 import HealthStatusResponseMetaType0
 from .hosting import Hosting
 from .hosting_antivirus import HostingAntivirus
 from .hosting_antivirus_nullable_response import HostingAntivirusNullableResponse
-from .hosting_antivirus_nullable_response_meta_type_0 import (
-    HostingAntivirusNullableResponseMetaType0,
-)
 from .hosting_antivirus_removal_scan import HostingAntivirusRemovalScan
 from .hosting_antivirus_removal_scan_paginated_list_response import (
     HostingAntivirusRemovalScanPaginatedListResponse,
 )
 from .hosting_antivirus_removal_scan_response import HostingAntivirusRemovalScanResponse
-from .hosting_antivirus_removal_scan_response_meta_type_0 import (
-    HostingAntivirusRemovalScanResponseMetaType0,
-)
 from .hosting_antivirus_scan import HostingAntivirusScan
 from .hosting_antivirus_scan_paginated_list_response import (
     HostingAntivirusScanPaginatedListResponse,
 )
 from .hosting_antivirus_scan_response import HostingAntivirusScanResponse
-from .hosting_antivirus_scan_response_meta_type_0 import HostingAntivirusScanResponseMetaType0
 from .hosting_backup import HostingBackup
 from .hosting_backup_expose_request import HostingBackupExposeRequest
 from .hosting_backup_list_response import HostingBackupListResponse
-from .hosting_backup_list_response_meta_type_0 import HostingBackupListResponseMetaType0
 from .hosting_backup_response import HostingBackupResponse
-from .hosting_backup_response_meta_type_0 import HostingBackupResponseMetaType0
 from .hosting_credential import HostingCredential
 from .hosting_credential_list_response import HostingCredentialListResponse
-from .hosting_credential_list_response_meta_type_0 import HostingCredentialListResponseMetaType0
 from .hosting_cronjob import HostingCronjob
 from .hosting_cronjob_create_request import HostingCronjobCreateRequest
 from .hosting_cronjob_create_request_http_request_method import (
@@ -220,59 +182,44 @@ from .hosting_cronjob_create_request_request_protocol import (
 )
 from .hosting_cronjob_paginated_list_response import HostingCronjobPaginatedListResponse
 from .hosting_cronjob_response import HostingCronjobResponse
-from .hosting_cronjob_response_meta_type_0 import HostingCronjobResponseMetaType0
 from .hosting_database import HostingDatabase
 from .hosting_database_list_response import HostingDatabaseListResponse
-from .hosting_database_list_response_meta_type_0 import HostingDatabaseListResponseMetaType0
 from .hosting_database_response import HostingDatabaseResponse
-from .hosting_database_response_meta_type_0 import HostingDatabaseResponseMetaType0
 from .hosting_dns_record import HostingDnsRecord
 from .hosting_dns_record_list_response import HostingDnsRecordListResponse
-from .hosting_dns_record_list_response_meta_type_0 import HostingDnsRecordListResponseMetaType0
 from .hosting_email_alias import HostingEmailAlias
 from .hosting_email_alias_create_request import HostingEmailAliasCreateRequest
 from .hosting_email_alias_list_response import HostingEmailAliasListResponse
-from .hosting_email_alias_list_response_meta_type_0 import HostingEmailAliasListResponseMetaType0
 from .hosting_email_alias_response import HostingEmailAliasResponse
-from .hosting_email_alias_response_meta_type_0 import HostingEmailAliasResponseMetaType0
 from .hosting_email_allow_list import HostingEmailAllowList
 from .hosting_email_allow_list_paginated_list_response import (
     HostingEmailAllowListPaginatedListResponse,
 )
 from .hosting_email_allow_list_response import HostingEmailAllowListResponse
-from .hosting_email_allow_list_response_meta_type_0 import HostingEmailAllowListResponseMetaType0
 from .hosting_email_block_list import HostingEmailBlockList
 from .hosting_email_block_list_paginated_list_response import (
     HostingEmailBlockListPaginatedListResponse,
 )
 from .hosting_email_block_list_response import HostingEmailBlockListResponse
-from .hosting_email_block_list_response_meta_type_0 import HostingEmailBlockListResponseMetaType0
 from .hosting_email_catch_all import HostingEmailCatchAll
 from .hosting_email_catch_all_request import HostingEmailCatchAllRequest
 from .hosting_email_catch_all_response import HostingEmailCatchAllResponse
-from .hosting_email_catch_all_response_meta_type_0 import HostingEmailCatchAllResponseMetaType0
 from .hosting_email_wblist_request import HostingEmailWblistRequest
 from .hosting_file_protection_update_request import HostingFileProtectionUpdateRequest
 from .hosting_http_version_update_request import HostingHttpVersionUpdateRequest
 from .hosting_http_version_update_request_version import HostingHttpVersionUpdateRequestVersion
 from .hosting_mod_security import HostingModSecurity
 from .hosting_mod_security_response import HostingModSecurityResponse
-from .hosting_mod_security_response_meta_type_0 import HostingModSecurityResponseMetaType0
 from .hosting_mod_security_rule import HostingModSecurityRule
 from .hosting_mod_security_rule_bulk_request import HostingModSecurityRuleBulkRequest
 from .hosting_mod_security_rule_create_request import HostingModSecurityRuleCreateRequest
 from .hosting_mod_security_rule_list_response import HostingModSecurityRuleListResponse
-from .hosting_mod_security_rule_list_response_meta_type_0 import (
-    HostingModSecurityRuleListResponseMetaType0,
-)
 from .hosting_mod_security_rule_response import HostingModSecurityRuleResponse
-from .hosting_mod_security_rule_response_meta_type_0 import HostingModSecurityRuleResponseMetaType0
 from .hosting_mod_security_scan import HostingModSecurityScan
 from .hosting_mod_security_scan_paginated_list_response import (
     HostingModSecurityScanPaginatedListResponse,
 )
 from .hosting_mod_security_scan_response import HostingModSecurityScanResponse
-from .hosting_mod_security_scan_response_meta_type_0 import HostingModSecurityScanResponseMetaType0
 from .hosting_mod_security_update_request import HostingModSecurityUpdateRequest
 from .hosting_paginated_list_response import HostingPaginatedListResponse
 from .hosting_php_setting import HostingPhpSetting
@@ -281,10 +228,8 @@ from .hosting_php_settings_update_request import HostingPhpSettingsUpdateRequest
 from .hosting_php_settings_update_request_setting import HostingPhpSettingsUpdateRequestSetting
 from .hosting_php_version import HostingPhpVersion
 from .hosting_php_version_list_response import HostingPhpVersionListResponse
-from .hosting_php_version_list_response_meta_type_0 import HostingPhpVersionListResponseMetaType0
 from .hosting_php_version_update_request import HostingPhpVersionUpdateRequest
 from .hosting_response import HostingResponse
-from .hosting_response_meta_type_0 import HostingResponseMetaType0
 from .hosting_ssl_certificate import HostingSslCertificate
 from .hosting_ssl_certificate_install_request import HostingSslCertificateInstallRequest
 from .hosting_ssl_certificate_install_request_cn_type import (
@@ -294,27 +239,18 @@ from .hosting_ssl_certificate_install_request_destination_type import (
     HostingSslCertificateInstallRequestDestinationType,
 )
 from .hosting_ssl_certificate_list_response import HostingSslCertificateListResponse
-from .hosting_ssl_certificate_list_response_meta_type_0 import (
-    HostingSslCertificateListResponseMetaType0,
-)
 from .hosting_ssl_certificate_response import HostingSslCertificateResponse
-from .hosting_ssl_certificate_response_meta_type_0 import HostingSslCertificateResponseMetaType0
 from .hosting_subdomain_create_request import HostingSubdomainCreateRequest
 from .invoice import Invoice
 from .invoice_paginated_list_response import InvoicePaginatedListResponse
 from .invoice_response import InvoiceResponse
-from .invoice_response_meta_type_0 import InvoiceResponseMetaType0
 from .invoice_row import InvoiceRow
 from .invoice_row_list_response import InvoiceRowListResponse
-from .invoice_row_list_response_meta_type_0 import InvoiceRowListResponseMetaType0
 from .invoice_row_response import InvoiceRowResponse
-from .invoice_row_response_meta_type_0 import InvoiceRowResponseMetaType0
 from .ip_address import IpAddress
 from .ip_address_list_response import IpAddressListResponse
-from .ip_address_list_response_meta_type_0 import IpAddressListResponseMetaType0
 from .ip_address_paginated_list_response import IpAddressPaginatedListResponse
 from .ip_address_response import IpAddressResponse
-from .ip_address_response_meta_type_0 import IpAddressResponseMetaType0
 from .jwk_key import JwkKey
 from .jwks_response import JwksResponse
 from .legal_entity import LegalEntity
@@ -322,28 +258,19 @@ from .legal_entity_group import LegalEntityGroup
 from .license_ import License
 from .license_paginated_list_response import LicensePaginatedListResponse
 from .license_response import LicenseResponse
-from .license_response_meta_type_0 import LicenseResponseMetaType0
 from .list_orders_type import ListOrdersType
 from .list_sms_sms_status import ListSmsSmsStatus
 from .microsoft_365 import Microsoft365
 from .microsoft_365_domain_available import Microsoft365DomainAvailable
 from .microsoft_365_domain_available_response import Microsoft365DomainAvailableResponse
-from .microsoft_365_domain_available_response_meta_type_0 import (
-    Microsoft365DomainAvailableResponseMetaType0,
-)
 from .microsoft_365_paginated_list_response import Microsoft365PaginatedListResponse
 from .microsoft_365_partner_link import Microsoft365PartnerLink
 from .microsoft_365_partner_link_response import Microsoft365PartnerLinkResponse
-from .microsoft_365_partner_link_response_meta_type_0 import (
-    Microsoft365PartnerLinkResponseMetaType0,
-)
 from .microsoft_365_response import Microsoft365Response
-from .microsoft_365_response_meta_type_0 import Microsoft365ResponseMetaType0
 from .microsoft_365_subscription_quantity_request import Microsoft365SubscriptionQuantityRequest
 from .microsoft_365_tenant import Microsoft365Tenant
 from .microsoft_365_tenant_paginated_list_response import Microsoft365TenantPaginatedListResponse
 from .microsoft_365_tenant_response import Microsoft365TenantResponse
-from .microsoft_365_tenant_response_meta_type_0 import Microsoft365TenantResponseMetaType0
 from .o_auth_audience import OAuthAudience
 from .o_auth_error import OAuthError
 from .o_auth_token_response import OAuthTokenResponse
@@ -352,9 +279,6 @@ from .object_storage_bucket import ObjectStorageBucket
 from .object_storage_bucket_chart import ObjectStorageBucketChart
 from .object_storage_bucket_chart_points_item import ObjectStorageBucketChartPointsItem
 from .object_storage_bucket_chart_response import ObjectStorageBucketChartResponse
-from .object_storage_bucket_chart_response_meta_type_0 import (
-    ObjectStorageBucketChartResponseMetaType0,
-)
 from .object_storage_bucket_firewall_entry import ObjectStorageBucketFirewallEntry
 from .object_storage_bucket_firewall_entry_create_request import (
     ObjectStorageBucketFirewallEntryCreateRequest,
@@ -363,100 +287,71 @@ from .object_storage_bucket_firewall_entry_paginated_list_response import (
     ObjectStorageBucketFirewallEntryPaginatedListResponse,
 )
 from .object_storage_bucket_firewall_entry_response import ObjectStorageBucketFirewallEntryResponse
-from .object_storage_bucket_firewall_entry_response_meta_type_0 import (
-    ObjectStorageBucketFirewallEntryResponseMetaType0,
-)
 from .object_storage_bucket_paginated_list_response import ObjectStorageBucketPaginatedListResponse
 from .object_storage_bucket_response import ObjectStorageBucketResponse
-from .object_storage_bucket_response_meta_type_0 import ObjectStorageBucketResponseMetaType0
 from .object_storage_iam_user import ObjectStorageIamUser
 from .object_storage_iam_user_paginated_list_response import (
     ObjectStorageIamUserPaginatedListResponse,
 )
 from .object_storage_iam_user_response import ObjectStorageIamUserResponse
-from .object_storage_iam_user_response_meta_type_0 import ObjectStorageIamUserResponseMetaType0
 from .object_storage_iam_user_s3_key import ObjectStorageIamUserS3Key
 from .object_storage_iam_user_s3_key_list_response import ObjectStorageIamUserS3KeyListResponse
-from .object_storage_iam_user_s3_key_list_response_meta_type_0 import (
-    ObjectStorageIamUserS3KeyListResponseMetaType0,
-)
 from .object_storage_iam_user_s3_key_response import ObjectStorageIamUserS3KeyResponse
-from .object_storage_iam_user_s3_key_response_meta_type_0 import (
-    ObjectStorageIamUserS3KeyResponseMetaType0,
-)
 from .object_storage_paginated_list_response import ObjectStoragePaginatedListResponse
 from .object_storage_response import ObjectStorageResponse
-from .object_storage_response_meta_type_0 import ObjectStorageResponseMetaType0
 from .object_storage_s3_key import ObjectStorageS3Key
 from .object_storage_s3_key_response import ObjectStorageS3KeyResponse
-from .object_storage_s3_key_response_meta_type_0 import ObjectStorageS3KeyResponseMetaType0
 from .one_click import OneClick
 from .one_click_autorenew import OneClickAutorenew
 from .one_click_autorenew_response import OneClickAutorenewResponse
-from .one_click_autorenew_response_meta_type_0 import OneClickAutorenewResponseMetaType0
 from .one_click_paginated_list_response import OneClickPaginatedListResponse
 from .one_click_payment_create_request import OneClickPaymentCreateRequest
 from .one_click_response import OneClickResponse
-from .one_click_response_meta_type_0 import OneClickResponseMetaType0
 from .order import Order
 from .order_can_cancel import OrderCanCancel
 from .order_can_cancel_response import OrderCanCancelResponse
-from .order_can_cancel_response_meta_type_0 import OrderCanCancelResponseMetaType0
 from .order_can_pay import OrderCanPay
 from .order_can_pay_response import OrderCanPayResponse
-from .order_can_pay_response_meta_type_0 import OrderCanPayResponseMetaType0
 from .order_invoice_status import OrderInvoiceStatus
 from .order_list_response import OrderListResponse
-from .order_list_response_meta_type_0 import OrderListResponseMetaType0
 from .order_paginated_list_response import OrderPaginatedListResponse
 from .order_payment_status import OrderPaymentStatus
 from .order_response import OrderResponse
-from .order_response_meta_type_0 import OrderResponseMetaType0
 from .order_row import OrderRow
 from .order_row_list_response import OrderRowListResponse
-from .order_row_list_response_meta_type_0 import OrderRowListResponseMetaType0
 from .order_row_response import OrderRowResponse
-from .order_row_response_meta_type_0 import OrderRowResponseMetaType0
 from .order_status import OrderStatus
 from .pagination_meta import PaginationMeta
 from .payment import Payment
 from .payment_paginated_list_response import PaymentPaginatedListResponse
 from .payment_provider_data import PaymentProviderData
 from .payment_response import PaymentResponse
-from .payment_response_meta_type_0 import PaymentResponseMetaType0
 from .pec import Pec
 from .pec_domain import PecDomain
 from .pec_domain_paginated_list_response import PecDomainPaginatedListResponse
 from .pec_domain_response import PecDomainResponse
-from .pec_domain_response_meta_type_0 import PecDomainResponseMetaType0
 from .pec_mailbox_owner_change_create_request import PecMailboxOwnerChangeCreateRequest
 from .pec_mailbox_update_request import PecMailboxUpdateRequest
 from .pec_owner_change import PecOwnerChange
 from .pec_owner_change_paginated_list_response import PecOwnerChangePaginatedListResponse
 from .pec_owner_change_response import PecOwnerChangeResponse
-from .pec_owner_change_response_meta_type_0 import PecOwnerChangeResponseMetaType0
 from .pec_owner_summary import PecOwnerSummary
 from .pec_paginated_list_response import PecPaginatedListResponse
 from .pec_response import PecResponse
-from .pec_response_meta_type_0 import PecResponseMetaType0
 from .prepaid_credit import PrepaidCredit
 from .prepaid_credit_operation import PrepaidCreditOperation
 from .prepaid_credit_operation_paginated_list_response import (
     PrepaidCreditOperationPaginatedListResponse,
 )
 from .prepaid_credit_operation_response import PrepaidCreditOperationResponse
-from .prepaid_credit_operation_response_meta_type_0 import PrepaidCreditOperationResponseMetaType0
 from .prepaid_credit_operation_type import PrepaidCreditOperationType
 from .prepaid_credit_payment_create_request import PrepaidCreditPaymentCreateRequest
 from .prepaid_credit_response import PrepaidCreditResponse
-from .prepaid_credit_response_meta_type_0 import PrepaidCreditResponseMetaType0
 from .prepaid_credit_topup import PrepaidCreditTopup
 from .prepaid_credit_topup_paginated_list_response import PrepaidCreditTopupPaginatedListResponse
 from .prepaid_credit_topup_response import PrepaidCreditTopupResponse
-from .prepaid_credit_topup_response_meta_type_0 import PrepaidCreditTopupResponseMetaType0
 from .private_cloud import PrivateCloud
 from .private_cloud_response import PrivateCloudResponse
-from .private_cloud_response_meta_type_0 import PrivateCloudResponseMetaType0
 from .private_cloud_vm_create_request import PrivateCloudVmCreateRequest
 from .private_cloud_vm_update_request import PrivateCloudVmUpdateRequest
 from .promotion import Promotion
@@ -464,30 +359,16 @@ from .purchase import Purchase
 from .purchase_billing_info_change_request import PurchaseBillingInfoChangeRequest
 from .purchase_can_add_additional import PurchaseCanAddAdditional
 from .purchase_can_add_additional_response import PurchaseCanAddAdditionalResponse
-from .purchase_can_add_additional_response_meta_type_0 import (
-    PurchaseCanAddAdditionalResponseMetaType0,
-)
 from .purchase_can_cancel import PurchaseCanCancel
 from .purchase_can_cancel_response import PurchaseCanCancelResponse
-from .purchase_can_cancel_response_meta_type_0 import PurchaseCanCancelResponseMetaType0
 from .purchase_can_change_recurrence import PurchaseCanChangeRecurrence
 from .purchase_can_change_recurrence_response import PurchaseCanChangeRecurrenceResponse
-from .purchase_can_change_recurrence_response_meta_type_0 import (
-    PurchaseCanChangeRecurrenceResponseMetaType0,
-)
 from .purchase_can_change_renew_status import PurchaseCanChangeRenewStatus
 from .purchase_can_change_renew_status_response import PurchaseCanChangeRenewStatusResponse
-from .purchase_can_change_renew_status_response_meta_type_0 import (
-    PurchaseCanChangeRenewStatusResponseMetaType0,
-)
 from .purchase_can_change_service import PurchaseCanChangeService
 from .purchase_can_change_service_response import PurchaseCanChangeServiceResponse
-from .purchase_can_change_service_response_meta_type_0 import (
-    PurchaseCanChangeServiceResponseMetaType0,
-)
 from .purchase_can_renew import PurchaseCanRenew
 from .purchase_can_renew_response import PurchaseCanRenewResponse
-from .purchase_can_renew_response_meta_type_0 import PurchaseCanRenewResponseMetaType0
 from .purchase_comment_change_request import PurchaseCommentChangeRequest
 from .purchase_name import PurchaseName
 from .purchase_paginated_list_response import PurchasePaginatedListResponse
@@ -495,7 +376,6 @@ from .purchase_provisioning_status import PurchaseProvisioningStatus
 from .purchase_recurrence_change_request import PurchaseRecurrenceChangeRequest
 from .purchase_renew_status_change_request import PurchaseRenewStatusChangeRequest
 from .purchase_response import PurchaseResponse
-from .purchase_response_meta_type_0 import PurchaseResponseMetaType0
 from .purchase_status import PurchaseStatus
 from .recurrence import Recurrence
 from .recurrence_frequency import RecurrenceFrequency
@@ -507,19 +387,14 @@ from .server import Server
 from .server_automatic_snapshot import ServerAutomaticSnapshot
 from .server_automatic_snapshot_request import ServerAutomaticSnapshotRequest
 from .server_automatic_snapshot_response import ServerAutomaticSnapshotResponse
-from .server_automatic_snapshot_response_meta_type_0 import ServerAutomaticSnapshotResponseMetaType0
 from .server_backup import ServerBackup
 from .server_backup_exhibit_request import ServerBackupExhibitRequest
 from .server_backup_list_response import ServerBackupListResponse
-from .server_backup_list_response_meta_type_0 import ServerBackupListResponseMetaType0
 from .server_backup_response import ServerBackupResponse
-from .server_backup_response_meta_type_0 import ServerBackupResponseMetaType0
 from .server_can_action import ServerCanAction
 from .server_can_action_response import ServerCanActionResponse
-from .server_can_action_response_meta_type_0 import ServerCanActionResponseMetaType0
 from .server_credential import ServerCredential
 from .server_credential_response import ServerCredentialResponse
-from .server_credential_response_meta_type_0 import ServerCredentialResponseMetaType0
 from .server_ip_address_reverse_update_request import ServerIpAddressReverseUpdateRequest
 from .server_monitoring import ServerMonitoring
 from .server_monitoring_paginated_list_response import ServerMonitoringPaginatedListResponse
@@ -527,41 +402,27 @@ from .server_monitoring_probe import ServerMonitoringProbe
 from .server_monitoring_probe_chart import ServerMonitoringProbeChart
 from .server_monitoring_probe_chart_points_item import ServerMonitoringProbeChartPointsItem
 from .server_monitoring_probe_chart_response import ServerMonitoringProbeChartResponse
-from .server_monitoring_probe_chart_response_meta_type_0 import (
-    ServerMonitoringProbeChartResponseMetaType0,
-)
 from .server_monitoring_probe_create_request import ServerMonitoringProbeCreateRequest
 from .server_monitoring_probe_create_request_parameters import (
     ServerMonitoringProbeCreateRequestParameters,
 )
 from .server_monitoring_probe_list_response import ServerMonitoringProbeListResponse
-from .server_monitoring_probe_list_response_meta_type_0 import (
-    ServerMonitoringProbeListResponseMetaType0,
-)
 from .server_monitoring_probe_response import ServerMonitoringProbeResponse
-from .server_monitoring_probe_response_meta_type_0 import ServerMonitoringProbeResponseMetaType0
 from .server_monitoring_probe_update_request import ServerMonitoringProbeUpdateRequest
 from .server_monitoring_response import ServerMonitoringResponse
-from .server_monitoring_response_meta_type_0 import ServerMonitoringResponseMetaType0
 from .server_network_interface import ServerNetworkInterface
 from .server_network_interface_create_request import ServerNetworkInterfaceCreateRequest
 from .server_network_interface_list_response import ServerNetworkInterfaceListResponse
-from .server_network_interface_list_response_meta_type_0 import (
-    ServerNetworkInterfaceListResponseMetaType0,
-)
 from .server_network_interface_response import ServerNetworkInterfaceResponse
-from .server_network_interface_response_meta_type_0 import ServerNetworkInterfaceResponseMetaType0
 from .server_os import ServerOs
 from .server_paginated_list_response import ServerPaginatedListResponse
 from .server_power_action_request import ServerPowerActionRequest
 from .server_power_action_request_action import ServerPowerActionRequestAction
 from .server_reinstall_request import ServerReinstallRequest
 from .server_response import ServerResponse
-from .server_response_meta_type_0 import ServerResponseMetaType0
 from .server_snapshot import ServerSnapshot
 from .server_snapshot_paginated_list_response import ServerSnapshotPaginatedListResponse
 from .server_snapshot_response import ServerSnapshotResponse
-from .server_snapshot_response_meta_type_0 import ServerSnapshotResponseMetaType0
 from .server_template import ServerTemplate
 from .service import Service
 from .service_category import ServiceCategory
@@ -573,19 +434,15 @@ from .simple_pagination_meta import SimplePaginationMeta
 from .sms import Sms
 from .sms_account import SmsAccount
 from .sms_account_response import SmsAccountResponse
-from .sms_account_response_meta_type_0 import SmsAccountResponseMetaType0
 from .sms_can_cancel import SmsCanCancel
 from .sms_can_cancel_response import SmsCanCancelResponse
-from .sms_can_cancel_response_meta_type_0 import SmsCanCancelResponseMetaType0
 from .sms_can_delete import SmsCanDelete
 from .sms_can_delete_response import SmsCanDeleteResponse
-from .sms_can_delete_response_meta_type_0 import SmsCanDeleteResponseMetaType0
 from .sms_create_request import SmsCreateRequest
 from .sms_create_request_quality import SmsCreateRequestQuality
 from .sms_message import SmsMessage
 from .sms_message_paginated_list_response import SmsMessagePaginatedListResponse
 from .sms_message_response import SmsMessageResponse
-from .sms_message_response_meta_type_0 import SmsMessageResponseMetaType0
 from .sms_paginated_list_response import SmsPaginatedListResponse
 from .sms_phonebook import SmsPhonebook
 from .sms_phonebook_add_contacts_request import SmsPhonebookAddContactsRequest
@@ -601,96 +458,66 @@ from .sms_phonebook_create_request_phone_numbers_item import (
 from .sms_phonebook_edit_request import SmsPhonebookEditRequest
 from .sms_phonebook_paginated_list_response import SmsPhonebookPaginatedListResponse
 from .sms_phonebook_response import SmsPhonebookResponse
-from .sms_phonebook_response_meta_type_0 import SmsPhonebookResponseMetaType0
 from .sms_price import SmsPrice
 from .sms_price_paginated_list_response import SmsPricePaginatedListResponse
 from .sms_price_response import SmsPriceResponse
-from .sms_price_response_meta_type_0 import SmsPriceResponseMetaType0
 from .sms_response import SmsResponse
-from .sms_response_meta_type_0 import SmsResponseMetaType0
 from .ssl_certificate import SslCertificate
 from .ssl_certificate_approver_emails import SslCertificateApproverEmails
 from .ssl_certificate_approver_emails_response import SslCertificateApproverEmailsResponse
-from .ssl_certificate_approver_emails_response_meta_type_0 import (
-    SslCertificateApproverEmailsResponseMetaType0,
-)
 from .ssl_certificate_can_reissue import SslCertificateCanReissue
 from .ssl_certificate_can_reissue_response import SslCertificateCanReissueResponse
-from .ssl_certificate_can_reissue_response_meta_type_0 import (
-    SslCertificateCanReissueResponseMetaType0,
-)
 from .ssl_certificate_change_csr_request import SslCertificateChangeCsrRequest
 from .ssl_certificate_export import SslCertificateExport
 from .ssl_certificate_export_format import SslCertificateExportFormat
 from .ssl_certificate_export_format_list_response import SslCertificateExportFormatListResponse
-from .ssl_certificate_export_format_list_response_meta_type_0 import (
-    SslCertificateExportFormatListResponseMetaType0,
-)
 from .ssl_certificate_export_request import SslCertificateExportRequest
 from .ssl_certificate_export_request_format import SslCertificateExportRequestFormat
 from .ssl_certificate_export_response import SslCertificateExportResponse
-from .ssl_certificate_export_response_meta_type_0 import SslCertificateExportResponseMetaType0
 from .ssl_certificate_key import SslCertificateKey
 from .ssl_certificate_key_response import SslCertificateKeyResponse
-from .ssl_certificate_key_response_meta_type_0 import SslCertificateKeyResponseMetaType0
 from .ssl_certificate_keys import SslCertificateKeys
 from .ssl_certificate_keys_response import SslCertificateKeysResponse
-from .ssl_certificate_keys_response_meta_type_0 import SslCertificateKeysResponseMetaType0
 from .ssl_certificate_owner_request import SslCertificateOwnerRequest
 from .ssl_certificate_paginated_list_response import SslCertificatePaginatedListResponse
 from .ssl_certificate_reemit_request import SslCertificateReemitRequest
 from .ssl_certificate_response import SslCertificateResponse
-from .ssl_certificate_response_meta_type_0 import SslCertificateResponseMetaType0
 from .sub_account_create_request import SubAccountCreateRequest
 from .sub_account_update_request import SubAccountUpdateRequest
 from .task import Task
 from .task_paginated_list_response import TaskPaginatedListResponse
 from .task_response import TaskResponse
-from .task_response_meta_type_0 import TaskResponseMetaType0
 from .task_status import TaskStatus
 from .tax_regime import TaxRegime
 from .tld import Tld
 from .tld_contact_specification import TldContactSpecification
 from .tld_paginated_list_response import TldPaginatedListResponse
 from .tld_response import TldResponse
-from .tld_response_meta_type_0 import TldResponseMetaType0
 from .upload_file_body import UploadFileBody
 from .web_monitoring import WebMonitoring
 from .web_monitoring_availability_chart import WebMonitoringAvailabilityChart
 from .web_monitoring_availability_chart_legend import WebMonitoringAvailabilityChartLegend
 from .web_monitoring_availability_chart_points_item import WebMonitoringAvailabilityChartPointsItem
 from .web_monitoring_availability_chart_response import WebMonitoringAvailabilityChartResponse
-from .web_monitoring_availability_chart_response_meta_type_0 import (
-    WebMonitoringAvailabilityChartResponseMetaType0,
-)
 from .web_monitoring_download_speed_chart import WebMonitoringDownloadSpeedChart
 from .web_monitoring_download_speed_chart_points_item import (
     WebMonitoringDownloadSpeedChartPointsItem,
 )
 from .web_monitoring_download_speed_chart_response import WebMonitoringDownloadSpeedChartResponse
-from .web_monitoring_download_speed_chart_response_meta_type_0 import (
-    WebMonitoringDownloadSpeedChartResponseMetaType0,
-)
 from .web_monitoring_notices import WebMonitoringNotices
 from .web_monitoring_notices_response import WebMonitoringNoticesResponse
-from .web_monitoring_notices_response_meta_type_0 import WebMonitoringNoticesResponseMetaType0
 from .web_monitoring_notices_update_request import WebMonitoringNoticesUpdateRequest
 from .web_monitoring_paginated_list_response import WebMonitoringPaginatedListResponse
 from .web_monitoring_response import WebMonitoringResponse
-from .web_monitoring_response_meta_type_0 import WebMonitoringResponseMetaType0
 from .web_monitoring_response_time_chart import WebMonitoringResponseTimeChart
 from .web_monitoring_response_time_chart_points_item import WebMonitoringResponseTimeChartPointsItem
 from .web_monitoring_response_time_chart_response import WebMonitoringResponseTimeChartResponse
-from .web_monitoring_response_time_chart_response_meta_type_0 import (
-    WebMonitoringResponseTimeChartResponseMetaType0,
-)
 
 __all__ = (
     "Account",
     "AccountBilling",
     "AccountPaginatedListResponse",
     "AccountResponse",
-    "AccountResponseMetaType0",
     "Amount",
     "AmountSimple",
     "ApiError",
@@ -698,7 +525,6 @@ __all__ = (
     "ApiErrorMetaType0Errors",
     "ApiUpload",
     "ApiUploadResponse",
-    "ApiUploadResponseMetaType0",
     "BillingData",
     "BuyPrepaidCreditTopupRequest",
     "BuyPrepaidCreditTopupRequestAmount",
@@ -747,15 +573,11 @@ __all__ = (
     "CloudStorageAccessCreateRequest",
     "CloudStorageAccessPaginatedListResponse",
     "CloudStorageAccessResponse",
-    "CloudStorageAccessResponseMetaType0",
     "CloudStoragePaginatedListResponse",
     "CloudStorageResponse",
-    "CloudStorageResponseMetaType0",
     "CloudStorageUser",
     "CloudStorageUserListResponse",
-    "CloudStorageUserListResponseMetaType0",
     "CloudStorageUserResponse",
-    "CloudStorageUserResponseMetaType0",
     "CloudStorageUserSizeUpdateRequest",
     "CompleteTaskDataBody",
     "CompleteTaskDataBodyData",
@@ -763,43 +585,33 @@ __all__ = (
     "Creditnote",
     "CreditnotePaginatedListResponse",
     "CreditnoteResponse",
-    "CreditnoteResponseMetaType0",
     "CreditnoteRow",
     "CreditnoteRowListResponse",
-    "CreditnoteRowListResponseMetaType0",
     "CreditnoteRowResponse",
-    "CreditnoteRowResponseMetaType0",
     "DnsRecord",
     "DnsRecordCaaData",
     "DnsRecordPaginatedListResponse",
     "DnsRecordResponse",
-    "DnsRecordResponseMetaType0",
     "DnsRecordTlsaData",
     "DnsType",
     "DnsZone",
     "DnsZoneResponse",
-    "DnsZoneResponseMetaType0",
     "DnssecDsData",
     "DnssecKeyData",
     "Domain",
     "DomainAvailability",
     "DomainAvailabilityResponse",
-    "DomainAvailabilityResponseMetaType0",
     "DomainCanChangeNameservers",
     "DomainCanChangeNameserversResponse",
-    "DomainCanChangeNameserversResponseMetaType0",
     "DomainContact",
     "DomainContactData",
     "DomainContactListResponse",
-    "DomainContactListResponseMetaType0",
     "DomainContactRequest",
     "DomainContactRequestContactDataItem",
     "DomainContactResponse",
-    "DomainContactResponseMetaType0",
     "DomainData",
     "DomainDetail",
     "DomainDetailResponse",
-    "DomainDetailResponseMetaType0",
     "DomainDnsNameserversChangeRequest",
     "DomainDnsNameserversCloudflareRequest",
     "DomainDnsRecordChangeRequest",
@@ -814,10 +626,8 @@ __all__ = (
     "DomainDnssec",
     "DomainDnssecCanActivate",
     "DomainDnssecCanActivateResponse",
-    "DomainDnssecCanActivateResponseMetaType0",
     "DomainDnssecCanDeactivate",
     "DomainDnssecCanDeactivateResponse",
-    "DomainDnssecCanDeactivateResponseMetaType0",
     "DomainDnssecRequest",
     "DomainDnssecRequestDsData1",
     "DomainDnssecRequestDsData1DigestType",
@@ -828,89 +638,66 @@ __all__ = (
     "DomainDnssecRequestKeyData257Item",
     "DomainDnssecRequestKeyData257ItemAlgorithm",
     "DomainDnssecResponse",
-    "DomainDnssecResponseMetaType0",
     "DomainName",
     "DomainNameserver",
     "DomainPaginatedListResponse",
     "DomainPremiumPrices",
     "EmptyResponse",
-    "EmptyResponseDataType0",
-    "EmptyResponseMetaType0",
     "HealthStatus",
     "HealthStatusResponse",
-    "HealthStatusResponseMetaType0",
     "Hosting",
     "HostingAntivirus",
     "HostingAntivirusNullableResponse",
-    "HostingAntivirusNullableResponseMetaType0",
     "HostingAntivirusRemovalScan",
     "HostingAntivirusRemovalScanPaginatedListResponse",
     "HostingAntivirusRemovalScanResponse",
-    "HostingAntivirusRemovalScanResponseMetaType0",
     "HostingAntivirusScan",
     "HostingAntivirusScanPaginatedListResponse",
     "HostingAntivirusScanResponse",
-    "HostingAntivirusScanResponseMetaType0",
     "HostingBackup",
     "HostingBackupExposeRequest",
     "HostingBackupListResponse",
-    "HostingBackupListResponseMetaType0",
     "HostingBackupResponse",
-    "HostingBackupResponseMetaType0",
     "HostingCredential",
     "HostingCredentialListResponse",
-    "HostingCredentialListResponseMetaType0",
     "HostingCronjob",
     "HostingCronjobCreateRequest",
     "HostingCronjobCreateRequestHttpRequestMethod",
     "HostingCronjobCreateRequestRequestProtocol",
     "HostingCronjobPaginatedListResponse",
     "HostingCronjobResponse",
-    "HostingCronjobResponseMetaType0",
     "HostingDatabase",
     "HostingDatabaseListResponse",
-    "HostingDatabaseListResponseMetaType0",
     "HostingDatabaseResponse",
-    "HostingDatabaseResponseMetaType0",
     "HostingDnsRecord",
     "HostingDnsRecordListResponse",
-    "HostingDnsRecordListResponseMetaType0",
     "HostingEmailAlias",
     "HostingEmailAliasCreateRequest",
     "HostingEmailAliasListResponse",
-    "HostingEmailAliasListResponseMetaType0",
     "HostingEmailAliasResponse",
-    "HostingEmailAliasResponseMetaType0",
     "HostingEmailAllowList",
     "HostingEmailAllowListPaginatedListResponse",
     "HostingEmailAllowListResponse",
-    "HostingEmailAllowListResponseMetaType0",
     "HostingEmailBlockList",
     "HostingEmailBlockListPaginatedListResponse",
     "HostingEmailBlockListResponse",
-    "HostingEmailBlockListResponseMetaType0",
     "HostingEmailCatchAll",
     "HostingEmailCatchAllRequest",
     "HostingEmailCatchAllResponse",
-    "HostingEmailCatchAllResponseMetaType0",
     "HostingEmailWblistRequest",
     "HostingFileProtectionUpdateRequest",
     "HostingHttpVersionUpdateRequest",
     "HostingHttpVersionUpdateRequestVersion",
     "HostingModSecurity",
     "HostingModSecurityResponse",
-    "HostingModSecurityResponseMetaType0",
     "HostingModSecurityRule",
     "HostingModSecurityRuleBulkRequest",
     "HostingModSecurityRuleCreateRequest",
     "HostingModSecurityRuleListResponse",
-    "HostingModSecurityRuleListResponseMetaType0",
     "HostingModSecurityRuleResponse",
-    "HostingModSecurityRuleResponseMetaType0",
     "HostingModSecurityScan",
     "HostingModSecurityScanPaginatedListResponse",
     "HostingModSecurityScanResponse",
-    "HostingModSecurityScanResponseMetaType0",
     "HostingModSecurityUpdateRequest",
     "HostingPaginatedListResponse",
     "HostingPhpSetting",
@@ -919,34 +706,25 @@ __all__ = (
     "HostingPhpSettingsUpdateRequestSetting",
     "HostingPhpVersion",
     "HostingPhpVersionListResponse",
-    "HostingPhpVersionListResponseMetaType0",
     "HostingPhpVersionUpdateRequest",
     "HostingResponse",
-    "HostingResponseMetaType0",
     "HostingSslCertificate",
     "HostingSslCertificateInstallRequest",
     "HostingSslCertificateInstallRequestCnType",
     "HostingSslCertificateInstallRequestDestinationType",
     "HostingSslCertificateListResponse",
-    "HostingSslCertificateListResponseMetaType0",
     "HostingSslCertificateResponse",
-    "HostingSslCertificateResponseMetaType0",
     "HostingSubdomainCreateRequest",
     "Invoice",
     "InvoicePaginatedListResponse",
     "InvoiceResponse",
-    "InvoiceResponseMetaType0",
     "InvoiceRow",
     "InvoiceRowListResponse",
-    "InvoiceRowListResponseMetaType0",
     "InvoiceRowResponse",
-    "InvoiceRowResponseMetaType0",
     "IpAddress",
     "IpAddressListResponse",
-    "IpAddressListResponseMetaType0",
     "IpAddressPaginatedListResponse",
     "IpAddressResponse",
-    "IpAddressResponseMetaType0",
     "JwkKey",
     "JwksResponse",
     "LegalEntity",
@@ -954,24 +732,19 @@ __all__ = (
     "License",
     "LicensePaginatedListResponse",
     "LicenseResponse",
-    "LicenseResponseMetaType0",
     "ListOrdersType",
     "ListSmsSmsStatus",
     "Microsoft365",
     "Microsoft365DomainAvailable",
     "Microsoft365DomainAvailableResponse",
-    "Microsoft365DomainAvailableResponseMetaType0",
     "Microsoft365PaginatedListResponse",
     "Microsoft365PartnerLink",
     "Microsoft365PartnerLinkResponse",
-    "Microsoft365PartnerLinkResponseMetaType0",
     "Microsoft365Response",
-    "Microsoft365ResponseMetaType0",
     "Microsoft365SubscriptionQuantityRequest",
     "Microsoft365Tenant",
     "Microsoft365TenantPaginatedListResponse",
     "Microsoft365TenantResponse",
-    "Microsoft365TenantResponseMetaType0",
     "OAuthAudience",
     "OAuthError",
     "OAuthTokenResponse",
@@ -980,95 +753,71 @@ __all__ = (
     "ObjectStorageBucketChart",
     "ObjectStorageBucketChartPointsItem",
     "ObjectStorageBucketChartResponse",
-    "ObjectStorageBucketChartResponseMetaType0",
     "ObjectStorageBucketFirewallEntry",
     "ObjectStorageBucketFirewallEntryCreateRequest",
     "ObjectStorageBucketFirewallEntryPaginatedListResponse",
     "ObjectStorageBucketFirewallEntryResponse",
-    "ObjectStorageBucketFirewallEntryResponseMetaType0",
     "ObjectStorageBucketPaginatedListResponse",
     "ObjectStorageBucketResponse",
-    "ObjectStorageBucketResponseMetaType0",
     "ObjectStorageIamUser",
     "ObjectStorageIamUserPaginatedListResponse",
     "ObjectStorageIamUserResponse",
-    "ObjectStorageIamUserResponseMetaType0",
     "ObjectStorageIamUserS3Key",
     "ObjectStorageIamUserS3KeyListResponse",
-    "ObjectStorageIamUserS3KeyListResponseMetaType0",
     "ObjectStorageIamUserS3KeyResponse",
-    "ObjectStorageIamUserS3KeyResponseMetaType0",
     "ObjectStoragePaginatedListResponse",
     "ObjectStorageResponse",
-    "ObjectStorageResponseMetaType0",
     "ObjectStorageS3Key",
     "ObjectStorageS3KeyResponse",
-    "ObjectStorageS3KeyResponseMetaType0",
     "OneClick",
     "OneClickAutorenew",
     "OneClickAutorenewResponse",
-    "OneClickAutorenewResponseMetaType0",
     "OneClickPaginatedListResponse",
     "OneClickPaymentCreateRequest",
     "OneClickResponse",
-    "OneClickResponseMetaType0",
     "Order",
     "OrderCanCancel",
     "OrderCanCancelResponse",
-    "OrderCanCancelResponseMetaType0",
     "OrderCanPay",
     "OrderCanPayResponse",
-    "OrderCanPayResponseMetaType0",
     "OrderInvoiceStatus",
     "OrderListResponse",
-    "OrderListResponseMetaType0",
     "OrderPaginatedListResponse",
     "OrderPaymentStatus",
     "OrderResponse",
-    "OrderResponseMetaType0",
     "OrderRow",
     "OrderRowListResponse",
-    "OrderRowListResponseMetaType0",
     "OrderRowResponse",
-    "OrderRowResponseMetaType0",
     "OrderStatus",
     "PaginationMeta",
     "Payment",
     "PaymentPaginatedListResponse",
     "PaymentProviderData",
     "PaymentResponse",
-    "PaymentResponseMetaType0",
     "Pec",
     "PecDomain",
     "PecDomainPaginatedListResponse",
     "PecDomainResponse",
-    "PecDomainResponseMetaType0",
     "PecMailboxOwnerChangeCreateRequest",
     "PecMailboxUpdateRequest",
     "PecOwnerChange",
     "PecOwnerChangePaginatedListResponse",
     "PecOwnerChangeResponse",
-    "PecOwnerChangeResponseMetaType0",
     "PecOwnerSummary",
     "PecPaginatedListResponse",
     "PecResponse",
-    "PecResponseMetaType0",
     "PrepaidCredit",
     "PrepaidCreditOperation",
     "PrepaidCreditOperationPaginatedListResponse",
     "PrepaidCreditOperationResponse",
-    "PrepaidCreditOperationResponseMetaType0",
     "PrepaidCreditOperationType",
     "PrepaidCreditPaymentCreateRequest",
     "PrepaidCreditResponse",
-    "PrepaidCreditResponseMetaType0",
     "PrepaidCreditTopup",
     "PrepaidCreditTopupPaginatedListResponse",
     "PrepaidCreditTopupResponse",
-    "PrepaidCreditTopupResponseMetaType0",
     "PrivateCloud",
     "PrivateCloudResponse",
-    "PrivateCloudResponseMetaType0",
     "PrivateCloudVmCreateRequest",
     "PrivateCloudVmUpdateRequest",
     "Promotion",
@@ -1076,22 +825,16 @@ __all__ = (
     "PurchaseBillingInfoChangeRequest",
     "PurchaseCanAddAdditional",
     "PurchaseCanAddAdditionalResponse",
-    "PurchaseCanAddAdditionalResponseMetaType0",
     "PurchaseCanCancel",
     "PurchaseCanCancelResponse",
-    "PurchaseCanCancelResponseMetaType0",
     "PurchaseCanChangeRecurrence",
     "PurchaseCanChangeRecurrenceResponse",
-    "PurchaseCanChangeRecurrenceResponseMetaType0",
     "PurchaseCanChangeRenewStatus",
     "PurchaseCanChangeRenewStatusResponse",
-    "PurchaseCanChangeRenewStatusResponseMetaType0",
     "PurchaseCanChangeService",
     "PurchaseCanChangeServiceResponse",
-    "PurchaseCanChangeServiceResponseMetaType0",
     "PurchaseCanRenew",
     "PurchaseCanRenewResponse",
-    "PurchaseCanRenewResponseMetaType0",
     "PurchaseCommentChangeRequest",
     "PurchaseName",
     "PurchasePaginatedListResponse",
@@ -1099,7 +842,6 @@ __all__ = (
     "PurchaseRecurrenceChangeRequest",
     "PurchaseRenewStatusChangeRequest",
     "PurchaseResponse",
-    "PurchaseResponseMetaType0",
     "PurchaseStatus",
     "Recurrence",
     "RecurrenceFrequency",
@@ -1111,19 +853,14 @@ __all__ = (
     "ServerAutomaticSnapshot",
     "ServerAutomaticSnapshotRequest",
     "ServerAutomaticSnapshotResponse",
-    "ServerAutomaticSnapshotResponseMetaType0",
     "ServerBackup",
     "ServerBackupExhibitRequest",
     "ServerBackupListResponse",
-    "ServerBackupListResponseMetaType0",
     "ServerBackupResponse",
-    "ServerBackupResponseMetaType0",
     "ServerCanAction",
     "ServerCanActionResponse",
-    "ServerCanActionResponseMetaType0",
     "ServerCredential",
     "ServerCredentialResponse",
-    "ServerCredentialResponseMetaType0",
     "ServerIpAddressReverseUpdateRequest",
     "ServerMonitoring",
     "ServerMonitoringPaginatedListResponse",
@@ -1131,33 +868,25 @@ __all__ = (
     "ServerMonitoringProbeChart",
     "ServerMonitoringProbeChartPointsItem",
     "ServerMonitoringProbeChartResponse",
-    "ServerMonitoringProbeChartResponseMetaType0",
     "ServerMonitoringProbeCreateRequest",
     "ServerMonitoringProbeCreateRequestParameters",
     "ServerMonitoringProbeListResponse",
-    "ServerMonitoringProbeListResponseMetaType0",
     "ServerMonitoringProbeResponse",
-    "ServerMonitoringProbeResponseMetaType0",
     "ServerMonitoringProbeUpdateRequest",
     "ServerMonitoringResponse",
-    "ServerMonitoringResponseMetaType0",
     "ServerNetworkInterface",
     "ServerNetworkInterfaceCreateRequest",
     "ServerNetworkInterfaceListResponse",
-    "ServerNetworkInterfaceListResponseMetaType0",
     "ServerNetworkInterfaceResponse",
-    "ServerNetworkInterfaceResponseMetaType0",
     "ServerOs",
     "ServerPaginatedListResponse",
     "ServerPowerActionRequest",
     "ServerPowerActionRequestAction",
     "ServerReinstallRequest",
     "ServerResponse",
-    "ServerResponseMetaType0",
     "ServerSnapshot",
     "ServerSnapshotPaginatedListResponse",
     "ServerSnapshotResponse",
-    "ServerSnapshotResponseMetaType0",
     "ServerTemplate",
     "Service",
     "ServiceCategory",
@@ -1169,19 +898,15 @@ __all__ = (
     "Sms",
     "SmsAccount",
     "SmsAccountResponse",
-    "SmsAccountResponseMetaType0",
     "SmsCanCancel",
     "SmsCanCancelResponse",
-    "SmsCanCancelResponseMetaType0",
     "SmsCanDelete",
     "SmsCanDeleteResponse",
-    "SmsCanDeleteResponseMetaType0",
     "SmsCreateRequest",
     "SmsCreateRequestQuality",
     "SmsMessage",
     "SmsMessagePaginatedListResponse",
     "SmsMessageResponse",
-    "SmsMessageResponseMetaType0",
     "SmsPaginatedListResponse",
     "SmsPhonebook",
     "SmsPhonebookAddContactsRequest",
@@ -1193,73 +918,56 @@ __all__ = (
     "SmsPhonebookEditRequest",
     "SmsPhonebookPaginatedListResponse",
     "SmsPhonebookResponse",
-    "SmsPhonebookResponseMetaType0",
     "SmsPrice",
     "SmsPricePaginatedListResponse",
     "SmsPriceResponse",
-    "SmsPriceResponseMetaType0",
     "SmsResponse",
-    "SmsResponseMetaType0",
     "SslCertificate",
     "SslCertificateApproverEmails",
     "SslCertificateApproverEmailsResponse",
-    "SslCertificateApproverEmailsResponseMetaType0",
     "SslCertificateCanReissue",
     "SslCertificateCanReissueResponse",
-    "SslCertificateCanReissueResponseMetaType0",
     "SslCertificateChangeCsrRequest",
     "SslCertificateExport",
     "SslCertificateExportFormat",
     "SslCertificateExportFormatListResponse",
-    "SslCertificateExportFormatListResponseMetaType0",
     "SslCertificateExportRequest",
     "SslCertificateExportRequestFormat",
     "SslCertificateExportResponse",
-    "SslCertificateExportResponseMetaType0",
     "SslCertificateKey",
     "SslCertificateKeyResponse",
-    "SslCertificateKeyResponseMetaType0",
     "SslCertificateKeys",
     "SslCertificateKeysResponse",
-    "SslCertificateKeysResponseMetaType0",
     "SslCertificateOwnerRequest",
     "SslCertificatePaginatedListResponse",
     "SslCertificateReemitRequest",
     "SslCertificateResponse",
-    "SslCertificateResponseMetaType0",
     "SubAccountCreateRequest",
     "SubAccountUpdateRequest",
     "Task",
     "TaskPaginatedListResponse",
     "TaskResponse",
-    "TaskResponseMetaType0",
     "TaskStatus",
     "TaxRegime",
     "Tld",
     "TldContactSpecification",
     "TldPaginatedListResponse",
     "TldResponse",
-    "TldResponseMetaType0",
     "UploadFileBody",
     "WebMonitoring",
     "WebMonitoringAvailabilityChart",
     "WebMonitoringAvailabilityChartLegend",
     "WebMonitoringAvailabilityChartPointsItem",
     "WebMonitoringAvailabilityChartResponse",
-    "WebMonitoringAvailabilityChartResponseMetaType0",
     "WebMonitoringDownloadSpeedChart",
     "WebMonitoringDownloadSpeedChartPointsItem",
     "WebMonitoringDownloadSpeedChartResponse",
-    "WebMonitoringDownloadSpeedChartResponseMetaType0",
     "WebMonitoringNotices",
     "WebMonitoringNoticesResponse",
-    "WebMonitoringNoticesResponseMetaType0",
     "WebMonitoringNoticesUpdateRequest",
     "WebMonitoringPaginatedListResponse",
     "WebMonitoringResponse",
-    "WebMonitoringResponseMetaType0",
     "WebMonitoringResponseTimeChart",
     "WebMonitoringResponseTimeChartPointsItem",
     "WebMonitoringResponseTimeChartResponse",
-    "WebMonitoringResponseTimeChartResponseMetaType0",
 )

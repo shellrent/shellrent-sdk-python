@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.hosting_mod_security import HostingModSecurity
-    from ..models.hosting_mod_security_response_meta_type_0 import (
-        HostingModSecurityResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="HostingModSecurityResponse")
@@ -26,15 +23,11 @@ class HostingModSecurityResponse:
     """ Always null in a successful response """
     data: HostingModSecurity
     """ Status of ModSecurity, the web application firewall, on the hosting """
-    meta: HostingModSecurityResponseMetaType0 | None
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.hosting_mod_security_response_meta_type_0 import (
-            HostingModSecurityResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -42,11 +35,7 @@ class HostingModSecurityResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, HostingModSecurityResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -64,9 +53,6 @@ class HostingModSecurityResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.hosting_mod_security import HostingModSecurity
-        from ..models.hosting_mod_security_response_meta_type_0 import (
-            HostingModSecurityResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -82,20 +68,7 @@ class HostingModSecurityResponse:
 
         data = HostingModSecurity.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> HostingModSecurityResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = HostingModSecurityResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(HostingModSecurityResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         hosting_mod_security_response = cls(
             error=error,

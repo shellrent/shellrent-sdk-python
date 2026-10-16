@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.domain_can_change_nameservers import DomainCanChangeNameservers
-    from ..models.domain_can_change_nameservers_response_meta_type_0 import (
-        DomainCanChangeNameserversResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="DomainCanChangeNameserversResponse")
@@ -27,15 +24,11 @@ class DomainCanChangeNameserversResponse:
     data: DomainCanChangeNameservers
     """ Nameserver types that can be activated on the domain now: none while the purchase of the domain is not
     active or has an operation running, or while the nameservers are being changed """
-    meta: DomainCanChangeNameserversResponseMetaType0 | None
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.domain_can_change_nameservers_response_meta_type_0 import (
-            DomainCanChangeNameserversResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -43,11 +36,7 @@ class DomainCanChangeNameserversResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, DomainCanChangeNameserversResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -67,9 +56,6 @@ class DomainCanChangeNameserversResponse:
         from ..models.domain_can_change_nameservers import (
             DomainCanChangeNameservers,
         )
-        from ..models.domain_can_change_nameservers_response_meta_type_0 import (
-            DomainCanChangeNameserversResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -85,20 +71,7 @@ class DomainCanChangeNameserversResponse:
 
         data = DomainCanChangeNameservers.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> DomainCanChangeNameserversResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = DomainCanChangeNameserversResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(DomainCanChangeNameserversResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         domain_can_change_nameservers_response = cls(
             error=error,

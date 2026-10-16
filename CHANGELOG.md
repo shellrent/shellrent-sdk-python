@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.0.0] - 2026-10-07
+## [1.0.0] - 2026-10-16
 
 Functions and models regenerated from the updated specification of the Shellrent API, which renames
 paths, parameters and models: see the lists below to update the code written for 0.3.0.
@@ -55,7 +55,8 @@ paths, parameters and models: see the lists below to update the code written for
   return `TaskResponse`; `update_private_cloud_virtual_machine` returns `EmptyResponse` when no
   resource changes; `get_hosting_antivirus` returns `HostingAntivirusNullableResponse`.
 - The default of `per_page` in the list operations is 20, as in the specification.
-- `error` of the success envelopes is `Literal[0]`; `ApiError.data` is `Any` (always null).
+- `error` of the success envelopes is `Literal[0]`. The fields that are always null are `Any`:
+  `meta` of the envelopes that are not paginated lists, `data` of `EmptyResponse` and of `ApiError`.
 - The package is classified as `Development Status :: 5 - Production/Stable`.
 - Model fields: many fields are now nullable or required as in the API, some request fields are
   enums (see Added), `Domain.nameservers` is a list of `DomainNameserver`,
@@ -80,8 +81,9 @@ paths, parameters and models: see the lists below to update the code written for
 - Models renamed: `CpanelLicense*` and `PleskLicense*` → `License*`, `DomainResponse` →
   `DomainDetailResponse`, `HostingEmailBlocList*` → `HostingEmailBlockList*`,
   `PaymentProviderDataType0` → `PaymentProviderData`, `GetHostingAntivirusResponse200` →
-  `HostingAntivirusNullableResponse`. Also removed: `ApiErrorDataType0`,
-  `HostingDatabaseCreateRequest`, `PayOrdersResponse200`,
+  `HostingAntivirusNullableResponse`. Also removed: the `*ResponseMetaType0` models of the `meta`
+  that is always null (such as `PaymentResponseMetaType0`), `EmptyResponseDataType0`,
+  `ApiErrorDataType0`, `HostingDatabaseCreateRequest`, `PayOrdersResponse200`,
   `BuyServiceObjectStorageRequestConfigurationTbSize` (`tb_size` is an `int`).
 - Fields no longer in the API: `Domain.dnssec_enabled`, the `ns_*_ip` of
   `DomainDnsNameserversChangeRequest`, `HostingSubdomainCreateRequest.subdomain`,

@@ -8,7 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.order_row import OrderRow
-    from ..models.order_row_list_response_meta_type_0 import OrderRowListResponseMetaType0
 
 
 T = TypeVar("T", bound="OrderRowListResponse")
@@ -24,13 +23,11 @@ class OrderRowListResponse:
     """ Always null in a successful response """
     data: list[OrderRow]
     """ Items returned by the operation """
-    meta: None | OrderRowListResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.order_row_list_response_meta_type_0 import OrderRowListResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -41,11 +38,7 @@ class OrderRowListResponse:
             data_item = data_item_data.to_dict()
             data.append(data_item)
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, OrderRowListResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -63,9 +56,6 @@ class OrderRowListResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.order_row import OrderRow
-        from ..models.order_row_list_response_meta_type_0 import (
-            OrderRowListResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -86,20 +76,7 @@ class OrderRowListResponse:
 
             data.append(data_item)
 
-        def _parse_meta(data: object) -> None | OrderRowListResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = OrderRowListResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | OrderRowListResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         order_row_list_response = cls(
             error=error,

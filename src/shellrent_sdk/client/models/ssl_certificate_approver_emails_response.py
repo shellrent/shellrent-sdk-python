@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.ssl_certificate_approver_emails import SslCertificateApproverEmails
-    from ..models.ssl_certificate_approver_emails_response_meta_type_0 import (
-        SslCertificateApproverEmailsResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="SslCertificateApproverEmailsResponse")
@@ -26,15 +23,11 @@ class SslCertificateApproverEmailsResponse:
     """ Always null in a successful response """
     data: SslCertificateApproverEmails
     """ Email addresses that can approve the validation of a domain name (`approver_email` of the certificate) """
-    meta: None | SslCertificateApproverEmailsResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.ssl_certificate_approver_emails_response_meta_type_0 import (
-            SslCertificateApproverEmailsResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -42,11 +35,7 @@ class SslCertificateApproverEmailsResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, SslCertificateApproverEmailsResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -66,9 +55,6 @@ class SslCertificateApproverEmailsResponse:
         from ..models.ssl_certificate_approver_emails import (
             SslCertificateApproverEmails,
         )
-        from ..models.ssl_certificate_approver_emails_response_meta_type_0 import (
-            SslCertificateApproverEmailsResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -84,20 +70,7 @@ class SslCertificateApproverEmailsResponse:
 
         data = SslCertificateApproverEmails.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | SslCertificateApproverEmailsResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = SslCertificateApproverEmailsResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | SslCertificateApproverEmailsResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         ssl_certificate_approver_emails_response = cls(
             error=error,

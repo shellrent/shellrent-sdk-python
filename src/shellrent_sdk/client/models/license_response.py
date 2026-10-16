@@ -8,7 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.license_ import License
-    from ..models.license_response_meta_type_0 import LicenseResponseMetaType0
 
 
 T = TypeVar("T", bound="LicenseResponse")
@@ -24,13 +23,11 @@ class LicenseResponse:
     """ Always null in a successful response """
     data: License
     """ cPanel or Plesk license of the account, with the server or the IP address where it is installed """
-    meta: LicenseResponseMetaType0 | None
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.license_response_meta_type_0 import LicenseResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -38,11 +35,7 @@ class LicenseResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, LicenseResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,7 +53,6 @@ class LicenseResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.license_ import License
-        from ..models.license_response_meta_type_0 import LicenseResponseMetaType0
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -76,20 +68,7 @@ class LicenseResponse:
 
         data = License.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> LicenseResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = LicenseResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(LicenseResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         license_response = cls(
             error=error,

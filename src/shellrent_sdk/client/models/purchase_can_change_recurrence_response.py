@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.purchase_can_change_recurrence import PurchaseCanChangeRecurrence
-    from ..models.purchase_can_change_recurrence_response_meta_type_0 import (
-        PurchaseCanChangeRecurrenceResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="PurchaseCanChangeRecurrenceResponse")
@@ -27,15 +24,11 @@ class PurchaseCanChangeRecurrenceResponse:
     data: PurchaseCanChangeRecurrence
     """ Whether the recurrence of the purchase can be changed (`PATCH /api/v3/purchases/{purchase_id}/recurrence`)
     """
-    meta: None | PurchaseCanChangeRecurrenceResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.purchase_can_change_recurrence_response_meta_type_0 import (
-            PurchaseCanChangeRecurrenceResponseMetaType0,
-        )
-
         error = self.error
 
         message: None | str
@@ -43,11 +36,7 @@ class PurchaseCanChangeRecurrenceResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, PurchaseCanChangeRecurrenceResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -67,9 +56,6 @@ class PurchaseCanChangeRecurrenceResponse:
         from ..models.purchase_can_change_recurrence import (
             PurchaseCanChangeRecurrence,
         )
-        from ..models.purchase_can_change_recurrence_response_meta_type_0 import (
-            PurchaseCanChangeRecurrenceResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -85,20 +71,7 @@ class PurchaseCanChangeRecurrenceResponse:
 
         data = PurchaseCanChangeRecurrence.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | PurchaseCanChangeRecurrenceResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = PurchaseCanChangeRecurrenceResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | PurchaseCanChangeRecurrenceResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         purchase_can_change_recurrence_response = cls(
             error=error,

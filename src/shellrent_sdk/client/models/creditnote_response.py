@@ -8,7 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.creditnote import Creditnote
-    from ..models.creditnote_response_meta_type_0 import CreditnoteResponseMetaType0
 
 
 T = TypeVar("T", bound="CreditnoteResponse")
@@ -24,13 +23,11 @@ class CreditnoteResponse:
     """ Always null in a successful response """
     data: Creditnote
     """ Credit note of the account, with its total and electronic invoicing data """
-    meta: CreditnoteResponseMetaType0 | None
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.creditnote_response_meta_type_0 import CreditnoteResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -38,11 +35,7 @@ class CreditnoteResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, CreditnoteResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,9 +53,6 @@ class CreditnoteResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.creditnote import Creditnote
-        from ..models.creditnote_response_meta_type_0 import (
-            CreditnoteResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -78,20 +68,7 @@ class CreditnoteResponse:
 
         data = Creditnote.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> CreditnoteResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = CreditnoteResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(CreditnoteResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         creditnote_response = cls(
             error=error,

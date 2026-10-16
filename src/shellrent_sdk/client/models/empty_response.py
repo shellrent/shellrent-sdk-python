@@ -1,15 +1,10 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from typing import TYPE_CHECKING, Any, Literal, Self, TypeVar, cast
+from typing import Any, Literal, Self, TypeVar, cast
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
-
-if TYPE_CHECKING:
-    from ..models.empty_response_data_type_0 import EmptyResponseDataType0
-    from ..models.empty_response_meta_type_0 import EmptyResponseMetaType0
-
 
 T = TypeVar("T", bound="EmptyResponse")
 
@@ -22,32 +17,21 @@ class EmptyResponse:
     """ Always 0 in a successful response """
     message: None | str
     """ Always null in a successful response """
-    data: EmptyResponseDataType0 | None
+    data: Any
     """ Always null: the operation returns no data """
-    meta: EmptyResponseMetaType0 | None
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.empty_response_data_type_0 import EmptyResponseDataType0
-        from ..models.empty_response_meta_type_0 import EmptyResponseMetaType0
-
         error = self.error
 
         message: None | str
         message = self.message
 
-        data: dict[str, Any] | None
-        if isinstance(self.data, EmptyResponseDataType0):
-            data = self.data.to_dict()
-        else:
-            data = self.data
+        data = self.data
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, EmptyResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -64,9 +48,6 @@ class EmptyResponse:
 
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
-        from ..models.empty_response_data_type_0 import EmptyResponseDataType0
-        from ..models.empty_response_meta_type_0 import EmptyResponseMetaType0
-
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
         if error != 0:
@@ -79,35 +60,9 @@ class EmptyResponse:
 
         message = _parse_message(d.pop("message"))
 
-        def _parse_data(data: object) -> EmptyResponseDataType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                data_type_0 = EmptyResponseDataType0.from_dict(data)
+        data = d.pop("data")
 
-                return data_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(EmptyResponseDataType0 | None, data)
-
-        data = _parse_data(d.pop("data"))
-
-        def _parse_meta(data: object) -> EmptyResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = EmptyResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(EmptyResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         empty_response = cls(
             error=error,

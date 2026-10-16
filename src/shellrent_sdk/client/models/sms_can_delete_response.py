@@ -8,7 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.sms_can_delete import SmsCanDelete
-    from ..models.sms_can_delete_response_meta_type_0 import SmsCanDeleteResponseMetaType0
 
 
 T = TypeVar("T", bound="SmsCanDeleteResponse")
@@ -24,13 +23,11 @@ class SmsCanDeleteResponse:
     """ Always null in a successful response """
     data: SmsCanDelete
     """ Whether an SMS can be deleted (`DELETE /api/v3/sms/{sms_id}`) """
-    meta: None | SmsCanDeleteResponseMetaType0
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
-        from ..models.sms_can_delete_response_meta_type_0 import SmsCanDeleteResponseMetaType0
-
         error = self.error
 
         message: None | str
@@ -38,11 +35,7 @@ class SmsCanDeleteResponse:
 
         data = self.data.to_dict()
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, SmsCanDeleteResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -60,9 +53,6 @@ class SmsCanDeleteResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.sms_can_delete import SmsCanDelete
-        from ..models.sms_can_delete_response_meta_type_0 import (
-            SmsCanDeleteResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -78,20 +68,7 @@ class SmsCanDeleteResponse:
 
         data = SmsCanDelete.from_dict(d.pop("data"))
 
-        def _parse_meta(data: object) -> None | SmsCanDeleteResponseMetaType0:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = SmsCanDeleteResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(None | SmsCanDeleteResponseMetaType0, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         sms_can_delete_response = cls(
             error=error,

@@ -8,9 +8,6 @@ from attrs import field as _attrs_field
 
 if TYPE_CHECKING:
     from ..models.hosting_antivirus import HostingAntivirus
-    from ..models.hosting_antivirus_nullable_response_meta_type_0 import (
-        HostingAntivirusNullableResponseMetaType0,
-    )
 
 
 T = TypeVar("T", bound="HostingAntivirusNullableResponse")
@@ -26,15 +23,12 @@ class HostingAntivirusNullableResponse:
     """ Always null in a successful response """
     data: HostingAntivirus | None
     """ Resource returned by the operation, or null: the description of the response says when """
-    meta: HostingAntivirusNullableResponseMetaType0 | None
+    meta: Any
     """ Always null: only the paginated lists have a `meta` """
     additional_properties: dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         from ..models.hosting_antivirus import HostingAntivirus
-        from ..models.hosting_antivirus_nullable_response_meta_type_0 import (
-            HostingAntivirusNullableResponseMetaType0,
-        )
 
         error = self.error
 
@@ -47,11 +41,7 @@ class HostingAntivirusNullableResponse:
         else:
             data = self.data
 
-        meta: dict[str, Any] | None
-        if isinstance(self.meta, HostingAntivirusNullableResponseMetaType0):
-            meta = self.meta.to_dict()
-        else:
-            meta = self.meta
+        meta = self.meta
 
         field_dict: dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -69,9 +59,6 @@ class HostingAntivirusNullableResponse:
     @classmethod
     def from_dict(cls, src_dict: Mapping[str, Any]) -> Self:
         from ..models.hosting_antivirus import HostingAntivirus
-        from ..models.hosting_antivirus_nullable_response_meta_type_0 import (
-            HostingAntivirusNullableResponseMetaType0,
-        )
 
         d = dict(src_dict)
         error = cast(Literal[0], d.pop("error"))
@@ -100,20 +87,7 @@ class HostingAntivirusNullableResponse:
 
         data = _parse_data(d.pop("data"))
 
-        def _parse_meta(data: object) -> HostingAntivirusNullableResponseMetaType0 | None:
-            if data is None:
-                return data
-            try:
-                if not isinstance(data, dict):
-                    raise TypeError()
-                meta_type_0 = HostingAntivirusNullableResponseMetaType0.from_dict(data)
-
-                return meta_type_0
-            except (TypeError, ValueError, AttributeError, KeyError):
-                pass
-            return cast(HostingAntivirusNullableResponseMetaType0 | None, data)
-
-        meta = _parse_meta(d.pop("meta"))
+        meta = d.pop("meta")
 
         hosting_antivirus_nullable_response = cls(
             error=error,
