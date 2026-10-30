@@ -54,6 +54,9 @@ class Purchase:
     """ Purchase price; null for sub-accounts. """
     renew_price: Amount | None
     """ Renew price (applied on recurring purchases only); null for sub-accounts. """
+    renew_price_discounted: Amount | None
+    """ Renew price with the discount granted to the purchase by a discount promotion, for the same recurrence as
+    `renew_price`; null when the purchase has no discount, and for sub-accounts. """
     restore_price: Amount | None
     """ Restore/reactivation price (applied on domains only); null for sub-accounts. """
     date_activation: datetime.date | None
@@ -148,6 +151,12 @@ class Purchase:
             renew_price = self.renew_price.to_dict()
         else:
             renew_price = self.renew_price
+
+        renew_price_discounted: dict[str, Any] | None
+        if isinstance(self.renew_price_discounted, Amount):
+            renew_price_discounted = self.renew_price_discounted.to_dict()
+        else:
+            renew_price_discounted = self.renew_price_discounted
 
         restore_price: dict[str, Any] | None
         if isinstance(self.restore_price, Amount):
@@ -251,6 +260,7 @@ class Purchase:
                 "quantity": quantity,
                 "activation_price": activation_price,
                 "renew_price": renew_price,
+                "renew_price_discounted": renew_price_discounted,
                 "restore_price": restore_price,
                 "date_activation": date_activation,
                 "date_activation_start": date_activation_start,
@@ -369,6 +379,21 @@ class Purchase:
             return cast(Amount | None, data)
 
         renew_price = _parse_renew_price(d.pop("renew_price"))
+
+        def _parse_renew_price_discounted(data: object) -> Amount | None:
+            if data is None:
+                return data
+            try:
+                if not isinstance(data, dict):
+                    raise TypeError()
+                renew_price_discounted_type_0 = Amount.from_dict(data)
+
+                return renew_price_discounted_type_0
+            except (TypeError, ValueError, AttributeError, KeyError):
+                pass
+            return cast(Amount | None, data)
+
+        renew_price_discounted = _parse_renew_price_discounted(d.pop("renew_price_discounted"))
 
         def _parse_restore_price(data: object) -> Amount | None:
             if data is None:
@@ -568,6 +593,7 @@ class Purchase:
             quantity=quantity,
             activation_price=activation_price,
             renew_price=renew_price,
+            renew_price_discounted=renew_price_discounted,
             restore_price=restore_price,
             date_activation=date_activation,
             date_activation_start=date_activation_start,

@@ -103,12 +103,19 @@ def sync_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Install SSL certificate on hosting
 
-     Install an SSL certificate on hosting or create and install Let's Encrypt
+     Installs a purchased SSL certificate on the hosting, or issues and installs a Let's Encrypt
+    certificate, with the rules of the control panel. With DNS that are not on our nameservers, Let's
+    Encrypt requires the CNAME record that delegates its DNS validation: `GET
+    /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells whether the installation can
+    start, and which record to create. 409 when a certificate is already installed on the destination,
+    the CNAME record is missing, the limit of Let's Encrypt installations is reached or an operation is
+    running; 403 when the mail server of the hosting does not accept certificates
 
     Args:
         hosting_id (int):
         body (HostingSslCertificateInstallRequest | Unset): SSL certificate to install on the
-            hosting; with no body, a Let's Encrypt certificate for the website
+            hosting; with no body, a wildcard Let's Encrypt certificate for the website and the mail
+            of a main hosting, or for the website of a subdomain
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -138,12 +145,19 @@ def sync(
 ) -> ApiError | TaskResponse | None:
     """Install SSL certificate on hosting
 
-     Install an SSL certificate on hosting or create and install Let's Encrypt
+     Installs a purchased SSL certificate on the hosting, or issues and installs a Let's Encrypt
+    certificate, with the rules of the control panel. With DNS that are not on our nameservers, Let's
+    Encrypt requires the CNAME record that delegates its DNS validation: `GET
+    /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells whether the installation can
+    start, and which record to create. 409 when a certificate is already installed on the destination,
+    the CNAME record is missing, the limit of Let's Encrypt installations is reached or an operation is
+    running; 403 when the mail server of the hosting does not accept certificates
 
     Args:
         hosting_id (int):
         body (HostingSslCertificateInstallRequest | Unset): SSL certificate to install on the
-            hosting; with no body, a Let's Encrypt certificate for the website
+            hosting; with no body, a wildcard Let's Encrypt certificate for the website and the mail
+            of a main hosting, or for the website of a subdomain
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -168,12 +182,19 @@ async def asyncio_detailed(
 ) -> Response[ApiError | TaskResponse]:
     """Install SSL certificate on hosting
 
-     Install an SSL certificate on hosting or create and install Let's Encrypt
+     Installs a purchased SSL certificate on the hosting, or issues and installs a Let's Encrypt
+    certificate, with the rules of the control panel. With DNS that are not on our nameservers, Let's
+    Encrypt requires the CNAME record that delegates its DNS validation: `GET
+    /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells whether the installation can
+    start, and which record to create. 409 when a certificate is already installed on the destination,
+    the CNAME record is missing, the limit of Let's Encrypt installations is reached or an operation is
+    running; 403 when the mail server of the hosting does not accept certificates
 
     Args:
         hosting_id (int):
         body (HostingSslCertificateInstallRequest | Unset): SSL certificate to install on the
-            hosting; with no body, a Let's Encrypt certificate for the website
+            hosting; with no body, a wildcard Let's Encrypt certificate for the website and the mail
+            of a main hosting, or for the website of a subdomain
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -201,12 +222,19 @@ async def asyncio(
 ) -> ApiError | TaskResponse | None:
     """Install SSL certificate on hosting
 
-     Install an SSL certificate on hosting or create and install Let's Encrypt
+     Installs a purchased SSL certificate on the hosting, or issues and installs a Let's Encrypt
+    certificate, with the rules of the control panel. With DNS that are not on our nameservers, Let's
+    Encrypt requires the CNAME record that delegates its DNS validation: `GET
+    /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells whether the installation can
+    start, and which record to create. 409 when a certificate is already installed on the destination,
+    the CNAME record is missing, the limit of Let's Encrypt installations is reached or an operation is
+    running; 403 when the mail server of the hosting does not accept certificates
 
     Args:
         hosting_id (int):
         body (HostingSslCertificateInstallRequest | Unset): SSL certificate to install on the
-            hosting; with no body, a Let's Encrypt certificate for the website
+            hosting; with no body, a wildcard Let's Encrypt certificate for the website and the mail
+            of a main hosting, or for the website of a subdomain
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

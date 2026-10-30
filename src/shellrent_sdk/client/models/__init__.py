@@ -72,6 +72,10 @@ from .buy_service_ssl_certificate_request_data_admin_title import (
 )
 from .buy_service_veeam_baas_request import BuyServiceVeeamBaasRequest
 from .buy_service_veeam_baas_request_configuration import BuyServiceVeeamBaasRequestConfiguration
+from .can_install_hosting_ssl_certificate_cn_type import CanInstallHostingSslCertificateCnType
+from .can_install_hosting_ssl_certificate_destination_type import (
+    CanInstallHostingSslCertificateDestinationType,
+)
 from .cloud_storage import CloudStorage
 from .cloud_storage_access import CloudStorageAccess
 from .cloud_storage_access_create_request import CloudStorageAccessCreateRequest
@@ -231,6 +235,9 @@ from .hosting_php_version_list_response import HostingPhpVersionListResponse
 from .hosting_php_version_update_request import HostingPhpVersionUpdateRequest
 from .hosting_response import HostingResponse
 from .hosting_ssl_certificate import HostingSslCertificate
+from .hosting_ssl_certificate_can_install import HostingSslCertificateCanInstall
+from .hosting_ssl_certificate_can_install_reason import HostingSslCertificateCanInstallReason
+from .hosting_ssl_certificate_can_install_response import HostingSslCertificateCanInstallResponse
 from .hosting_ssl_certificate_install_request import HostingSslCertificateInstallRequest
 from .hosting_ssl_certificate_install_request_cn_type import (
     HostingSslCertificateInstallRequestCnType,
@@ -240,6 +247,7 @@ from .hosting_ssl_certificate_install_request_destination_type import (
 )
 from .hosting_ssl_certificate_list_response import HostingSslCertificateListResponse
 from .hosting_ssl_certificate_response import HostingSslCertificateResponse
+from .hosting_ssl_dns_delegation import HostingSslDnsDelegation
 from .hosting_subdomain_create_request import HostingSubdomainCreateRequest
 from .invoice import Invoice
 from .invoice_paginated_list_response import InvoicePaginatedListResponse
@@ -568,6 +576,8 @@ __all__ = (
     "BuyServiceSslCertificateRequestDataAdminTitle",
     "BuyServiceVeeamBaasRequest",
     "BuyServiceVeeamBaasRequestConfiguration",
+    "CanInstallHostingSslCertificateCnType",
+    "CanInstallHostingSslCertificateDestinationType",
     "CloudStorage",
     "CloudStorageAccess",
     "CloudStorageAccessCreateRequest",
@@ -709,11 +719,15 @@ __all__ = (
     "HostingPhpVersionUpdateRequest",
     "HostingResponse",
     "HostingSslCertificate",
+    "HostingSslCertificateCanInstall",
+    "HostingSslCertificateCanInstallReason",
+    "HostingSslCertificateCanInstallResponse",
     "HostingSslCertificateInstallRequest",
     "HostingSslCertificateInstallRequestCnType",
     "HostingSslCertificateInstallRequestDestinationType",
     "HostingSslCertificateListResponse",
     "HostingSslCertificateResponse",
+    "HostingSslDnsDelegation",
     "HostingSubdomainCreateRequest",
     "Invoice",
     "InvoicePaginatedListResponse",
