@@ -30,8 +30,9 @@ class HostingSslCertificateCanInstall:
     """ Why the installation cannot start now; null when it can. `ALREADY_INSTALLED`: a certificate is already
     installed on the destination, remove it first. `CNAME_MISSING`: the DNS of the domain are not on our nameservers
     and the CNAME record in `dns_delegation` is missing. `LIMIT_REACHED`: too many Let's Encrypt installations on
-    the hosting in the last days. `MAIL_NOT_SUPPORTED`: the mail server of the hosting does not accept certificates.
-    `OPERATION_RUNNING`: another installation or operation is running on the hosting """
+    the hosting in the last days. `HOSTING_NOT_ACTIVE`: the activation of the hosting has not been completed yet.
+    `MAIL_NOT_SUPPORTED`: the mail server of the hosting does not accept certificates. `OPERATION_RUNNING`: another
+    installation or operation is running on the hosting """
     message: None | str
     """ Description of `reason`; null when the installation can start """
     dns_delegation: HostingSslDnsDelegation | None

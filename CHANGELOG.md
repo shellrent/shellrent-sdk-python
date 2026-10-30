@@ -21,7 +21,7 @@ renew price of the purchases. No breaking changes in names or signatures.
   nameservers.
 - `HostingSslCertificateCanInstall`, `HostingSslCertificateCanInstallResponse`, `HostingSslDnsDelegation`, the enum
   `HostingSslCertificateCanInstallReason` (`ALREADY_INSTALLED`, `CNAME_MISSING`, `LIMIT_REACHED`,
-  `MAIL_NOT_SUPPORTED`, `OPERATION_RUNNING`) and the enums of the query parameters
+  `HOSTING_NOT_ACTIVE`, `MAIL_NOT_SUPPORTED`, `OPERATION_RUNNING`) and the enums of the query parameters
   `CanInstallHostingSslCertificateDestinationType` and `CanInstallHostingSslCertificateCnType`.
 - `Purchase.renew_price_discounted` (`Amount | None`): the renew price with the discount of the discount promotion
   applied to the purchase; `None` without a discount and for sub-accounts.

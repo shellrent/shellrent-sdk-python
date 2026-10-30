@@ -132,9 +132,9 @@ def sync_detailed(
     and its fields in the query, whether the SSL certificate can be installed on the hosting now, and
     why not: a certificate already installed, the CNAME record that delegates the validation of Let's
     Encrypt missing from DNS that are not on our nameservers (`dns_delegation` has the record to
-    create), the limit of Let's Encrypt installations, an operation running. With DNS on our nameservers
-    the installation creates the CNAME record by itself. Invalid fields respond 400, as in the
-    installation
+    create), the limit of Let's Encrypt installations, the hosting not active yet, an operation running.
+    With DNS on our nameservers the installation creates the CNAME record by itself. Invalid fields
+    respond 400, as in the installation
 
     Args:
         hosting_id (int):
@@ -180,9 +180,9 @@ def sync(
     and its fields in the query, whether the SSL certificate can be installed on the hosting now, and
     why not: a certificate already installed, the CNAME record that delegates the validation of Let's
     Encrypt missing from DNS that are not on our nameservers (`dns_delegation` has the record to
-    create), the limit of Let's Encrypt installations, an operation running. With DNS on our nameservers
-    the installation creates the CNAME record by itself. Invalid fields respond 400, as in the
-    installation
+    create), the limit of Let's Encrypt installations, the hosting not active yet, an operation running.
+    With DNS on our nameservers the installation creates the CNAME record by itself. Invalid fields
+    respond 400, as in the installation
 
     Args:
         hosting_id (int):
@@ -223,9 +223,9 @@ async def asyncio_detailed(
     and its fields in the query, whether the SSL certificate can be installed on the hosting now, and
     why not: a certificate already installed, the CNAME record that delegates the validation of Let's
     Encrypt missing from DNS that are not on our nameservers (`dns_delegation` has the record to
-    create), the limit of Let's Encrypt installations, an operation running. With DNS on our nameservers
-    the installation creates the CNAME record by itself. Invalid fields respond 400, as in the
-    installation
+    create), the limit of Let's Encrypt installations, the hosting not active yet, an operation running.
+    With DNS on our nameservers the installation creates the CNAME record by itself. Invalid fields
+    respond 400, as in the installation
 
     Args:
         hosting_id (int):
@@ -269,9 +269,9 @@ async def asyncio(
     and its fields in the query, whether the SSL certificate can be installed on the hosting now, and
     why not: a certificate already installed, the CNAME record that delegates the validation of Let's
     Encrypt missing from DNS that are not on our nameservers (`dns_delegation` has the record to
-    create), the limit of Let's Encrypt installations, an operation running. With DNS on our nameservers
-    the installation creates the CNAME record by itself. Invalid fields respond 400, as in the
-    installation
+    create), the limit of Let's Encrypt installations, the hosting not active yet, an operation running.
+    With DNS on our nameservers the installation creates the CNAME record by itself. Invalid fields
+    respond 400, as in the installation
 
     Args:
         hosting_id (int):

@@ -3131,9 +3131,9 @@ paths:
         /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells
         whether the installation can start, and which record to create. 409 when
         a certificate is already installed on the destination, the CNAME record
-        is missing, the limit of Let's Encrypt installations is reached or an
-        operation is running; 403 when the mail server of the hosting does not
-        accept certificates
+        is missing, the limit of Let's Encrypt installations is reached, the
+        hosting is not active yet or an operation is running; 403 when the mail
+        server of the hosting does not accept certificates
       operationId: installHostingSslCertificate
       parameters:
         - $ref: '#/components/parameters/HostingId'
@@ -3264,9 +3264,10 @@ paths:
         and why not: a certificate already installed, the CNAME record that
         delegates the validation of Let's Encrypt missing from DNS that are not
         on our nameservers (`dns_delegation` has the record to create), the
-        limit of Let's Encrypt installations, an operation running. With DNS on
-        our nameservers the installation creates the CNAME record by itself.
-        Invalid fields respond 400, as in the installation
+        limit of Let's Encrypt installations, the hosting not active yet, an
+        operation running. With DNS on our nameservers the installation creates
+        the CNAME record by itself. Invalid fields respond 400, as in the
+        installation
       operationId: canInstallHostingSslCertificate
       parameters:
         - $ref: '#/components/parameters/HostingId'
@@ -12622,6 +12623,7 @@ components:
         - ALREADY_INSTALLED
         - CNAME_MISSING
         - LIMIT_REACHED
+        - HOSTING_NOT_ACTIVE
         - MAIL_NOT_SUPPORTED
         - OPERATION_RUNNING
       example: CNAME_MISSING
@@ -17543,9 +17545,11 @@ components:
             destination, remove it first. `CNAME_MISSING`: the DNS of the domain
             are not on our nameservers and the CNAME record in `dns_delegation`
             is missing. `LIMIT_REACHED`: too many Let's Encrypt installations on
-            the hosting in the last days. `MAIL_NOT_SUPPORTED`: the mail server
-            of the hosting does not accept certificates. `OPERATION_RUNNING`:
-            another installation or operation is running on the hosting
+            the hosting in the last days. `HOSTING_NOT_ACTIVE`: the activation
+            of the hosting has not been completed yet. `MAIL_NOT_SUPPORTED`: the
+            mail server of the hosting does not accept certificates.
+            `OPERATION_RUNNING`: another installation or operation is running on
+            the hosting
           anyOf:
             - $ref: '#/components/schemas/HostingSslCertificateCanInstallReason'
             - type: 'null'

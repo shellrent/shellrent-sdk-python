@@ -108,8 +108,9 @@ def sync_detailed(
     Encrypt requires the CNAME record that delegates its DNS validation: `GET
     /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells whether the installation can
     start, and which record to create. 409 when a certificate is already installed on the destination,
-    the CNAME record is missing, the limit of Let's Encrypt installations is reached or an operation is
-    running; 403 when the mail server of the hosting does not accept certificates
+    the CNAME record is missing, the limit of Let's Encrypt installations is reached, the hosting is not
+    active yet or an operation is running; 403 when the mail server of the hosting does not accept
+    certificates
 
     Args:
         hosting_id (int):
@@ -150,8 +151,9 @@ def sync(
     Encrypt requires the CNAME record that delegates its DNS validation: `GET
     /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells whether the installation can
     start, and which record to create. 409 when a certificate is already installed on the destination,
-    the CNAME record is missing, the limit of Let's Encrypt installations is reached or an operation is
-    running; 403 when the mail server of the hosting does not accept certificates
+    the CNAME record is missing, the limit of Let's Encrypt installations is reached, the hosting is not
+    active yet or an operation is running; 403 when the mail server of the hosting does not accept
+    certificates
 
     Args:
         hosting_id (int):
@@ -187,8 +189,9 @@ async def asyncio_detailed(
     Encrypt requires the CNAME record that delegates its DNS validation: `GET
     /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells whether the installation can
     start, and which record to create. 409 when a certificate is already installed on the destination,
-    the CNAME record is missing, the limit of Let's Encrypt installations is reached or an operation is
-    running; 403 when the mail server of the hosting does not accept certificates
+    the CNAME record is missing, the limit of Let's Encrypt installations is reached, the hosting is not
+    active yet or an operation is running; 403 when the mail server of the hosting does not accept
+    certificates
 
     Args:
         hosting_id (int):
@@ -227,8 +230,9 @@ async def asyncio(
     Encrypt requires the CNAME record that delegates its DNS validation: `GET
     /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells whether the installation can
     start, and which record to create. 409 when a certificate is already installed on the destination,
-    the CNAME record is missing, the limit of Let's Encrypt installations is reached or an operation is
-    running; 403 when the mail server of the hosting does not accept certificates
+    the CNAME record is missing, the limit of Let's Encrypt installations is reached, the hosting is not
+    active yet or an operation is running; 403 when the mail server of the hosting does not accept
+    certificates
 
     Args:
         hosting_id (int):
