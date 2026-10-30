@@ -3124,8 +3124,16 @@ paths:
         - Hosting
       summary: Install SSL certificate on hosting
       description: >-
-        Install an SSL certificate on hosting or create and install Let's
-        Encrypt
+        Installs a purchased SSL certificate on the hosting, or issues and
+        installs a Let's Encrypt certificate, with the rules of the control
+        panel. With DNS that are not on our nameservers, Let's Encrypt requires
+        the CNAME record that delegates its DNS validation: `GET
+        /api/v3/hostings/{hosting_id}/ssl-certificates/can-install` tells
+        whether the installation can start, and which record to create. 409 when
+        a certificate is already installed on the destination, the CNAME record
+        is missing, the limit of Let's Encrypt installations is reached, the
+        hosting is not active yet or an operation is running; 403 when the mail
+        server of the hosting does not accept certificates
       operationId: installHostingSslCertificate
       parameters:
         - $ref: '#/components/parameters/HostingId'
@@ -3244,6 +3252,84 @@ paths:
       security:
         - oauth2:
             - hosting:write
+  /api/v3/hostings/{hosting_id}/ssl-certificates/can-install:
+    get:
+      tags:
+        - Hosting
+      summary: Can install SSL certificate on hosting
+      description: >-
+        Checks, with the rules of the installation (`POST
+        /api/v3/hostings/{hosting_id}/ssl-certificates`) and its fields in the
+        query, whether the SSL certificate can be installed on the hosting now,
+        and why not: a certificate already installed, the CNAME record that
+        delegates the validation of Let's Encrypt missing from DNS that are not
+        on our nameservers (`dns_delegation` has the record to create), the
+        limit of Let's Encrypt installations, the hosting not active yet, an
+        operation running. With DNS on our nameservers the installation creates
+        the CNAME record by itself. Invalid fields respond 400, as in the
+        installation
+      operationId: canInstallHostingSslCertificate
+      parameters:
+        - $ref: '#/components/parameters/HostingId'
+        - name: ssl_certificate_id
+          in: query
+          description: >-
+            Id of the purchased SSL certificate to install (`GET
+            /api/v3/ssl-certificates/{ssl_certificate_id}`); omit it for a Let's
+            Encrypt certificate
+          required: false
+          schema:
+            type:
+              - integer
+              - 'null'
+        - name: destination_type
+          in: query
+          description: >-
+            Where to install the certificate: `web` for the website, `mail` for
+            the mail servers, `all` for both. When omitted, `all` on a main
+            hosting and `web` on a subdomain, where only `web` is allowed
+          required: false
+          schema:
+            type: string
+            enum:
+              - all
+              - web
+              - mail
+        - name: cn_type
+          in: query
+          description: >-
+            Type of the Let's Encrypt certificate: `NORMAL`, or `WILDCARD` for a
+            wildcard certificate. Omit this parameter if you're sending
+            `ssl_certificate_id`.
+          required: false
+          schema:
+            type: string
+            default: WILDCARD
+            enum:
+              - NORMAL
+              - WILDCARD
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HostingSslCertificateCanInstallResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+      security:
+        - oauth2:
+            - hosting:read
   /api/v3/hostings/{hosting_id}/backups:
     get:
       tags:
@@ -12263,7 +12349,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/OAuthTokenResponse'
         '400':
-          description: Invalid request
+          description: >-
+            Invalid request, or `unauthorized_client`: the client is
+            authenticated, but its owner has not enabled two-factor
+            authentication
           content:
             application/json:
               schema:
@@ -12442,8 +12531,8 @@ components:
       properties:
         error:
           description: >-
-            OAuth2 error code, for example `invalid_client`, `invalid_scope` or
-            `rate_limited`
+            OAuth2 error code, for example `invalid_client`, `invalid_scope`,
+            `unauthorized_client` or `rate_limited`
           type: string
           example: invalid_client
         error_description:
@@ -12525,6 +12614,19 @@ components:
         - api-public
         - api-internal
       example: api-public
+    HostingSslCertificateCanInstallReason:
+      description: >-
+        Why an SSL certificate cannot be installed on the hosting now (`GET
+        /api/v3/hostings/{hosting_id}/ssl-certificates/can-install`)
+      type: string
+      enum:
+        - ALREADY_INSTALLED
+        - CNAME_MISSING
+        - LIMIT_REACHED
+        - HOSTING_NOT_ACTIVE
+        - MAIL_NOT_SUPPORTED
+        - OPERATION_RUNNING
+      example: CNAME_MISSING
     BuyPrepaidCreditTopupRequest:
       required:
         - amount
@@ -14216,25 +14318,30 @@ components:
       additionalProperties: false
     HostingSslCertificateInstallRequest:
       description: >-
-        SSL certificate to install on the hosting; with no body, a Let's Encrypt
-        certificate for the website
+        SSL certificate to install on the hosting; with no body, a wildcard
+        Let's Encrypt certificate for the website and the mail of a main
+        hosting, or for the website of a subdomain
       properties:
         ssl_certificate_id:
           description: >-
             Id of a purchased SSL certificate to install (`GET
-            /api/v3/ssl-certificates/{ssl_certificate_id}`); omit it, or send
-            null, to install a Let's Encrypt certificate, issued if the hosting
-            has none
+            /api/v3/ssl-certificates/{ssl_certificate_id}`): an active
+            certificate of the owner of the hosting, a wildcard one or one with
+            SAN to install it also on the mail servers. Omit it, or send null,
+            to install a Let's Encrypt certificate, issued if the hosting has
+            none: when the DNS of the domain are not on our nameservers, the
+            issue requires the CNAME record that delegates the DNS validation
+            (`GET /api/v3/hostings/{hosting_id}/ssl-certificates/can-install`)
           type:
             - integer
             - 'null'
         destination_type:
           description: >-
             Where to install the certificate: `web` for the website, `mail` for
-            the mail servers, `all` for both. `mail` and `all` require `cn_type`
-            `WILDCARD`; on a subdomain only `web` is allowed
+            the mail servers, `all` for both. When omitted, `all` on a main
+            hosting and `web` on a subdomain, where only `web` is allowed.
+            `mail` and `all` require a Let's Encrypt `cn_type` `WILDCARD`
           type: string
-          default: web
           enum:
             - all
             - web
@@ -14243,9 +14350,10 @@ components:
           description: >-
             Type of the certificate: `NORMAL`, or `WILDCARD` for a wildcard
             certificate. Without `ssl_certificate_id` it chooses the Let's
-            Encrypt certificate to install
+            Encrypt certificate to install. Omit this field if you're sending
+            `ssl_certificate_id`.
           type: string
-          default: NORMAL
+          default: WILDCARD
           enum:
             - NORMAL
             - WILDCARD
@@ -17411,6 +17519,54 @@ components:
           description: Whether it is the default version of the web server
           type: boolean
       type: object
+    HostingSslCertificateCanInstall:
+      description: >-
+        Whether an SSL certificate can be installed on the hosting now, and why
+        not
+      required:
+        - hosting_id
+        - can_install
+        - reason
+        - message
+        - dns_delegation
+      properties:
+        hosting_id:
+          description: Id of the hosting (`GET /api/v3/hostings/{hosting_id}`)
+          type: integer
+        can_install:
+          description: >-
+            Whether the installation can start now with `POST
+            /api/v3/hostings/{hosting_id}/ssl-certificates` and the same fields
+          type: boolean
+        reason:
+          description: >-
+            Why the installation cannot start now; null when it can.
+            `ALREADY_INSTALLED`: a certificate is already installed on the
+            destination, remove it first. `CNAME_MISSING`: the DNS of the domain
+            are not on our nameservers and the CNAME record in `dns_delegation`
+            is missing. `LIMIT_REACHED`: too many Let's Encrypt installations on
+            the hosting in the last days. `HOSTING_NOT_ACTIVE`: the activation
+            of the hosting has not been completed yet. `MAIL_NOT_SUPPORTED`: the
+            mail server of the hosting does not accept certificates.
+            `OPERATION_RUNNING`: another installation or operation is running on
+            the hosting
+          anyOf:
+            - $ref: '#/components/schemas/HostingSslCertificateCanInstallReason'
+            - type: 'null'
+        message:
+          description: Description of `reason`; null when the installation can start
+          type:
+            - string
+            - 'null'
+        dns_delegation:
+          description: >-
+            CNAME record that delegates the validation of the Let's Encrypt
+            certificate; null when installing a purchased certificate
+            (`ssl_certificate_id`)
+          anyOf:
+            - $ref: '#/components/schemas/HostingSslDnsDelegation'
+            - type: 'null'
+      type: object
     HostingSslCertificate:
       description: SSL certificate installed on the website or on the mail of the hosting
       required:
@@ -17475,6 +17631,40 @@ components:
             for the mail servers
           type:
             - string
+            - 'null'
+      type: object
+    HostingSslDnsDelegation:
+      description: >-
+        CNAME record that delegates the DNS validation of the Let's Encrypt
+        certificate
+      required:
+        - managed_dns
+        - host
+        - target
+        - present
+      properties:
+        managed_dns:
+          description: >-
+            Whether the DNS zone of the domain is on our nameservers: the
+            installation creates the CNAME record by itself. When false the
+            record must be created on the nameservers of the domain before the
+            installation
+          type: boolean
+        host:
+          description: Name of the CNAME record, in punycode
+          type: string
+        target:
+          description: Target of the CNAME record; null when no delegation is required
+          type:
+            - string
+            - 'null'
+        present:
+          description: >-
+            Whether the public DNS resolvers return the CNAME record with
+            `target`; null when the DNS zone is on our nameservers, where it is
+            not checked, or when no delegation is required
+          type:
+            - boolean
             - 'null'
       type: object
     Hosting:
@@ -20212,6 +20402,7 @@ components:
         - quantity
         - activation_price
         - renew_price
+        - renew_price_discounted
         - restore_price
         - date_activation
         - date_activation_start
@@ -20292,6 +20483,14 @@ components:
           description: >-
             Renew price (applied on recurring purchases only); null for
             sub-accounts.
+          anyOf:
+            - $ref: '#/components/schemas/Amount'
+            - type: 'null'
+        renew_price_discounted:
+          description: >-
+            Renew price with the discount granted to the purchase by a discount
+            promotion, for the same recurrence as `renew_price`; null when the
+            purchase has no discount, and for sub-accounts.
           anyOf:
             - $ref: '#/components/schemas/Amount'
             - type: 'null'
@@ -24157,6 +24356,30 @@ components:
             - 'null'
         data:
           $ref: '#/components/schemas/Hosting'
+          description: Resource returned by the operation
+        meta:
+          description: 'Always null: only the paginated lists have a `meta`'
+          const: null
+      type: object
+    HostingSslCertificateCanInstallResponse:
+      description: Successful response with one `HostingSslCertificateCanInstall`
+      required:
+        - error
+        - message
+        - data
+        - meta
+      properties:
+        error:
+          description: Always 0 in a successful response
+          type: integer
+          const: 0
+        message:
+          description: Always null in a successful response
+          type:
+            - string
+            - 'null'
+        data:
+          $ref: '#/components/schemas/HostingSslCertificateCanInstall'
           description: Resource returned by the operation
         meta:
           description: 'Always null: only the paginated lists have a `meta`'
